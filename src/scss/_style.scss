@@ -1,0 +1,42 @@
+//color
+@import '_color.scss';
+
+
+$font: 14px 16px 20px 24px 36px;
+
+//rwd
+
+$wide: 'min-width: 1800px' !default;
+$desktop: 'min-width: 1200px' !default;
+$tablet-landscape: 'min-width: 900px' !default;
+$tablet-protrait: 'min-width: 600px' !default;
+$phone: 'max-width: 600px' !default;
+
+@mixin background-img($center: center) {
+  background-position: $center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@mixin flexcenter {
+  justify-content: center;
+  align-items: center;
+}
+
+%numberStyle {
+  font-size: nth($font, 5);
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+@mixin media($query: $phone) {
+  @media screen and ($query) {
+    @content;
+  }
+}
+
+//https://codepen.io/jakealbaugh/post/using-sass-functions-to-access-complex-variable-maps
+//因為sass的原因所以$map不能取顏色名
+@function color($color-style:other, $color-type: green) {
+  @return map-get(map-get($colors, $color-style), $color-type);
+}

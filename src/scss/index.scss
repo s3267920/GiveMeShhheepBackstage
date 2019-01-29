@@ -1,0 +1,396 @@
+@import '_style';
+
+.content {
+  background-color: color(color_gray, white);
+  ;
+
+  .content_title {
+    font-size: nth($font, 4);
+    font-weight: bold;
+    color: color(color_teal, main);
+  }
+
+  .overview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 4%;
+
+    .overview_head {
+      display: flex;
+      flex-direction: row;
+      margin-top: 30px;
+
+      h2 {
+        display: inline-flex;
+        justify-content: space-around;
+        line-height: 28px;
+      }
+
+      /* 日期部分 */
+      .date {
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 4%;
+
+        p {
+          color: color(color_gray, dark);
+          display: inline-flex;
+          margin: 0 8px;
+        }
+
+        .triangle_right {
+          display: inline-block;
+          width: 0;
+          height: 0;
+          border-top: 5px solid transparent;
+          border-left: 5px solid color(color_teal, main);
+          border-bottom: 5px solid transparent;
+        }
+
+        .select_option {
+          color: color(color_teal, dark);
+          margin: 0 8px;
+          position: relative;
+
+          a {
+            color: color(color_teal, dark);
+          }
+
+          ul {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            left: -50px;
+            margin-top: 10px;
+            box-shadow: 0 0 10px color(color_teal, main);
+
+            li {
+              background-color: color(color_gray, white);
+              width: 125px;
+              height: 34px;
+
+              &:first-child {
+                padding-top: 6px;
+              }
+
+              &:last-child {
+                padding-bottom: 6px;
+              }
+
+              a {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                background-color: color(color_gray, white);
+                width: 125px;
+                height: 34px;
+
+                &:hover,
+                &:focus {
+                  background-color: color(color_teal, dark);
+                  color: color(color_gray, white);
+                }
+              }
+            }
+          }
+        }
+
+        .triangle_bottom {
+          display: inline-block;
+          width: 0;
+          height: 0;
+          border-top: 5px solid color(color_teal, main);
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+        }
+      }
+    }
+
+    .overview_card {
+      display: flex;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+      .overview-title {
+        color: color(color_teal, teal);
+        font-weight: 600;
+      }
+
+      li {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: 1.95%;
+        background-color: color(other, white);
+        width: 300px;
+        height: 138px;
+        box-shadow: 0 0 10px color(color_gray, gray);
+
+        img {
+          height: 25px;
+          margin-right: 10px;
+        }
+
+        .number-revenue {
+          @extend %numberStyle;
+          color: color(other, green);
+        }
+
+        .number-cost {
+          @extend %numberStyle;
+          color: color(other, red);
+        }
+
+        .number-income {
+          @extend %numberStyle;
+          color: color(other, skyblue);
+        }
+      }
+    }
+  }
+
+  .activity,
+  .transaction_web,
+  .latest_orders {
+    background-color: color(other, white);
+    margin: 0 4%;
+    box-shadow: 0 0 10px color(color_gray, gray);
+
+    h2 {
+      padding: 30px 4.5%;
+      padding-bottom: 0;
+      line-height: 28px;
+    }
+  }
+
+  .transaction_web {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 44.92%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    margin-right: 0;
+
+    h2 {
+      margin-left: 4%;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5px;
+
+      li {
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 8%;
+        padding: 25px 0;
+        border-bottom: 1px solid color(color_gray, light);
+
+        &:last-child {
+          border: none;
+          margin-bottom: 5px;
+        }
+
+        >img {
+          height: 45px;
+          margin-right: 20px;
+        }
+
+        >p {
+          color: color(color_teal, main);
+        }
+
+        .web_data {
+          display: inline-flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: auto;
+
+          p {
+            margin-right: 20px;
+            font-size: nth($font, 3);
+            font-weight: 500;
+            color: color(color_teal, main);
+          }
+
+          .compare {
+            position: relative;
+
+            img {
+              height: 18px;
+              vertical-align: bottom;
+              margin-right: 10px;
+            }
+
+            .tooltip {
+              display: inline-flex;
+              visibility: hidden;
+              padding: 20px 10px 20px 20px;
+              background-color: color(color_teal, dark);
+              flex-direction: column;
+              align-items: center;
+              color: color(color_gray, main);
+              font-size: nth($font, 1);
+              border-radius: 5px;
+              //位置
+              position: absolute;
+              bottom: 150%;
+              left: -100%;
+
+              //hover前
+              opacity: 0;
+              transition: opacity 0.3s;
+
+              //箭頭部分
+              &::after {
+                content: '';
+                position: absolute;
+                bottom: -20%;
+                left: 50%;
+                border-top: 8px solid color(color_teal, main);
+                border-right: 4px solid transparent;
+                border-left: 4px solid transparent;
+                border-bottom: 10px solid transparent;
+              }
+
+              p {
+                display: inline-flex;
+                align-items: baseline;
+                color: color(color_gray, main);
+                font-size: nth($font, 1);
+                margin-bottom: 10px;
+
+                span {
+                  margin: 0 5px;
+                  font-size: nth($font, 3);
+                }
+              }
+
+              .old_data {
+                font-style: italic;
+                font-weight: 300;
+                color: rgba(color(color_gray, main), 0.8);
+              }
+            }
+
+            &:hover {
+              .tooltip {
+                visibility: visible;
+                opacity: 1;
+              }
+            }
+          }
+
+          .increase {
+            color: color(other, green);
+          }
+
+          .decrease {
+            color: color(other, red);
+          }
+        }
+      }
+    }
+  }
+
+  .latest_orders {
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 44.92%;
+    margin-left: 16px;
+
+    h2 {
+      margin-left: 4%;
+      line-height: 28px;
+    }
+
+    ul {
+      width: 90%;
+      margin: 22px auto;
+    }
+
+    li {
+      width: 90%;
+      margin: 0 4%;
+      display: inline-flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid color(color_gray, light);
+
+      &:last-child {
+        border: none;
+      }
+
+      >span {
+        display: inline-flex;
+        width: 100px;
+        height: 100px;
+        margin: 8px 0;
+        @include background-img;
+      }
+
+      .orders_content {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 20px;
+
+        .order_name {
+          font-size: nth($font, 3);
+          line-height: 24px;
+          font-weight: bold;
+          margin-bottom: 8px;
+          color: color(color_teal, main);
+        }
+
+        img {
+          width: 10px;
+          margin-right: 10px;
+
+          &:last-child {
+            width: 8px;
+          }
+        }
+
+        span {
+          color: color(color_teal, light);
+        }
+
+        .time {
+          margin-bottom: 10px;
+        }
+      }
+
+      .price {
+        display: inline-flex;
+        flex-direction: column;
+        align-self: flex-end;
+        margin-left: auto;
+        margin-bottom: 30px;
+
+        >p {
+          display: inline-flex;
+          justify-content: flex-end;
+          font-size: nth($font, 1);
+          color: color(color_teal, main);
+        }
+
+        >span {
+          color: color(color_teal, main);
+          font-weight: bold;
+          font-size: nth($font, 3);
+          line-height: 24px;
+        }
+      }
+    }
+  }
+}
