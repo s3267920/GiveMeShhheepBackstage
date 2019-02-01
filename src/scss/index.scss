@@ -50,6 +50,7 @@
           border-bottom: 5px solid transparent;
         }
 
+        //下拉式選單
         .select_option {
           color: color(color_teal, dark);
           margin: 0 8px;
@@ -92,10 +93,22 @@
                 &:focus {
                   background-color: color(color_teal, dark);
                   color: color(color_gray, white);
+
                 }
               }
             }
           }
+
+          .fade-enter-active,
+          .fade-leave-active {
+            transition: all .3s ease;
+          }
+
+          .fade-enter,
+          .fade-leave-to {
+            opacity: 0;
+          }
+
         }
 
         .triangle_bottom {
@@ -222,6 +235,7 @@
 
           .compare {
             position: relative;
+            cursor: pointer;
 
             img {
               height: 18px;
@@ -230,6 +244,7 @@
             }
 
             .tooltip {
+
               display: inline-flex;
               visibility: hidden;
               padding: 20px 10px 20px 20px;
@@ -282,6 +297,7 @@
 
             &:hover {
               .tooltip {
+
                 visibility: visible;
                 opacity: 1;
               }
@@ -330,7 +346,7 @@
         border: none;
       }
 
-      >span {
+      .order_img {
         display: inline-flex;
         width: 100px;
         height: 100px;
@@ -362,7 +378,8 @@
         }
 
         span {
-          color: color(color_teal, light);
+          color: color(color_teal, gray);
+          margin-right: 8px;
         }
 
         .time {
@@ -385,7 +402,7 @@
         }
 
         >span {
-          color: color(color_teal, main);
+          color: color(color_teal, gray);
           font-weight: bold;
           font-size: nth($font, 3);
           line-height: 24px;
@@ -393,4 +410,5 @@
       }
     }
   }
+
 }
