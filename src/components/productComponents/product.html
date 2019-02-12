@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Product</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1 ,maximum-scale=1">
+
+</head>
+
+<body>
+  <div class="product_content">
+    <div class="content_head">
+      <div class="product_select_option">
+        <input type="checkbox" name="check" class="check_all" id="all">
+        <label for="all"></label>
+        <span class="triangle_bottom" id="check_more_option">
+          <ul id="select_menu" class="select_menu">
+            <li><a href="javascript:;" class="select_all">Select All</a></li>
+            <li><a href="javascript:;" class="unselect_all">Unselect All</a></li>
+            <li><a href="javascript:;" class="Published">Published</a></li>
+            <li><a href="javascript:;" class="Unpublished">Unpublished</a></li>
+          </ul>
+        </span>
+        <span id="check_option_icon">
+          <div class="tooltip">Change Status</div>
+          <ul id="status_change" class="status_change">
+            <li><a href="javascript:;" class="Published">Published</a></li>
+            <li><a href="javascript:;" class="Unpublished">Unpublished</a></li>
+          </ul>
+        </span>
+      </div>
+      <button class="add_product_btn" @click="openModal">ADD NEW PRODUCT<span>＋</span></button>
+      <div class="add_modal" v-show="!modalDisplay">
+        <div class="modal">
+          <div class="modal_head">
+            <h3>ADD NEW PRODUCT</h3>
+            <label for="close_reset" class="close_btn">
+            </label>
+          </div>
+          <div class="modal_content">
+            <form action="javascript:;" enctype="multipart/form-data" id="form" method="post">
+              <div class="add_image">
+                <input @change.stop="addImg" type="file" name="src[]" id="addImage" accept="image/*" multiple>
+                <label for="addImage"> <img src="@/assets/img/cloud-upload-alt.svg">
+                  Drag an image or click here to upload…</label>
+                <div class="image_previews">
+                  <PreviewBox :get-image="items" :get-index="index" v-for="(items,index) in imgList" :key="items.name"
+                    v-on:remove="removeImg"></PreviewBox>
+                </div>
+              </div>
+              <div class="add_information">
+                <label for="product_name">Product Discription </label>
+                <input type="text" name="productName" id="product_name" placeholder="Product Name" required="required"
+                  v-model="formData.productName">
+                <textarea name="" id="" cols="30" rows="10" placeholder="Discription" v-model="formData.discription"></textarea>
+                <label for="">Price</label>
+                <div class="info_price">
+                  <label for="original"><span>Original</span><input type="number" min="0" name="original" v-model="formData.price.original"
+                      required="required"></label>
+                  <label for="discount"><span>Discount</span><input type="number" name="discount" v-model="formData.price.discount"
+                      min="0" required="required"></label>
+                </div>
+                <label for="">Specification</label>
+                <ul class="specification_info" v-if="formData.specification">
+                  <Specification v-for="(items,index) in formData.specification" @delete="removeSpecification" @confirm="determineSpecification"
+                    :get-index="index" :get-new-id="getNewId" :key="items.id"></Specification>
+                </ul>
+                <button type="button" class="add_new_btn" @click="addNewSpecification">ADD
+                  NEW SPECIFICATION <img src="@/assets/img/ic_add.svg"></button>
+
+                <input type="reset" id="close_reset" value="" @click="closeModal">
+                <div class="submit_btn">
+                  <a href="javascript:;" id="save_draft">SAVE DRAFT</a>
+                  <button type="submit" @click="submitData">PUBLISH</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <table class="product_table">
+    <tr>
+      <th></th>
+      <th class="table_product">Product</th>
+      <th>Original</th>
+      <th>Discount</th>
+      <th class="information_size">Size</th>
+      <th class="information_flavor">Flavor</th>
+      <th class="information_inventory">Inventory</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td class="table_checkbox">
+        <input type="checkbox">
+        <label></label>
+      </td>
+      <td class="product">
+        <img src="https://images.unsplash.com/photo-1514517220017-8ce97a34a7b6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=7c376ffa487bcd258df29dc881b10703&auto=format&fit=crop&w=634&q=80">
+        <span>甜甜圈</span>
+      </td>
+      <td class="original">$500</td>
+      <td class="discount">$450</td>
+      <td class="information">
+        <ul>
+          <li>
+            <div class="size">L</div>
+            <div class="flavor">
+              <p>香草</p>
+              <p>焦糖</p>
+            </div>
+            <div class="inventory">
+              <p>15</p>
+              <p>20</p>
+            </div>
+          </li>
+          <li>
+            <div class="size">M</div>
+            <div class="flavor">
+              <p>香草</p>
+              <p>焦糖</p>
+            </div>
+            <div class="inventory">
+              <p>15</p>
+              <p>20</p>
+            </div>
+          </li>
+          <li>
+            <div class="size">S</div>
+            <div class="flavor">
+              <p>香草</p>
+              <p>焦糖</p>
+            </div>
+            <div class="inventory">
+              <p>15</p>
+              <p>20</p>
+            </div>
+          </li>
+        </ul>
+      </td>
+      <td class="status">
+        <button class="status_Btn" value="UNPUBLISHED">UNPUBLISHED<span class="triangle_bottom"></span>
+          <ul class="status_option">
+            <a href="javascript:;" class="Published">
+              <li>Published</li>
+            </a>
+            <a href="javascript:;" class="Unpublished">
+              <li>Unpublished</li>
+            </a>
+            <a href="javascript:;" class="delete">
+              <li>Delete</li>
+            </a>
+          </ul>
+        </button>
+
+      </td>
+    </tr>
+  </table>
+  </div>
+  <footer></footer>
+</body>
+
+</html>

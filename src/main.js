@@ -12,6 +12,7 @@ import {
 import {
   faUser,
   faBuilding,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FontAwesomeIcon,
@@ -19,10 +20,12 @@ import {
 import {
   faUserCircle,
   faTimesCircle,
+  faEdit,
+
 } from '@fortawesome/free-regular-svg-icons';
 
 
-library.add(faUserCircle, faTimesCircle, faUser, faBuilding);
+library.add(faUserCircle, faTimesCircle, faUser, faBuilding, faEdit, faCheck);
 sync(store, router);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

@@ -5,29 +5,30 @@
 
 <script>
 import PreviewBox from './PreviewBox'
+import Specification from './Specification'
 export default {
   name: 'product',
   components: {
-    PreviewBox
+    PreviewBox,
+    Specification
   },
   data() {
     return {
       modalDisplay: false,
       modalStatus: '',
       imgList: [],
-      formData: [
-        {
-          img: [],
-          title: '',
-          discriiption: '',
-          price: {
-            origin: '',
-            discount: ''
-          },
-          specification: {},
-          status: ''
-        }
-      ]
+      specificationCount: 0,
+      formData: {
+        img: [],
+        productName: '',
+        discription: '',
+        price: {
+          original: '',
+          discount: ''
+        },
+        specification: [],
+        status: true
+      }
     }
   },
   computed: {
@@ -37,6 +38,9 @@ export default {
         list.push(el.name)
       })
       return list
+    },
+    getNewId() {
+      return this.specificationCount
     }
   },
   methods: {
@@ -49,7 +53,6 @@ export default {
     addImg(e) {
       //參考https://runkids.github.io/vue/2017123101/
       let vm = this
-      let fileList = []
       let files = e.target.files
       Array.prototype.forEach.call(files, this.readURL)
     },
@@ -68,13 +71,63 @@ export default {
             src,
             name
           }
-          console.log(newImg)
           vm.imgList.push(newImg)
+          vm.formData.img = vm.imgList
         }
         reader.readAsDataURL(files)
       }
     },
-    deleteImg() {},
+    removeImg(newIndex) {
+      this.imgList.splice(newIndex, 1)
+    },
+    removeSpecification(data) {
+      let index = this.formData.specification.indexOf(data)
+      this.formData.specification.splice(index, 1)
+      this.$forceUpdate()
+    },
+    determineSpecification(data) {
+      let newIndex = data.index
+      let arr = this.formData.specification
+      if (!data.style.length && !data.inventory.length) {
+        alert('請輸入樣式跟庫存')
+        return
+      } else {
+        if (this.formData.specification.length <= 1) {
+          this.formData.specification.splice(newIndex, 1, data)
+        } else {
+          try {
+            arr.forEach(el => {
+              if (arr.indexOf(el) !== newIndex) {
+                this.formData.specification.splice(newIndex, 1, data)
+              } else {
+                this.$set(
+                  this.formData.specification,
+                  this.formData.specification.findIndex(
+                    newData => newData.style === data.style
+                  ),
+                  data
+                )
+              }
+            })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      }
+    },
+    addNewSpecification() {
+      if (this.formData.specification.length > 0) {
+        this.specificationCount++
+      }
+      this.formData.specification.push({
+        style: null,
+        inventory: null,
+        hasConfirm: null,
+        id: this.getNewId,
+        index: this.getNewId
+      })
+    },
+    submitData() {},
     fileDragHandle(e) {
       e.stopPropagation()
       e.preventDefault()
@@ -82,6 +135,10 @@ export default {
     },
     fileSelectHandle() {}
   },
-  mounted() {}
+  mounted() {
+    this.$nextTick(function() {
+      this.addNewSpecification()
+    })
+  }
 }
 </script>
