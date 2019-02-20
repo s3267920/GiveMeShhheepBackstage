@@ -5,9 +5,11 @@ a {
 }
 
 .product_content {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: color(color_gray, white30);
+  background-color: color(color_gray, light20);
   padding-bottom: 40px;
 }
 
@@ -24,7 +26,7 @@ a {
     display: none;
     cursor: pointer;
     @include background-img;
-    background-image: url(../img/tags.svg);
+    background-image: url(../assets/img/tags.svg);
     height: 15px;
     width: 19px;
     margin-left: 15px;
@@ -172,6 +174,7 @@ a {
   }
 
   .add_product_btn {
+    cursor: pointer;
     line-height: 34px;
     display: flex;
     align-items: center;
@@ -200,8 +203,8 @@ a {
   //互動式視窗
   .add_modal {
     position: fixed;
-    display: none;
-    // display: flex;
+    // display: none;
+    display: flex;
     justify-content: center;
     z-index: 999;
     left: 0%;
@@ -213,7 +216,7 @@ a {
   }
 
   .modal {
-    width: 940px;
+    width: 1024px;
     margin: 4% auto;
     height: auto;
     overflow-y: auto;
@@ -239,11 +242,11 @@ a {
       margin-left: auto;
       width: 19px;
       height: 19px;
-      background-image: url(../img/x.svg);
+      background-image: url(../assets/img/x.svg);
       @include background-img;
 
       &:hover {
-        background-image: url(../img/x-yellow.svg);
+        background-image: url(../assets/img/x-yellow.svg);
       }
     }
   }
@@ -254,6 +257,7 @@ a {
     background-color: color(other, white);
 
     form {
+      width: 100%;
       display: flex;
     }
 
@@ -264,6 +268,7 @@ a {
       margin-left: 30px;
       margin-top: 30px;
       height: auto;
+      width: 70%;
 
       input {
         width: 0.1px;
@@ -272,8 +277,9 @@ a {
       }
 
       label {
-        width: 394px;
-        background-color: color(color_teal, light30);
+        // width: 394px;
+        width: 100%;
+        background-color: color(color_teal, gray25);
         padding: 25px 0;
         display: flex;
         flex-direction: column;
@@ -295,27 +301,77 @@ a {
       }
 
       .image_previews {
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
-        width: 394px;
+        // width: 394px;
+        width: 100%;
         justify-content: space-between;
 
-        img {
-          display: inline-flex;
-          margin-bottom: 8px;
-          width: 126px;
-          height: 126px;
-          object-fit: cover;
+        .preview_box {
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          margin-top: 10px;
+          box-sizing: border-box;
+          // background-color: #000;
 
-          &:last-child {
-            margin-right: 0;
+          .delete_icon {
+            color: color(color_teal, teal);
+            opacity: 0;
+            height: 0.1px;
+            width: 0.1px;
+            transition: all 0.5s ease-out;
           }
+
+          .image_delete {
+            width: 100%;
+            height: 0px;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: color(other, whiteO30);
+            box-sizing: border-box;
+            transition: all 0.5s ease;
+          }
+
+          img {
+            display: inline-flex;
+            margin-bottom: 8px;
+            width: 126px;
+            height: 126px;
+            object-fit: cover;
+
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+
+          &:hover {
+            .image_delete {
+              height: 30px;
+              width: 100%;
+            }
+
+            .delete_icon {
+              width: 1.33em;
+              height: 1.33em;
+              opacity: 1;
+
+              &:hover {
+                color: color(color_yellow, main);
+              }
+            }
+          }
+
+
         }
       }
     }
 
     .add_information {
-      width: 456px;
+      width: 100%;
       margin-top: 30px;
       margin-bottom: 30px;
       display: flex;
@@ -337,25 +393,25 @@ a {
         line-height: 38px;
         border-radius: 5px;
         margin-bottom: 8px;
-        border: 0.5px solid color(color_teal, light);
+        border: 0.5px solid color(color_teal, gray);
         outline: none;
 
         &::placeholder {
-          color: color(color_teal, light);
+          color: color(color_teal, gray);
         }
       }
 
       textarea {
         width: 90%;
         border-radius: 5px;
-        border: 0.5px solid color(color_teal, light);
+        border: 0.5px solid color(color_teal, gray);
         padding: 10px 16px;
         resize: none;
         margin-bottom: 20px;
         outline: none;
 
         &::placeholder {
-          color: color(color_teal, light);
+          color: color(color_teal, gray);
         }
       }
 
@@ -367,22 +423,26 @@ a {
           border-radius: 5px 0 0 5px;
           line-height: 38px;
           padding: 0 15px;
-          border-top: 0.5px solid color(color_teal, light);
-          border-left: 0.5px solid color(color_teal, light);
-          border-bottom: 0.5px solid color(color_teal, light);
+          border-top: 0.5px solid color(color_teal, gray);
+          border-left: 0.5px solid color(color_teal, gray);
+          border-bottom: 0.5px solid color(color_teal, gray);
           outline: none;
-          background-color: color(color_teal, light30);
+          background-color: color(color_teal, gray25);
           color: color(color_teal, dark);
+
         }
 
         input {
           width: 70px;
           padding: 0 15px;
           border-radius: 0 5px 5px 0;
+          margin-right: 10px;
         }
       }
 
       .specification_info {
+        width: 100%;
+
         label {
           position: relative;
 
@@ -391,47 +451,64 @@ a {
             border-radius: 5px 0 0 5px;
             line-height: 38px;
             padding: 0 15px;
-            border-top: 0.5px solid color(color_teal, light);
-            border-left: 0.5px solid color(color_teal, light);
-            border-bottom: 0.5px solid color(color_teal, light);
+            border-top: 0.5px solid color(color_teal, gray);
+            border-left: 0.5px solid color(color_teal, gray);
+            border-bottom: 0.5px solid color(color_teal, gray);
             outline: none;
-            background-color: color(color_teal, light30);
+            background-color: color(color_teal, gray25);
             color: color(color_teal, dark);
           }
 
           input {
-            width: 45px;
+            width: 50px;
             padding: 0 10px;
             border-radius: 0 5px 5px 0;
+            margin-right: 10px;
           }
+        }
 
-          select {
-            margin-left: -6px;
-            border-top: 0.5px solid color(color_teal, light);
-            border-left: 0.5px solid color(color_teal, light);
-            border-bottom: 0.5px solid color(color_teal, light);
-            height: 39px;
-            width: 60px;
-            padding: 0 10px 0 18px;
-            background-image: url(../img/ic_unfold_more_18px.svg);
-            background-position: 25px;
-            background-repeat: no-repeat;
-            background-size: 50px 20px;
-            border-radius: 0 5px 5px 0;
-            appearance: none;
-            outline: none;
+        .style {
+          width: 50%;
+        }
+
+        .specification_icon {
+          margin-bottom: 10px;
+        }
+
+        .specification_check {
+          margin-left: auto;
+        }
+
+        .specification_delete,
+        .specification_edit,
+        .specification_check {
+
+          cursor: pointer;
+          color: color(color_teal, gray);
+          margin-right: 10px;
+
+          &:hover {
+            color: color(color_teal, dark);
+
           }
+        }
+
+        .has_determine {
+          user-select: none;
+          color: color(color_teal, gray);
         }
       }
 
+
       .add_new_btn {
         display: flex;
+        width: 96%;
         justify-content: center;
         align-items: center;
         background-color: color(color_teal, dark);
         color: color(other, white);
         font-weight: bold;
-        padding: 8px 105px;
+        padding: 8px 10px;
         border-radius: 5px;
 
         img {
@@ -450,18 +527,19 @@ a {
 
       .submit_btn {
         margin-top: 30px;
-        margin-right: 12px;
+        margin-right: 4%;
         display: flex;
         align-items: center;
         margin-left: auto;
 
         a {
-          color: color(color_teal, light);
+          color: color(color_teal, gray);
           font-weight: bold;
           margin-right: 30px;
         }
 
         button {
+          cursor: pointer;
           background-color: color(color_teal, dark);
           color: color(other, white);
           padding: 8px 16px;
@@ -571,14 +649,20 @@ a {
     }
   }
 
-  .table_product,
-  .product {
+
+
+  .table_product {
     min-width: 160px;
     padding-right: 10px;
   }
 
+  .table_discount {
+    padding-right: 10px;
+  }
+
+
   .information_size,
-  .information_flavor,
+  .information_style,
   .information_inventory {
     min-width: 100px;
   }
@@ -587,7 +671,12 @@ a {
     padding-right: 30px;
   }
 
+
   .product {
+    width: 170px;
+    word-break: keep-all;
+    white-space: nowrap;
+
     >img {
       width: 50px;
       height: 50px;
@@ -596,6 +685,10 @@ a {
     }
 
     >span {
+      display: inline-block;
+      white-space: pre-line;
+      vertical-align: middle;
+      width: 100px;
       margin-left: 10px;
     }
   }
@@ -624,11 +717,28 @@ a {
       }
     }
 
+    .style_info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .give_them_group {
+      display: flex;
+    }
+
     .size,
-    .flavor,
+    .style,
     .inventory {
       width: 100px;
     }
+
+
+    .style>p {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: 15px;
+    }
+
 
     .inventory {
       display: inline-flex;
@@ -711,7 +821,7 @@ a {
     background-color: color(color_yellow, main);
   }
 
-  .lightgreen {
+  .tealGray {
     background-color: color(color_teal, gray30);
   }
 
@@ -719,3 +829,5 @@ a {
     color: color(color_teal, light);
   }
 }
+
+@import '_loadingPage';

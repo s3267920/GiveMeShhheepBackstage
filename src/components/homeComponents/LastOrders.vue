@@ -1,7 +1,10 @@
 <template>
   <ul v-if="orderData">
     <li v-for="i in 3" :key="orderData[i-1].name">
-      <span class="order_img" :style="{backgroundImage:`url(${orderData[i-1].img})`}"></span>
+      <!-- <span class="order_img" :style="{backgroundImage:`url(${orderData[i-1].img})`}"></span> -->
+      <span class="order_img">
+        <img :src="`${orderData[i-1].img}`" alt>
+      </span>
       <div class="orders_content">
         <p class="order_name">{{orderData[i-1].productName}}</p>
         <div class="time">
@@ -23,33 +26,33 @@
 </template>
 
 <script>
-const axios = require('axios');
-const moment = require('moment');
+const axios = require('axios')
+const moment = require('moment')
 
 export default {
   data() {
     return {
-      orderData: '',
-    };
+      orderData: ''
+    }
   },
   methods: {
     getDate: () => {
-      moment.locale('zh-tw');
-      return moment().format('L');
+      moment.locale('zh-tw')
+      return moment().format('L')
     },
     getTime: () => {
-      moment.locale('zh-tw');
-      return moment().format('LT');
-    },
+      moment.locale('zh-tw')
+      return moment().format('LT')
+    }
   },
   mounted() {
     axios
       .get('http://localhost:3000/customers')
-      .then((res) => {
-        const data = res.data;
-        this.orderData = data;
+      .then(res => {
+        const data = res.data
+        this.orderData = data
       })
-      .catch(error => console.log(error));
-  },
-};
+      .catch(error => console.log(error))
+  }
+}
 </script>

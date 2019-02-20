@@ -32,14 +32,17 @@
         </span>
       </div>
       <button class="add_product_btn" @click="openModal">ADD NEW PRODUCT<span>＋</span></button>
-      <div class="add_modal" v-show="!modalDisplay">
+      <div class="add_modal" v-show="modalDisplay">
+
         <div class="modal">
           <div class="modal_head">
             <h3>ADD NEW PRODUCT</h3>
+
             <label for="close_reset" class="close_btn">
             </label>
           </div>
           <div class="modal_content">
+            <LoadingPage style="position:absolute;left:0%;z-index:99" v-if="isLoading"></LoadingPage>
             <form action="javascript:;" enctype="multipart/form-data" id="form" method="post">
               <div class="add_image">
                 <input @change.stop="addImg" type="file" name="src[]" id="addImage" accept="image/*" multiple>
@@ -73,7 +76,7 @@
                 <input type="reset" id="close_reset" value="" @click="closeModal">
                 <div class="submit_btn">
                   <a href="javascript:;" id="save_draft">SAVE DRAFT</a>
-                  <button type="submit" @click="submitData">PUBLISH</button>
+                  <button type="button" @click.stop="submitData">PUBLISH</button>
                 </div>
               </div>
             </form>
@@ -82,85 +85,20 @@
         </div>
       </div>
     </div>
-
-  </div>
-  <table class="product_table">
-    <tr>
-      <th></th>
-      <th class="table_product">Product</th>
-      <th>Original</th>
-      <th>Discount</th>
-      <th class="information_size">Size</th>
-      <th class="information_flavor">Flavor</th>
-      <th class="information_inventory">Inventory</th>
-      <th>Status</th>
-    </tr>
-    <tr>
-      <td class="table_checkbox">
-        <input type="checkbox">
-        <label></label>
-      </td>
-      <td class="product">
-        <img src="https://images.unsplash.com/photo-1514517220017-8ce97a34a7b6?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=7c376ffa487bcd258df29dc881b10703&auto=format&fit=crop&w=634&q=80">
-        <span>甜甜圈</span>
-      </td>
-      <td class="original">$500</td>
-      <td class="discount">$450</td>
-      <td class="information">
-        <ul>
-          <li>
-            <div class="size">L</div>
-            <div class="flavor">
-              <p>香草</p>
-              <p>焦糖</p>
-            </div>
-            <div class="inventory">
-              <p>15</p>
-              <p>20</p>
-            </div>
-          </li>
-          <li>
-            <div class="size">M</div>
-            <div class="flavor">
-              <p>香草</p>
-              <p>焦糖</p>
-            </div>
-            <div class="inventory">
-              <p>15</p>
-              <p>20</p>
-            </div>
-          </li>
-          <li>
-            <div class="size">S</div>
-            <div class="flavor">
-              <p>香草</p>
-              <p>焦糖</p>
-            </div>
-            <div class="inventory">
-              <p>15</p>
-              <p>20</p>
-            </div>
-          </li>
-        </ul>
-      </td>
-      <td class="status">
-        <button class="status_Btn" value="UNPUBLISHED">UNPUBLISHED<span class="triangle_bottom"></span>
-          <ul class="status_option">
-            <a href="javascript:;" class="Published">
-              <li>Published</li>
-            </a>
-            <a href="javascript:;" class="Unpublished">
-              <li>Unpublished</li>
-            </a>
-            <a href="javascript:;" class="delete">
-              <li>Delete</li>
-            </a>
-          </ul>
-        </button>
-
-      </td>
-    </tr>
-  </table>
+    <table class="product_table">
+      <tr>
+        <th></th>
+        <th class="table_product">Product</th>
+        <th>Original</th>
+        <th class="table_discount">Discount</th>
+        <th class="information_style">Style</th>
+        <th class="information_size">Size</th>
+        <th class="information_inventory">Inventory</th>
+        <th>Status</th>
+      </tr>
+      <ProductTable :get-all-product="productData" :get-data="item" v-for="(item,index) in productData" :key="item.id"></ProductTable>
+      <LoadingPage v-if="isLoading"></LoadingPage>
+    </table>
   </div>
   <footer></footer>
 </body>

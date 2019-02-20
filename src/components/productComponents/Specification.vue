@@ -11,24 +11,10 @@
         required="required"
         name="style"
         :id="`style${newIndex}`"
+        class="style"
       >
     </label>
-    <label :for="`inventory${newIndex}`">
-      <span>Inventory</span>
-      <input
-        :key="`inventory${newIndex}`"
-        :class="{has_determine:specificationInfo.hasConfirm}"
-        :disabled="specificationInfo.hasConfirm"
-        v-model.trim="specificationInfo.inventory"
-        type="number"
-        min="0"
-        required="required"
-        name="inventory"
-        :id="`inventory${newIndex}`"
-        class="inventory"
-      >
-    </label>
-    <span>
+    <span class="specification_icon">
       <font-awesome-icon
         class="specification_check"
         :icon="['fas','check']"
@@ -50,7 +36,60 @@
         @click="deleteSpecificationIcon"
         fixed-width
       ></font-awesome-icon>
+      <font-awesome-icon
+        class="specification_delete"
+        :icon="['fas','plus-circle']"
+        size="lg"
+        v-if="!specificationInfo.styleInfo.length"
+        @click="addNewIcon"
+        fixed-width
+      ></font-awesome-icon>
     </span>
+    <div class="style_Info" v-for="(item , index) in specificationInfo.styleInfo" :key="item.style">
+      <label :for="`size${newIndex}`">
+        <span>Size</span>
+        <input
+          :class="{has_determine:specificationInfo.hasConfirm}"
+          :disabled="specificationInfo.hasConfirm"
+          v-model.trim="item.size"
+          :key="`size${newIndex}`"
+          type="text"
+          required="required"
+          name="size"
+          :id="`size${newIndex}`"
+          class="size"
+        >
+      </label>
+      <label :for="`inventory${newIndex}`">
+        <span>Inventory</span>
+        <input
+          :key="`inventory${newIndex}`"
+          :class="{has_determine:specificationInfo.hasConfirm}"
+          :disabled="specificationInfo.hasConfirm"
+          v-model.trim="item.inventory"
+          type="number"
+          min="0"
+          required="required"
+          name="inventory"
+          :id="`inventory${newIndex}`"
+          class="inventory"
+        >
+      </label>
+      <font-awesome-icon
+        class="specification_delete"
+        :icon="['fas','plus-circle']"
+        size="lg"
+        @click="addNewIcon"
+        fixed-width
+      ></font-awesome-icon>
+      <font-awesome-icon
+        class="specification_delete"
+        :icon="['fas','minus-circle']"
+        size="lg"
+        @click="removeIcon(index)"
+        fixed-width
+      ></font-awesome-icon>
+    </div>
   </li>
 </template>
 
@@ -62,7 +101,12 @@ export default {
     return {
       specificationInfo: {
         style: '',
-        inventory: '',
+        styleInfo: [
+          {
+            inventory: '',
+            size: ''
+          }
+        ],
         hasConfirm: false
       }
     }
@@ -85,11 +129,18 @@ export default {
     },
     determineSpecificationIcon() {
       this.$emit('confirm', this.specificationInfo)
-      if (
-        this.specificationInfo.style.length &&
-        this.specificationInfo.inventory.length
-      )
+      if (this.specificationInfo.style.length)
         this.specificationInfo.hasConfirm = true
+    },
+    addNewIcon() {
+      if (this.specificationInfo.hasConfirm === true) {
+        return
+      } else {
+        this.specificationInfo.styleInfo.push({ inventory: '', size: '' })
+      }
+    },
+    removeIcon(index) {
+      this.specificationInfo.styleInfo.splice(index, 1)
     }
   },
   mounted() {
