@@ -1,0 +1,102 @@
+<body>
+  <div class="content">
+    <loadingPage v-if="isLoading"></loadingPage>
+    <div class="content_head">
+      <div class="check_option">
+        <input type="checkbox" name="check" id="all" :class="{checked:checkedAll}" v-model="checkedAll">
+        <label for="all" @click="checkedSelection(hascheckedAll)"></label>
+        <span class="triangle_bottom" id="check_more_option" @click="selectDisplay">
+          <transition name="fade" mode="in-out">
+            <ul id="select_menu" class="select_menu" v-show="selectIsShow">
+              <li @click="checkedSelection('Select All')"><a href="javascript:;" class="select_all" :class="{has_check:hasSelect === 'Select All'}">Select
+                  All</a></li>
+              <li @click="checkedSelection('Unselect All')"><a href="javascript:;" class="unselect_all" :class="{has_check:hasSelect === 'Unselect All'}">Unselect
+                  All</a></li>
+              <li @click="checkedSelection('Paid')"><a href="javascript:;" class="paid" :class="{has_check:hasSelect === 'Paid'}">Paid</a></li>
+              <li @click="checkedSelection('Unpaid')"><a href="javascript:;" class="unpaid" :class="{has_check:hasSelect === 'Unpaid'}">Unpaid</a></li>
+              <li @click="checkedSelection('Shipping')"><a href="javascript:;" class="shipping" :class="{has_check:hasSelect === 'Shipping'}">Shipping</a></li>
+              <li @click="checkedSelection('done')"><a href="javascript:;" class="done" :class="{has_check:hasSelect === 'Done'}">Done</a></li>
+            </ul>
+          </transition>
+        </span>
+        <changeStatusSelection v-on:changeOrderStatus="changeOrdersStatus" :has-checked-data="hasCheckedData"></changeStatusSelection>
+
+      </div>
+      <div class="edit_section">
+        <a href="javascript:;" @click="slideDownHandle">
+          EDIT SECTION
+          <span class="triangle_bottom" id="edit_section_option"></span>
+        </a>
+        <transition name="fade">
+          <ul id="edit_section_menu" v-if="editIsShow">
+            <li>
+              <input type="checkbox" name="edit_section" value="Order ID" class="order_id" id="order_id" v-model="getCheck.orderID">
+              <label for="order_id">Order ID</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="customer" value="Customer" class="customer" v-model="getCheck.customer">
+              <label for="customer">Customer</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="product_list" value="Product" class="product_list" v-model="getCheck.product">
+              <label for="product_list">Product</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="total" value="Total" class="total" v-model="getCheck.total">
+              <label for="total">Total</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="add_cart" value="Add to Cart" class="add_cart" v-model="getCheck.addToCart">
+              <label for="add_cart">Add to Cart</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="check_out" value="Check-out" class="check_out" v-model="getCheck.checkOut">
+              <label for="check_out">Check-out</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="address" value="Address" class="address" v-model="getCheck.address">
+              <label for="address">Address</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="phone" value="Phone" class="phone" v-model="getCheck.phone">
+              <label for="phone">Phone</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="email" value="Email" class="email" v-model="getCheck.email">
+              <label for="email">Email</label>
+            </li>
+            <li>
+              <input type="checkbox" name="edit_section" id="status" value="Status" class="status" v-model="getCheck.status">
+              <label for="status">Status</label>
+            </li>
+          </ul>
+        </transition>
+      </div>
+    </div>
+
+    <div class="content_table">
+      <div class="table">
+        <table class="table_content">
+          <tr class="table_title">
+            <th></th>
+            <th class="table_order_id" v-if="getCheck.orderID">Order ID</th>
+            <th class="table_customer" v-if="getCheck.customer">Customer</th>
+            <th class="table_product" v-if="getCheck.product">Product</th>
+            <th class="table_total" v-if="getCheck.total">Total</th>
+            <th v-if="getCheck.addToCart">Add to Cart</th>
+            <th v-if="getCheck.checkOut">Check-out</th>
+            <th class="table_address" v-if="getCheck.address">Address</th>
+            <th v-if="getCheck.phone">Phone</th>
+            <th v-if="getCheck.email">Email</th>
+            <th class="table_status" v-if="getCheck.status">Status</th>
+          </tr>
+          <orderList v-for="item in orderListData" :key="orderListData.orderId" :get-order-data="item" :get-check="getCheck"
+            :has-select="hasSelect" :get-all-data="orderListData" v-on:changeDataStatus="changeStatusHandle"
+            @getCheckedData="getCheckedDataArray"></orderList>
+        </table>
+      </div>
+    </div>
+    <pagination></pagination>
+  </div>
+  <footer></footer>
+</body>

@@ -1,0 +1,284 @@
+{
+  "orders": [
+    {
+      "id": 1,
+      "orderId": "9",
+      "customer": {
+        "name": "lan Medina",
+        "address": {
+          "city": "台北市",
+          "zone": "XX區",
+          "streetAddress": "XX路Ｘ段Ｘ號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "123@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "Vestibulum",
+          "price": 1400,
+          "quantity": 1
+        },
+        {
+          "id": 1,
+          "name": "Fusce vehicu",
+          "price": 800,
+          "quantity": 1
+        }
+      ],
+      "total": 2200,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:40"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "paid"
+    },
+    {
+      "id": 2,
+      "orderId": "10",
+      "customer": {
+        "name": "Manuel Stephens",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "456@gmail.com"
+      },
+      "product": [
+        {
+          "name": "Donec facili.",
+          "price": 1400,
+          "quantity": 1
+        }
+      ],
+      "total": 1400,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:55"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "paid"
+    },
+    {
+      "id": 3,
+      "orderId": "11",
+      "customer": {
+        "name": "Daisy Reynolds",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "789@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "測試用0",
+          "price": 800,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "測試用1",
+          "price": 1500,
+          "quantity": 21
+        }
+      ],
+      "total": 3100,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:39"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "done"
+    },
+    {
+      "id": 4,
+      "orderId": "12",
+      "customer": {
+        "name": "王大明",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0912345678",
+        "email": "2347@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "測試用2",
+          "price": 800,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "測試用3",
+          "price": 1500,
+          "quantity": 21
+        }
+      ],
+      "total": 3100,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:39"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "shipping"
+    },
+    {
+      "id": 5,
+      "orderId": "13",
+      "customer": {
+        "name": "王大明",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "123@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "測試用4",
+          "price": 800,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "測試用5",
+          "price": 1500,
+          "quantity": 21
+        }
+      ],
+      "total": 3100,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:39"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "unpaid"
+    },
+    {
+      "id": 6,
+      "orderId": "14",
+      "customer": {
+        "name": "王大明",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "123@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "測試用6",
+          "price": 800,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "測試用7",
+          "price": 1500,
+          "quantity": 21
+        }
+      ],
+      "total": 3100,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:39"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "done"
+    },
+    {
+      "id": 7,
+      "orderId": "15",
+      "customer": {
+        "name": "王大明",
+        "address": {
+          "city": "高雄市",
+          "zone": "XX區",
+          "streetAddress": "XX路X號",
+          "streetAddress2": "",
+          "ZIPCode": "8XX",
+          "Country": ""
+        },
+        "phone": "0123456789",
+        "email": "123@gmail.com"
+      },
+      "product": [
+        {
+          "id": 0,
+          "name": "測試用",
+          "price": 800,
+          "quantity": 2
+        },
+        {
+          "id": 1,
+          "name": "測試用",
+          "price": 1500,
+          "quantity": 21
+        }
+      ],
+      "total": 3100,
+      "addToCart": {
+        "date": "2018/6/8",
+        "time": "13:39"
+      },
+      "checkOut": {
+        "date": "2018/6/8",
+        "time": "20:23"
+      },
+      "status": "shipping"
+    }
+  ]
+}

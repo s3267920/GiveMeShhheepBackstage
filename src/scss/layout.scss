@@ -4,7 +4,7 @@
 body {
   margin: 0 auto;
   max-width: 1024px;
-  font-family: 'Microsoft JhengHei', '微軟正黑體', 'PingFang';
+  font-family: 'Microsoft JhengHei', 'PingFang', Helvetica, sans-serif;
 }
 
 a {
@@ -69,10 +69,36 @@ header {
     a {
       padding: 25px 0;
       color: color(color_gray, white);
-      ;
       font-weight: bold;
     }
+
+    ul {
+      display: flex;
+
+      li>a {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        padding: 10px 8px;
+
+        &:hover {
+          color: color(color_yellow, main);
+        }
+      }
+    }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 footer {

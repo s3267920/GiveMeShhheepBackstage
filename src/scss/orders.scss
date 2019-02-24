@@ -20,15 +20,16 @@ a {
     flex-direction: row;
 
     #check_option_icon {
-      display: none;
+      display: flex;
       @include background-img;
-      background-image: url(../img/tags.svg);
+      background-image: url(../assets/img/tags.svg);
       height: 15px;
       width: 19px;
       margin-left: 15px;
       position: relative;
 
-      .tooltip {
+      .tooltip,
+      .tooltip_right {
         position: absolute;
         top: 30px;
         left: -45px;
@@ -39,7 +40,7 @@ a {
         height: 29px;
         padding: 0px 10px;
         background-color: color(color_teal, dark);
-        color: color(color_teal, light);
+        color: color(other, white);
         visibility: hidden;
         opacity: 0;
         transition: opacity 0.3s;
@@ -56,16 +57,37 @@ a {
         }
       }
 
+      .tooltip_right {
+        top: -10px;
+        left: 35px;
+        border-radius: 3px;
+
+        &::after {
+          content: '';
+          position: absolute;
+
+          top: 12px;
+          left: -12px;
+          border-bottom: 4px solid transparent;
+          border-right: 8px solid color(color_teal, dark);
+          border-top: 4px solid transparent;
+          border-left: 4px solid transparent;
+        }
+      }
+
       &:hover {
-        .tooltip {
+
+        .tooltip,
+        .tooltip_right {
           visibility: visible;
           opacity: 1;
         }
       }
     }
 
-    .select_option {
+    .check_option {
       position: relative;
+      cursor: pointer;
       height: 15px;
       z-index: 5;
       color: color(color_teal, light);
@@ -77,12 +99,13 @@ a {
         color: color(color_teal, dark);
       }
 
-      ul {
-        display: none;
+      .select_menu,
+      .status_change {
+        display: flex;
         flex-direction: column;
         position: absolute;
         top: 15px;
-        left: -45px;
+        left: 0px;
         margin-top: 10px;
         box-shadow: 0 0 10px color(color_teal, dark);
 
@@ -120,7 +143,16 @@ a {
         }
       }
 
+      .status_change {
+        left: -45px;
+      }
+
+      input {
+        visibility: hidden;
+      }
+
       label {
+        cursor: pointer;
         position: absolute;
         bottom: -1px;
         left: 0px;
@@ -129,6 +161,10 @@ a {
         border-radius: 3px;
         display: inline-block;
         border: 1px solid color(color_teal, light);
+
+        &:hover {
+          background-color: color(color_teal, gray30);
+        }
 
         &::after {
           content: none;
@@ -143,11 +179,7 @@ a {
         }
       }
 
-      input {
-        visibility: hidden;
-      }
-
-      input:checked+label {
+      input[class="checked"]+label {
         background-color: color(color_teal, dark);
 
         &::after {
@@ -179,8 +211,7 @@ a {
       }
 
       ul {
-        display: none;
-        // display: flex;
+        display: flex;
         flex-direction: column;
         position: absolute;
         z-index: 5;
@@ -305,7 +336,7 @@ a {
           background-color: color(color_yellow, white);
 
           &:hover {
-            background-color: color(color_teal, light);
+            background-color: color(color_teal, gray30);
           }
 
           &::after {
@@ -321,7 +352,7 @@ a {
           }
         }
 
-        input[checked]+label {
+        input[class="checked"]+label {
           background-color: color(color_teal, dark);
 
           &::after {
@@ -345,11 +376,11 @@ a {
       }
 
       .table_product {
-        min-width: 190px;
+        min-width: 185px;
       }
 
       .product_list {
-        min-width: 190px;
+        min-width: 185px;
         border-spacing: 0 10px;
 
         li {
@@ -384,13 +415,15 @@ a {
 
       .table_total,
       .total {
-        min-width: 75px;
+        min-width: 80px;
       }
 
-      .add_cart,
-      .check_out {
-        border-spacing: 25px 10px;
-      }
+      // .add_cart,
+      // .check_out {
+      //   // display: inline-flex;
+      //   // align-items: flex-start;
+      //   // border-spacing: 25px 10px;
+      // }
 
       .table_address,
       .address {
@@ -402,9 +435,6 @@ a {
         border-spacing: 5px 10px;
       }
 
-      .email {
-        border-spacing: 15px 10px;
-      }
 
       .table_status {
         min-width: 140px;
@@ -448,7 +478,8 @@ a {
           }
         }
 
-        .status_select {
+        .status_selection {
+          display: flex;
           animation: selectMove 0.4s ease-in-out;
           position: absolute;
           z-index: 2;
@@ -459,7 +490,6 @@ a {
           top: 43px;
           left: 11px;
           margin-top: 10px;
-          display: none;
 
           li {
             display: flex;
@@ -490,28 +520,36 @@ a {
     }
 
     .table {
-      .lightgreen {
+      .grayRow {
         background-color: adjust-color(color(color_gray, gray), $lightness: 30%);
       }
 
-      .green {
+      .paidColor {
         background-color: color(other, green);
       }
 
-      .orange {
+      .shippingColor {
         background-color: color(other, orange);
       }
 
-      .skyblue {
+      .unpaidColor {
         background-color: color(other, skyblue);
       }
 
-      .gray {
+      .doneColor {
         background-color: color(color_gray, gray);
       }
 
       .doneStyle {
-        text-decoration: line-through;
+        color: color(color_teal, gray);
+
+        td {
+          text-decoration: line-through;
+
+          &:last-child {
+            text-decoration: none;
+          }
+        }
       }
 
       .unpaidStyle {
@@ -520,7 +558,7 @@ a {
     }
   }
 
-  .content_page {
+  .pagination {
     display: flex;
     justify-content: flex-end;
     margin-right: 4%;
@@ -534,7 +572,9 @@ a {
       width: 40px;
       height: 40px;
       background-color: color(other, white);
-      border: 1px solid color(color_gray, gray);
+      border-top: 1px solid color(color_gray, gray);
+      border-bottom: 1px solid color(color_gray, gray);
+      border-left: 1px solid color(color_gray, gray);
 
       &:hover {
         background-color: color(color_teal, dark);
@@ -550,30 +590,31 @@ a {
         @include background-img;
         width: 8px;
         height: 8px;
-        background-image: url(../img/angle-double-left.svg);
+        background-image: url(../assets/img/angle-double-left.svg);
       }
 
       &:hover {
         span {
-          background-image: url(../img/angle-double-left-white.svg);
+          background-image: url(../assets/img/angle-double-left-white.svg);
         }
       }
     }
 
     .go_ahead {
       border-radius: 0px 5px 5px 0;
-      border-left: none;
+      border-right: 1px solid color(color_gray, gray);
+
 
       span {
         @include background-img;
         width: 8px;
         height: 8px;
-        background-image: url(../img/angle-double-right.svg);
+        background-image: url(../assets/img/angle-double-right.svg);
       }
 
       &:hover {
         span {
-          background-image: url(../img/angle-double-right-white.svg);
+          background-image: url(../assets/img/angle-double-right-white.svg);
         }
       }
     }
