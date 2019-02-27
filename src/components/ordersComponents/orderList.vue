@@ -4,20 +4,20 @@
       <input type="checkbox" name="check" :id="'check'+data.orderId" :class="{checked:ischecked}">
       <label :for="'check'+data.orderId" @click="labelCheck"></label>
     </td>
-    <td v-if="getCheckItem.orderID" class="order_id">{{data.orderId}}</td>
-    <td class="customer" v-if="getCheckItem.customer">{{data.customer.name}}</td>
+    <td v-if="getCheckItem.orderID" class="order_id" v-text="data.orderId"></td>
+    <td class="customer" v-if="getCheckItem.customer" v-text="data.customer.name"></td>
     <td class="product_list" v-if="getCheckItem.product">
       <ul>
         <li v-for="products in data.product" :key="products.id">
           <p>
             {{products.name}}
-            <span>{{products.price}}</span>
+            <span v-text="products.price"></span>
           </p>
-          <span>{{products.quantity}}</span>
+          <span v-text="products.quantity"></span>
         </li>
       </ul>
     </td>
-    <td class="total" v-if="getCheckItem.total">{{data.total}}</td>
+    <td class="total" v-if="getCheckItem.total" v-text="data.total"></td>
     <td class="add_cart" v-if="getCheckItem.addToCart">
       {{data.addToCart.date}}
       <br>
@@ -32,8 +32,8 @@
       class="address"
       v-if="getCheckItem.address"
     >{{data.customer.address.city+data.customer.address.zone+data.customer.address.streetAddress}}</td>
-    <td class="phone" v-if="getCheckItem.phone">{{data.customer.phone}}</td>
-    <td class="email" v-if="getCheckItem.email">{{data.customer.email}}</td>
+    <td class="phone" v-if="getCheckItem.phone" v-text="data.customer.phone"></td>
+    <td class="email" v-if="getCheckItem.email" v-text="data.customer.email"></td>
     <td class="status" v-if="getCheckItem.status">
       <button
         class="status_Btn"
@@ -132,6 +132,12 @@ export default {
             : (this.ischecked = false)
           break
       }
+    },
+    data: {
+      handler: function() {
+        this.statusColor()
+      },
+      deep: true
     }
   },
   methods: {
@@ -164,13 +170,8 @@ export default {
         this.statusText.toLowerCase(),
         this.data.id
       )
-    }
-  },
-  mounted() {
-    this.$nextTick(function() {
-      if ((this.allData.indexOf(this.data) + 1) % 2 === 0) {
-        this.trRowColor = true
-      }
+    },
+    statusColor() {
       switch (this.data.status) {
         case 'paid':
           this.statusText = 'PAID'
@@ -185,6 +186,14 @@ export default {
           this.statusText = 'DONE'
           break
       }
+    }
+  },
+  mounted() {
+    this.$nextTick(function() {
+      if ((this.allData.indexOf(this.data) + 1) % 2 === 0) {
+        this.trRowColor = true
+      }
+      this.statusColor()
     })
   }
 }

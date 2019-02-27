@@ -1,8 +1,8 @@
 <template>
   <span v-if="hasChecked.length" id="check_option_icon" @click="toggleIsShow">
-    <div :class="{tooltip_right:isshow,tooltip:!isshow}">Change Status</div>
+    <div :class="{tooltip_right:isShow,tooltip:!isShow}">Change Status</div>
     <transition name="fade" mode="in-out">
-      <ul v-if="isshow" id="status_change" class="status_change">
+      <ul v-if="isShow" id="status_change" class="status_change">
         <li>
           <a
             href="javascript:;"
@@ -45,7 +45,7 @@ export default {
   props: ['hasCheckedData'],
   data() {
     return {
-      isshow: false,
+      isShow: false,
       hasSelect: false
     }
   },
@@ -56,10 +56,11 @@ export default {
   },
   methods: {
     toggleIsShow() {
-      this.isshow = !this.isshow
+      this.isShow = !this.isShow
     },
     changeStatus(val) {
-      this.$emit('changeOrderStatus', val)
+      this.isShow = false
+      this.$emit('changeHasCheckedDataStatus', val)
     }
   }
 }

@@ -4,23 +4,23 @@
 
 <script>
 import orderList from './orderList'
-import orderData from '../../assets/orders.json'
 import changeStatusSelection from './changeStatusSelection'
 import loadingPage from '../LoadingPage'
-import pagination from './Pagination'
+import pagination from '../Pagination'
 import axios from 'axios'
 export default {
   name: 'orders',
   components: {
     orderList,
     loadingPage,
-    pagination,
-    changeStatusSelection
+    changeStatusSelection,
+    pagination
   },
 
   data() {
     return {
-      orderListData: orderData.orders || [],
+      orderData: [],
+      filterData: [],
       hasCheckedData: [],
       selectIsShow: false,
       editIsShow: false,
@@ -49,6 +49,16 @@ export default {
       } else {
         this.hasSelect = 'Select All'
         return 'Select All'
+      }
+    },
+    orderListData() {
+      if (!this.filterData.length) {
+        return this.filterDataHandle(1, 5)
+      } else {
+        this.hasCheckedData = []
+        this.hasSelect = ''
+        this.selectIsShow = false
+        return this.filterData
       }
     }
   },
@@ -80,15 +90,15 @@ export default {
           // this.hasSelect = value
           break
       }
-      this.selectIsShow = false
     },
-    changeStatusHandle(newRes, id) {
-      this.orderListData[id - 1].status = newRes
+    changeOrderListStatus(newRes, id) {
       axios
         .patch(`http://localhost:3000/orders/${id}`, { status: newRes })
         .then(res => {
-          console.log('updated!!!')
+          this.orderData[id - 1].status = newRes
+          this.isLoading = false
         })
+      console.log('changeOrderListStatus')
     },
     getCheckedDataArray(data, status) {
       let vm = this
@@ -104,35 +114,48 @@ export default {
         vm.hasCheckedData.splice(newIndex, 1)
       }
     },
-    changeOrdersStatus(val) {
-      let vm = this
-      vm.hasCheckedData.forEach(el => {
+    changeHasCheckedDataStatus(val) {
+      this.hasCheckedData.forEach(el => {
         if (el.status !== val) {
           axios
             .patch(`http://localhost:3000/orders/${el.id}`, { status: val })
             .then(res => {
-              console.log('change!!!')
+              this.orderData[el.id - 1].status = val
+              this.isLoading = false
             })
         }
       })
+      console.log('changeHasCheckedDataStatus')
+    },
+    filterDataHandle(page, limitNum) {
+      let newData = [],
+        totalData = 5
+      page * limitNum > this.orderData.length
+        ? (totalData = this.orderData.length)
+        : (totalData = page * limitNum)
+      for (let i = (page - 1) * limitNum; i < totalData; i++) {
+        newData.push(this.orderData[i])
+      }
+      this.filterData = newData
+      return newData
     }
   },
   watch: {
     checkedAll: function() {
+      this.selectIsShow = false
       //不使用watch監聽會在一開始獲取錯誤值
       this.checkedSelection(this.hascheckedAll)
     }
   },
   mounted() {
+    this.isLoading = true
     this.$nextTick(function() {
-      let vm = this
-      if (!vm.orderListData.length) {
-        vm.isLoading = true
+      if (!this.orderData.length) {
         axios
           .get('http://localhost:3000/orders')
           .then(res => {
-            vm.orderListData = res.data
-            vm.isLoading = false
+            this.orderData = res.data
+            this.isLoading = false
           })
           .catch(error => {
             console.log(error)

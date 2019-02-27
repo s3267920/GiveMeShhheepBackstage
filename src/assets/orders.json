@@ -1,6 +1,5 @@
 {
-  "orders": [
-    {
+  "orders": [{
       "id": 1,
       "orderId": "9",
       "customer": {
@@ -16,8 +15,7 @@
         "phone": "0123456789",
         "email": "123@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "Vestibulum",
           "price": 1400,
@@ -57,13 +55,11 @@
         "phone": "0123456789",
         "email": "456@gmail.com"
       },
-      "product": [
-        {
-          "name": "Donec facili.",
-          "price": 1400,
-          "quantity": 1
-        }
-      ],
+      "product": [{
+        "name": "Donec facili.",
+        "price": 1400,
+        "quantity": 1
+      }],
       "total": 1400,
       "addToCart": {
         "date": "2018/6/8",
@@ -91,8 +87,7 @@
         "phone": "0123456789",
         "email": "789@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "測試用0",
           "price": 800,
@@ -132,8 +127,7 @@
         "phone": "0912345678",
         "email": "2347@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "測試用2",
           "price": 800,
@@ -173,8 +167,7 @@
         "phone": "0123456789",
         "email": "123@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "測試用4",
           "price": 800,
@@ -214,8 +207,7 @@
         "phone": "0123456789",
         "email": "123@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "測試用6",
           "price": 800,
@@ -255,8 +247,7 @@
         "phone": "0123456789",
         "email": "123@gmail.com"
       },
-      "product": [
-        {
+      "product": [{
           "id": 0,
           "name": "測試用",
           "price": 800,
