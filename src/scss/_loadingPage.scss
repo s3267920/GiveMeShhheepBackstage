@@ -5,6 +5,8 @@
   height: 600px;
   display: flex;
 
+
+
   .loadingAnimate {
     display: flex;
     margin: auto;
@@ -21,7 +23,7 @@
       height: 1000px;
       background-repeat: no-repeat;
       animation-name: sheep_jump;
-      // animation-delay: 1s;
+      animation-delay: 1s;
       animation-duration: 3s;
       animation-iteration-count: infinite;
       animation-timing-function: step-start;
