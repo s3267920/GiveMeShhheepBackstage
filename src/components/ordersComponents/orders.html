@@ -4,7 +4,7 @@
     <div class="content_head">
       <div class="check_option">
         <input type="checkbox" name="check" id="all" :class="{checked:checkedAll}" v-model="checkedAll">
-        <label for="all" @click="checkedSelection(hascheckedAll)"></label>
+        <label for="all" @click="checkedSelection(hasCheckedAll)"></label>
         <span class="triangle_bottom" id="check_more_option" @click="selectDisplay">
           <transition name="fade" mode="in-out">
             <ul id="select_menu" class="select_menu" v-show="selectIsShow">
@@ -90,7 +90,7 @@
             <th class="table_status" v-if="getCheck.status">Status</th>
           </tr>
           <orderList v-for="item in orderListData" :key="item.orderId" :get-order-data="item" :get-check="getCheck"
-            :has-select="hasSelect" :get-all-data="orderData" v-on:changeDataStatus="changeOrderListStatus"
+            :has-select="hasSelect" :hasCheckedAll="checkedAll" :get-all-data="orderData" v-on:changeDataStatus="changeOrderListStatus"
             @getCheckedData="getCheckedDataArray"></orderList>
         </table>
       </div>

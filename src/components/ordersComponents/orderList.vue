@@ -64,7 +64,13 @@
 <script>
 export default {
   name: 'orderList',
-  props: ['getAllData', 'getOrderData', 'getCheck', 'hasSelect'],
+  props: [
+    'getAllData',
+    'getOrderData',
+    'getCheck',
+    'hasSelect',
+    'hasCheckedAll'
+  ],
   data() {
     return {
       data: this.getOrderData,
@@ -92,6 +98,9 @@ export default {
           return 'doneColor'
           break
       }
+    },
+    checkedAll() {
+      return this.hasCheckedAll
     },
     checkedSelection() {
       return this.hasSelect
@@ -124,12 +133,14 @@ export default {
           this.data.status === 'shipping'
             ? (this.ischecked = true)
             : (this.ischecked = false)
-
           break
-        default:
+        case 'Done':
           this.data.status === 'done'
             ? (this.ischecked = true)
             : (this.ischecked = false)
+          break
+        default:
+          this.ischecked = false
           break
       }
     },

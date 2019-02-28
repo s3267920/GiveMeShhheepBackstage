@@ -5,8 +5,8 @@
 <script>
 import orderList from './orderList'
 import changeStatusSelection from './changeStatusSelection'
-import loadingPage from '../LoadingPage'
-import pagination from '../Pagination'
+import loadingPage from '../extendComponents/LoadingPage'
+import pagination from '../extendComponents/Pagination'
 import axios from 'axios'
 export default {
   name: 'orders',
@@ -38,17 +38,23 @@ export default {
         phone: false,
         email: false,
         status: true
-      }
+      },
+      ordersPageStatusList: []
     }
   },
   computed: {
-    hascheckedAll() {
-      if (this.checkedAll === false) {
-        this.hasSelect = 'Unselect All'
-        return 'Unselect All'
-      } else {
+    hasCheckedAll() {
+      if (this.checkedAll === true) {
         this.hasSelect = 'Select All'
         return 'Select All'
+      } else {
+        if (this.hasSelect !== 'Select All') {
+          this.hasSelect = this.hasSelect
+          return this.hasSelect
+        } else {
+          this.hasSelect = 'Unselect All'
+          return 'Unselect All'
+        }
       }
     },
     orderListData() {
@@ -87,7 +93,6 @@ export default {
           this.hasSelect = value
           break
         default:
-          // this.hasSelect = value
           break
       }
     },
@@ -144,7 +149,7 @@ export default {
     checkedAll: function() {
       this.selectIsShow = false
       //不使用watch監聽會在一開始獲取錯誤值
-      this.checkedSelection(this.hascheckedAll)
+      this.checkedSelection(this.hasCheckedAll)
     }
   },
   mounted() {

@@ -129,6 +129,7 @@ a {
             background-color: color(color_gray, white);
             width: 125px;
             height: 34px;
+            text-transform: capitalize;
 
             &:hover,
             &:focus {
