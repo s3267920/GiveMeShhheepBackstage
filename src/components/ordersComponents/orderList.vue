@@ -112,29 +112,29 @@ export default {
     },
     checkedSelection: function(val) {
       switch (val) {
-        case 'Select All':
+        case 'select all':
           this.ischecked = true
           break
-        case 'Unselect All':
+        case 'unselect all':
           this.ischecked = false
           break
-        case 'Paid':
+        case 'paid':
           this.data.status === 'paid'
             ? (this.ischecked = true)
             : (this.ischecked = false)
 
           break
-        case 'Unpaid':
+        case 'unpaid':
           this.data.status === 'unpaid'
             ? (this.ischecked = true)
             : (this.ischecked = false)
           break
-        case 'Shipping':
+        case 'shipping':
           this.data.status === 'shipping'
             ? (this.ischecked = true)
             : (this.ischecked = false)
           break
-        case 'Done':
+        case 'done':
           this.data.status === 'done'
             ? (this.ischecked = true)
             : (this.ischecked = false)

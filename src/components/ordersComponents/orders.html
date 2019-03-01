@@ -8,18 +8,19 @@
         <span class="triangle_bottom" id="check_more_option" @click="selectDisplay">
           <transition name="fade" mode="in-out">
             <ul id="select_menu" class="select_menu" v-show="selectIsShow">
-              <li @click="checkedSelection('Select All')"><a href.prevent class="select_all" :class="{has_check:hasSelect === 'Select All'}">Select
+              <li @click="checkedSelection('select all')"><a href.prevent class="select_all" :class="{has_check:hasSelect === 'select all'}">Select
                   All</a></li>
-              <li @click="checkedSelection('Unselect All')"><a href.prevent class="unselect_all" :class="{has_check:hasSelect === 'Unselect All'}">Unselect
+              <li @click="checkedSelection('unselect all')"><a href.prevent class="unselect_all" :class="{has_check:hasSelect === 'unselect all'}">Unselect
                   All</a></li>
-              <li @click="checkedSelection('Paid')"><a href.prevent class="paid" :class="{has_check:hasSelect === 'Paid'}">Paid</a></li>
-              <li @click="checkedSelection('Unpaid')"><a href.prevent class="unpaid" :class="{has_check:hasSelect === 'Unpaid'}">Unpaid</a></li>
-              <li @click="checkedSelection('Shipping')"><a href.prevent class="shipping" :class="{has_check:hasSelect === 'Shipping'}">Shipping</a></li>
-              <li @click="checkedSelection('done')"><a href.prevent class="done" :class="{has_check:hasSelect === 'Done'}">Done</a></li>
+              <li @click="checkedSelection('paid')"><a href.prevent class="paid" :class="{has_check:hasSelect === 'paid'}">Paid</a></li>
+              <li @click="checkedSelection('unpaid')"><a href.prevent class="unpaid" :class="{has_check:hasSelect === 'unpaid'}">Unpaid</a></li>
+              <li @click="checkedSelection('shipping')"><a href.prevent class="shipping" :class="{has_check:hasSelect === 'shipping'}">Shipping</a></li>
+              <li @click="checkedSelection('done')"><a href.prevent class="done" :class="{has_check:hasSelect === 'done'}">Done</a></li>
             </ul>
           </transition>
         </span>
-        <changeStatusSelection v-on:changeHasCheckedDataStatus="changeHasCheckedDataStatus" :has-checked-data="hasCheckedData"></changeStatusSelection>
+        <ChangeStatusSelection v-on:changeHasCheckedDataStatus="changeHasCheckedDataStatus" :has-checked-data="hasCheckedData"
+          :getAllSelectionOption="allSelectionOption"></ChangeStatusSelection>
 
       </div>
       <div class="edit_section">

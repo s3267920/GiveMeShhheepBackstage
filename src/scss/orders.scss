@@ -10,244 +10,55 @@ a {
   background-color: color(color_gray, white30);
   padding-bottom: 40px;
 
-  .content_head {
-    display: flex;
-    margin: 0 4%;
-    padding-top: 30px;
-    padding-bottom: 15px;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
+  @import '_extend.scss';
 
-    #check_option_icon {
-      display: flex;
-      @include background-img;
-      background-image: url(../assets/img/tags.svg);
-      height: 15px;
-      width: 19px;
-      margin-left: 15px;
-      position: relative;
+  .content_head>.edit_section {
+    margin: 0 8px;
+    position: relative;
 
-      .tooltip,
-      .tooltip_right {
-        position: absolute;
-        top: 30px;
-        left: -45px;
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        font-size: nth($font, 1);
-        height: 29px;
-        padding: 0px 10px;
-        background-color: color(color_teal, dark);
-        color: color(other, white);
-        visibility: hidden;
-        opacity: 0;
-        transition: opacity 0.3s;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: -12px;
-          left: 50px;
-          border-top: 4px solid transparent;
-          border-bottom: 8px solid color(color_teal, dark);
-          border-left: 4px solid transparent;
-          border-right: 4px solid transparent;
-        }
-      }
-
-      .tooltip_right {
-        top: -10px;
-        left: 35px;
-        border-radius: 3px;
-
-        &::after {
-          content: '';
-          position: absolute;
-
-          top: 12px;
-          left: -12px;
-          border-bottom: 4px solid transparent;
-          border-right: 8px solid color(color_teal, dark);
-          border-top: 4px solid transparent;
-          border-left: 4px solid transparent;
-        }
-      }
-
-      &:hover {
-
-        .tooltip,
-        .tooltip_right {
-          visibility: visible;
-          opacity: 1;
-        }
-      }
-    }
-
-    .check_option {
-      position: relative;
-      cursor: pointer;
-      height: 15px;
-      z-index: 5;
-      color: color(color_teal, light);
+    a {
+      color: color(color_teal, dark);
       display: inline-flex;
       align-items: center;
-      margin: 0 8px;
-
-      a {
-        color: color(color_teal, dark);
-      }
-
-      .select_menu,
-      .status_change {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 15px;
-        left: 0px;
-        margin-top: 10px;
-        box-shadow: 0 0 10px color(color_teal, dark);
-
-        li {
-          background-color: color(color_gray, white);
-          width: 125px;
-          height: 34px;
-
-          &:first-child {
-            padding-top: 6px;
-          }
-
-          &:last-child {
-            padding-bottom: 6px;
-          }
-
-          a {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            background-color: color(color_gray, white);
-            width: 125px;
-            height: 34px;
-            text-transform: capitalize;
-
-            &:hover,
-            &:focus {
-              background-color: color(color_teal, dark);
-              color: color(color_gray, white);
-            }
-          }
-        }
-
-        .has_check {
-          background-color: color(color_yellow, main);
-        }
-      }
-
-      .status_change {
-        left: -45px;
-      }
-
-      input {
-        visibility: hidden;
-      }
-
-      label {
-        cursor: pointer;
-        position: absolute;
-        bottom: -1px;
-        left: 0px;
-        width: 14px;
-        height: 14px;
-        border-radius: 3px;
-        display: inline-block;
-        border: 1px solid color(color_teal, light);
-
-        &:hover {
-          background-color: color(color_teal, gray30);
-        }
-
-        &::after {
-          content: none;
-          position: absolute;
-          bottom: 6px;
-          left: 3px;
-          width: 8px;
-          height: 4px;
-          transform: rotate(-45deg);
-          border-bottom: 2px solid color(color_gray, white);
-          border-left: 2px solid color(color_gray, white);
-        }
-      }
-
-      input[class="checked"]+label {
-        background-color: color(color_teal, dark);
-
-        &::after {
-          content: '';
-        }
-      }
     }
 
-    .triangle_bottom {
-      display: inline-flex;
-      width: 0;
-      height: 0;
-      margin-left: 5px;
-      cursor: pointer;
-      line-height: 10px;
-      border-top: 5px solid color(color_teal, dark);
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-    }
+    ul {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      z-index: 5;
+      left: 0px;
+      margin-top: 10px;
+      box-shadow: 0 0 10px color(color_teal, dark);
 
-    .edit_section {
-      margin: 0 8px;
-      position: relative;
-
-      a {
-        color: color(color_teal, dark);
+      li {
+        background-color: color(color_gray, white);
+        width: 150px;
+        height: 34px;
         display: inline-flex;
         align-items: center;
-      }
 
-      ul {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        z-index: 5;
-        left: 0px;
-        margin-top: 10px;
-        box-shadow: 0 0 10px color(color_teal, dark);
+        &:first-child {
+          padding-top: 6px;
+        }
 
-        li {
-          background-color: color(color_gray, white);
-          width: 150px;
-          height: 34px;
-          display: inline-flex;
-          align-items: center;
+        &:last-child {
+          padding-bottom: 6px;
+        }
 
-          &:first-child {
-            padding-top: 6px;
-          }
+        input {
+          margin: 10px 0px 10px 20px;
+        }
 
-          &:last-child {
-            padding-bottom: 6px;
-          }
-
-          input {
-            margin: 10px 0px 10px 20px;
-          }
-
-          label {
-            margin-left: 10px;
-          }
+        label {
+          margin-left: 10px;
         }
       }
-
-      margin-left: auto;
     }
+
+    margin-left: auto;
   }
+
 
   .content_table {
     user-select: none; //禁止選取

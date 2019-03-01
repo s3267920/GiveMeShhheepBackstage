@@ -4,7 +4,7 @@
 
 <script>
 import orderList from './orderList'
-import changeStatusSelection from './changeStatusSelection'
+import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
 import loadingPage from '../extendComponents/LoadingPage'
 import pagination from '../extendComponents/Pagination'
 import axios from 'axios'
@@ -13,12 +13,13 @@ export default {
   components: {
     orderList,
     loadingPage,
-    changeStatusSelection,
+    ChangeStatusSelection,
     pagination
   },
 
   data() {
     return {
+      allSelectionOption: ['paid', 'unpaid', 'shipping', 'done'],
       orderData: [],
       filterData: [],
       hasCheckedData: [],
@@ -45,15 +46,15 @@ export default {
   computed: {
     hasCheckedAll() {
       if (this.checkedAll === true) {
-        this.hasSelect = 'Select All'
-        return 'Select All'
+        this.hasSelect = 'select all'
+        return 'select all'
       } else {
-        if (this.hasSelect !== 'Select All') {
+        if (this.hasSelect !== 'select all') {
           this.hasSelect = this.hasSelect
           return this.hasSelect
         } else {
-          this.hasSelect = 'Unselect All'
-          return 'Unselect All'
+          this.hasSelect = 'unselect all'
+          return 'unselect all'
         }
       }
     },
@@ -68,6 +69,13 @@ export default {
       }
     }
   },
+  watch: {
+    checkedAll: function() {
+      this.selectIsShow = false
+      //不使用watch監聽會在一開始獲取錯誤值
+      this.checkedSelection(this.hasCheckedAll)
+    }
+  },
   methods: {
     selectDisplay() {
       this.selectIsShow = !this.selectIsShow
@@ -77,17 +85,17 @@ export default {
     },
     checkedSelection(value) {
       switch (value) {
-        case 'Select All':
+        case 'select all':
           this.checkedAll = true
           this.hasSelect = value
           break
-        case 'Unselect All':
+        case 'unselect all':
           this.checkedAll = false
           this.hasSelect = value
           break
-        case 'Paid':
-        case 'Unpaid':
-        case 'Shipping':
+        case 'paid':
+        case 'unpaid':
+        case 'shipping':
         case 'done':
           this.checkedAll = false
           this.hasSelect = value
@@ -130,7 +138,6 @@ export default {
             })
         }
       })
-      console.log('changeHasCheckedDataStatus')
     },
     filterDataHandle(page, limitNum) {
       let newData = [],
@@ -143,13 +150,6 @@ export default {
       }
       this.filterData = newData
       return newData
-    }
-  },
-  watch: {
-    checkedAll: function() {
-      this.selectIsShow = false
-      //不使用watch監聽會在一開始獲取錯誤值
-      this.checkedSelection(this.hasCheckedAll)
     }
   },
   mounted() {
