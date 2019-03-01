@@ -7,23 +7,30 @@
 import PreviewBox from './PreviewBox'
 import Specification from './Specification'
 import ProductTable from './ProductTable'
-import LoadingPage from './LoadingPage'
+import LoadingPage from '../extendComponents/LoadingPage'
+import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
+import Pagination from '../extendComponents/Pagination'
 import db from '@/firebaseInit.js'
 export default {
   name: 'product',
   components: {
     PreviewBox,
     Specification,
+    ChangeStatusSelection,
     ProductTable,
-    LoadingPage
+    LoadingPage,
+    Pagination
   },
   data() {
     return {
-      image: [],
       modalDisplay: false,
-      trRowColorGreen: false,
+      isCheckedAll: false,
+      allSelectionOption: ['published', 'unpublished'],
+      hasSelectText: '',
+      hasCheckedDataArray: [],
       imgList: [],
       specificationCount: 0,
+      filterData: [],
       productData: [],
       formData: {
         img: [],
@@ -36,7 +43,10 @@ export default {
         specification: [],
         status: true
       },
-      isLoading: false
+      isLoading: false,
+      selectionOptionDisplay: false,
+      page: null,
+      limitNum: null
     }
   },
   computed: {
@@ -50,22 +60,77 @@ export default {
     getNewId() {
       return this.specificationCount
     },
-    trColorGreen() {
-      this.productData.forEach((el, index, arr) => {
-        if (arr.indexOf(el) % 2 === 0) {
-          return true
-        } else {
-          return false
-        }
-      })
+    productTableData() {
+      if (!this.filterData.length) {
+        return this.filterDataHandle(1, 5)
+      } else {
+        this.hasCheckedData = []
+        this.hasSelectText = ''
+        this.selectionOptionDisplay = false
+        this.isCheckedAll = false
+        return this.filterData
+      }
+    }
+  },
+  watch: {
+    productData: {
+      handler() {
+        this.isLoading = true
+        this.$nextTick(function() {
+          this.getProductData()
+          this.filterDataHandle(this.page, this.limitNum)
+          console.log(this.productData.length)
+        })
+      },
+      deep: true
     },
-    dataStatus() {
-      // if()
+    isCheckedAll: function() {
+      this.checkedSelectionOptionHandle(this.hasSelectText)
     }
   },
   methods: {
-    openModal() {
-      this.modalDisplay = true
+    getProductData() {
+      let newData = []
+      //在database裡面的user集合裡的id
+      //id裡面的集合product
+      db.firestore()
+        .collection('user')
+        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .collection('product')
+        .orderBy('productIndex', 'asc')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            let data = {
+              id: doc.id,
+              productIndex: doc.data().productIndex,
+              imgList: doc.data().imgList,
+              productName: doc.data().productName,
+              discription: doc.data().discription,
+              price: {
+                original: doc.data().price.original,
+                discount: doc.data().price.discount
+              },
+              specification: doc.data().specification,
+              status: doc.data().status
+            }
+            newData.push(data)
+            if (this.productData.length < querySnapshot.docs.length) {
+              if (!this.productData.length) {
+                this.productData = newData
+              } else {
+                this.productData.forEach(el => {
+                  if (el === data) {
+                    return
+                  } else {
+                    this.productData = newData
+                  }
+                })
+              }
+            }
+            this.isLoading = false
+          })
+        })
     },
     closeModal() {
       this.modalDisplay = false
@@ -79,7 +144,6 @@ export default {
     },
     readURL(files) {
       let vm = this
-      vm.image.push(files)
       if (!window.FileReader) {
         alert('您的設備不支援圖片預覽功能，如需此功能，請升級瀏覽器')
       } else {
@@ -97,9 +161,9 @@ export default {
             let ctx = canvas.getContext('2d')
             let imgWidth = img.width
             let imgHeight = img.height
-            let maxWidth = 1024,
-              maxHeight = 1024
-            let targetWidth = imgWidth,
+            let maxWidth = 800,
+              maxHeight = 800,
+              targetWidth = imgWidth,
               targetHeight = imgHeight
             if (imgWidth > maxWidth || imgHeight > maxHeight) {
               if (imgWidth / imgHeight > maxWidth / maxHeight) {
@@ -181,29 +245,45 @@ export default {
         index: this.getNewId
       })
     },
-    submitData() {
+    resetForm() {
+      this.formData.productName = ''
+      this.formData.discription = ''
+      this.formData.price.original = ''
+      this.formData.price.discount = ''
+      this.formData.specification = []
+      this.img = []
+      this.imgList = []
+      this.addNewSpecification()
+    },
+    submitData(isPublished) {
+      let vm = this
+      isPublished === 'published'
+        ? (vm.formData.status = true)
+        : (vm.formData.status = false)
       if (
-        !this.formData.img.length &&
-        this.formData.productName === '' &&
-        this.formData.discription === '' &&
-        this.formData.price.original === '' &&
-        this.formData.price.discount === '' &&
-        this.formData.specification[0].style === null &&
-        this.formData.specification[0].styleInfo[0].inventory === '' &&
-        this.formData.specification[0].styleInfo[0].size === ''
+        !vm.formData.img.length &&
+        vm.formData.productName === '' &&
+        vm.formData.discription === '' &&
+        vm.formData.price.original === '' &&
+        vm.formData.price.discount === '' &&
+        vm.formData.specification[0].hasConfirm === null &&
+        vm.formData.specification[0].style === null
       ) {
         alert('請填寫完畢再送出！！！')
       } else {
-        this.isLoading = true
         let newProduct = {
-          productName: this.formData.productName,
-          discription: this.formData.discription,
+          id: '',
+          imgList: [],
+          productName: vm.formData.productName,
+          discription: vm.formData.discription,
+          productIndex:
+            vm.productData[vm.productData.length - 1].productIndex + 1,
           price: {
-            original: this.formData.price.original,
-            discount: this.formData.price.discount
+            original: vm.formData.price.original,
+            discount: vm.formData.price.discount
           },
-          specification: this.formData.specification,
-          status: this.formData.status
+          specification: vm.formData.specification,
+          status: vm.formData.status
         }
         let id
         db.firestore()
@@ -212,17 +292,18 @@ export default {
           .collection('product')
           .add(newProduct)
           .then(data => {
+            vm.isLoading = true
             id = data.id
             return id
           })
           .then(id => {
             let storage = db.storage()
             let userID = 'eeaiaWr8npPl02Xn9lQohYvfFgn2' + '/'
-            this.image.forEach(img => {
+            vm.imgList.forEach(img => {
               storage
                 .ref('user/' + userID + 'product/' + id)
                 .child(img.name)
-                .put(img)
+                .putString(img.src, 'data_url')
                 .then(fileData => {
                   storage
                     .ref(fileData.metadata.fullPath)
@@ -233,9 +314,9 @@ export default {
                         src: url
                       }
                       if (fileData.state === 'success') {
-                        this.formData.img.push(newImgInfo)
+                        vm.formData.img.push(newImgInfo)
                       }
-                      if (this.formData.img.length === this.image.length) {
+                      if (vm.formData.img.length === vm.imgList.length) {
                         db.firestore()
                           .collection('user')
                           .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
@@ -243,12 +324,16 @@ export default {
                           .doc(id)
                           .update({
                             id: id,
-                            imgList: this.formData.img
+                            imgList: vm.formData.img
                           })
-                          .then(function() {
-                            this.resetForm()
-                            this.isLoading = false
+                          .then(() => {
+                            ;(newProduct.id = id),
+                              (newProduct.imgList = vm.formData.img)
                           })
+                        this.productData.push(newProduct)
+                        vm.isLoading = false
+                        vm.modalDisplay = false
+                        vm.resetForm()
                       }
                     })
                 })
@@ -260,69 +345,120 @@ export default {
           .catch(function(error) {
             console.error('Error adding document: ', error)
           })
-        this.modalDisplay = false
       }
     },
-    resetForm() {
-      this.formData.productName = ''
-      this.formData.discription = ''
-      this.formData.price.original = ''
-      this.formData.price.discount = ''
-      this.formData.specification = []
-      this.img = []
-      this.image = []
-      this.imgList = []
-      this.addNewSpecification()
+    deleteProduct(data) {
+      console.log(data.id)
+      let dataIndex = this.productData.indexOf(data)
+      this.productData.splice(dataIndex, 1)
+    },
+
+    getHasCheckedData(status, data) {
+      let arrIndex = this.hasCheckedDataArray.indexOf(data)
+      status
+        ? this.hasCheckedDataArray.push(data)
+        : this.hasCheckedDataArray.splice(arrIndex, 1)
+    },
+    checkedSelectionOptionHandle(val) {
+      switch (val) {
+        case 'all':
+          this.isCheckedAll === true
+            ? (this.hasSelectText = 'not checked all')
+            : (this.hasSelectText = 'checked all')
+          break
+        case 'select all':
+          this.isCheckedAll = true
+          this.hasSelectText = 'select all'
+          break
+        case 'unselect all':
+          this.isCheckedAll = false
+          this.hasSelectText = 'unselect all'
+          break
+        case 'published':
+          this.isCheckedAll = false
+          this.hasSelectText = 'published'
+          break
+        case 'unpublished':
+          this.isCheckedAll = false
+          this.hasSelectText = 'unpublished'
+          break
+        default:
+          break
+      }
+    },
+    changeHasCheckedDataStatus(val) {
+      let vm = this
+      vm.isLoading = true
+      let reset = () => {
+        vm.hasSelectText = ''
+        vm.hasCheckedDataArray = []
+        vm.isCheckedAll = false
+      }
+      this.hasCheckedDataArray.forEach(data => {
+        if (val === 'published') {
+          let index = vm.productData.indexOf(data)
+          db.firestore()
+            .collection('user')
+            .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+            .collection('product')
+            .doc(data.id)
+            .update({
+              status: true
+            })
+            .then(() => {
+              vm.productData[index].status = true
+              vm.isLoading = false
+              reset()
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        } else {
+          let index = vm.productData.indexOf(data)
+          db.firestore()
+            .collection('user')
+            .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+            .collection('product')
+            .doc(data.id)
+            .update({
+              status: false
+            })
+            .then(() => {
+              vm.productData[index].status = false
+              vm.isLoading = false
+              reset()
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      })
+    },
+    filterDataHandle(page, limitNum) {
+      this.page = page
+      this.limitNum = limitNum
+      let newData = [],
+        totalData = 5
+      page * limitNum > this.productData.length
+        ? (totalData = this.productData.length)
+        : (totalData = page * limitNum)
+      for (let i = (page - 1) * limitNum; i < totalData; i++) {
+        newData.push(this.productData[i])
+      }
+      this.filterData = newData
+      return newData
     },
     fileDragHandle(e) {
       e.stopPropagation()
       e.preventDefault()
       e.target.className = e.type == 'dragover' ? 'hover' : ''
     },
-    fileSelectHandle() {},
-    getProductData() {
-      //在database裡面的user集合裡的id
-      //id裡面的集合product
-      db.firestore()
-        .collection('user')
-        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
-        .collection('product')
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            let data = {
-              id: doc.id,
-              imgList: doc.data().imgList,
-              productName: doc.data().productName,
-              discription: doc.data().discription,
-              price: {
-                original: doc.data().price.original,
-                discount: doc.data().price.discount
-              },
-              specification: doc.data().specification,
-              status: doc.data().status
-            }
-            this.productData.push(data)
-          })
-        })
-    }
+    fileSelectHandle() {}
   },
   mounted() {
-    this.$nextTick(function() {
-      this.addNewSpecification()
-    })
-  },
-  updated() {
-    this.$nextTick(function() {
-      !this.productData.length
-        ? (this.isLoading = true)
-        : (this.isLoading = false)
-    })
-  },
-  created() {
-    this.$nextTick(function() {
-      this.getProductData()
-    })
+    this.isLoading = true
+    this.getProductData()
+    this.addNewSpecification()
   }
 }
 </script>

@@ -48,8 +48,8 @@ export default {
   },
   methods: {
     changePage(page) {
-      this.$emit('changePage', page, this.limitNum)
       this.isCurrentPage = page
+      this.$emit('changePage', page, this.limitNum)
     },
     goPage(val) {
       let total = this.totalPage,

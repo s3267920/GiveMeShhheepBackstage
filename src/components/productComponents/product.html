@@ -12,26 +12,23 @@
 <body>
   <div class="product_content">
     <div class="content_head">
-      <div class="product_select_option">
-        <input type="checkbox" name="check" class="check_all" id="all">
+      <div class="check_option">
+        <input type="checkbox" name="check" id="all" v-model="isCheckedAll" :class="{checked:isCheckedAll}" @click="checkedSelectionOptionHandle('all')">
         <label for="all"></label>
-        <span class="triangle_bottom" id="check_more_option">
-          <ul id="select_menu" class="select_menu">
-            <li><a href="javascript:;" class="select_all">Select All</a></li>
-            <li><a href="javascript:;" class="unselect_all">Unselect All</a></li>
-            <li><a href="javascript:;" class="Published">Published</a></li>
-            <li><a href="javascript:;" class="Unpublished">Unpublished</a></li>
+        <span class="triangle_bottom" id="check_more_option" @click="selectionOptionDisplay=!selectionOptionDisplay">
+          <ul v-if="selectionOptionDisplay" id="select_menu" class="select_menu">
+            <li><a href.prevent class="select_all" :class="{has_check:hasSelectText==='select all'}" @click="checkedSelectionOptionHandle('select all')">select
+                all</a></li>
+            <li><a href.prevent class="unselect_all" :class="{has_check:hasSelectText==='unselect all'}" @click="checkedSelectionOptionHandle('unselect all')">unselect
+                all</a></li>
+            <li><a href.prevent class="published" :class="{has_check:hasSelectText==='published'}" @click="checkedSelectionOptionHandle('published')">published</a></li>
+            <li><a href.prevent class="unpublished" :class="{has_check:hasSelectText==='unpublished'}" @click="checkedSelectionOptionHandle('unpublished')">unpublished</a></li>
           </ul>
         </span>
-        <span id="check_option_icon">
-          <div class="tooltip">Change Status</div>
-          <ul id="status_change" class="status_change">
-            <li><a href="javascript:;" class="Published">Published</a></li>
-            <li><a href="javascript:;" class="Unpublished">Unpublished</a></li>
-          </ul>
-        </span>
+        <ChangeStatusSelection @changeHasCheckedDataStatus="changeHasCheckedDataStatus" :hasCheckedData="hasCheckedDataArray"
+          :getAllSelectionOption="allSelectionOption"></ChangeStatusSelection>
       </div>
-      <button class="add_product_btn" @click="openModal">ADD NEW PRODUCT<span>＋</span></button>
+      <button class="add_product_btn" @click="modalDisplay = true">ADD NEW PRODUCT<span>＋</span></button>
       <div class="add_modal" v-show="modalDisplay">
 
         <div class="modal">
@@ -43,7 +40,7 @@
           </div>
           <div class="modal_content">
             <LoadingPage style="position:absolute;left:0%;z-index:99" v-if="isLoading"></LoadingPage>
-            <form action="javascript:;" enctype="multipart/form-data" id="form" method="post">
+            <form v-on:submit.stop.prevent action="javascript:;" enctype="multipart/form-data" id="form" method="post">
               <div class="add_image">
                 <input @change.stop="addImg" type="file" name="src[]" id="addImage" accept="image/*" multiple>
                 <label for="addImage"> <img src="@/assets/img/cloud-upload-alt.svg">
@@ -56,13 +53,13 @@
               <div class="add_information">
                 <label for="product_name">Product Discription </label>
                 <input type="text" name="productName" id="product_name" placeholder="Product Name" required="required"
-                  v-model="formData.productName">
-                <textarea name="" id="" cols="30" rows="10" placeholder="Discription" v-model="formData.discription"></textarea>
+                  v-model.trim="formData.productName">
+                <textarea name="" id="" cols="30" rows="10" placeholder="Discription" v-model.trim="formData.discription"></textarea>
                 <label for="">Price</label>
                 <div class="info_price">
-                  <label for="original"><span>Original</span><input type="number" min="0" name="original" v-model="formData.price.original"
+                  <label for="original"><span>Original</span><input type="number" min="0" name="original" v-model.trim="formData.price.original"
                       required="required"></label>
-                  <label for="discount"><span>Discount</span><input type="number" name="discount" v-model="formData.price.discount"
+                  <label for="discount"><span>Discount</span><input type="number" name="discount" v-model.trim="formData.price.discount"
                       min="0" required="required"></label>
                 </div>
                 <label for="">Specification</label>
@@ -72,15 +69,13 @@
                 </ul>
                 <button type="button" class="add_new_btn" @click="addNewSpecification">ADD
                   NEW SPECIFICATION <img src="@/assets/img/ic_add.svg"></button>
-
                 <input type="reset" id="close_reset" value="" @click="closeModal">
                 <div class="submit_btn">
-                  <a href="javascript:;" id="save_draft">SAVE DRAFT</a>
-                  <button type="button" @click.stop="submitData">PUBLISH</button>
+                  <a href="javascript:;" @click.stop="submitData('unpublished')" id="save_draft">UNPUBLISHED</a>
+                  <button type="button" @click.stop="submitData('published')">PUBLISH</button>
                 </div>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -96,9 +91,12 @@
         <th class="information_inventory">Inventory</th>
         <th>Status</th>
       </tr>
-      <ProductTable :get-all-product="productData" :get-data="item" v-for="(item,index) in productData" :key="item.id"></ProductTable>
       <LoadingPage v-if="isLoading"></LoadingPage>
+      <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
+        v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
+        :key="item.id"></ProductTable>
     </table>
+    <Pagination :getData="productData" @changePage="filterDataHandle"></Pagination>
   </div>
   <footer></footer>
 </body>

@@ -1,12 +1,12 @@
 <template>
   <tr v-if="product" :class="{tealGray:trRowColor}">
     <td class="table_checkbox">
-      <input type="checkbox">
-      <label></label>
+      <input type="checkbox" :class="{checked:hasCheck}">
+      <label @click="hasCheck = !hasCheck"></label>
     </td>
 
     <td class="product">
-      <img :src="product.imgList[0].src">
+      <img :src="''||product.imgList[0].src">
       <span>{{product.productName}}</span>
     </td>
     <td class="original">{{product.price.original}}</td>
@@ -27,17 +27,22 @@
       </ul>
     </td>
     <td class="status">
-      <button class="status_Btn" value="UNPUBLISHED">
-        UNPUBLISHED
+      <button
+        @click="statusBtnDisplayHandle"
+        class="status_Btn"
+        value="UNPUBLISHED"
+        :class="{published_status:statusValue==='PUBLISHED',unpublished_status:statusValue==='UNPUBLISHED'}"
+      >
+        {{statusValue}}
         <span class="triangle_bottom"></span>
-        <ul class="status_option">
-          <a href="javascript:;" class="Published">
+        <ul class="status_option" v-show="statusBtnDisplay">
+          <a href.prevent @click="changeBtnStatus('Published')">
             <li>Published</li>
           </a>
-          <a href="javascript:;" class="Unpublished">
+          <a href.prevent @click="changeBtnStatus('Unpublished')">
             <li>Unpublished</li>
           </a>
-          <a href="javascript:;" class="delete">
+          <a href.prevent @click="deleteData" class="delete">
             <li>Delete</li>
           </a>
         </ul>
@@ -46,17 +51,124 @@
   </tr>
 </template>
 <script>
+import db from '@/firebaseInit.js'
 export default {
   name: 'productTable',
-  props: ['getData', 'getAllProduct'],
+  props: ['getData', 'getFilterProduct', 'getHasSelectText'],
   data() {
     return {
-      product: this.getData,
-      allProduct: this.getAllProduct,
-      trRowColor: false
+      hasCheck: false,
+      trRowColor: false,
+      statusBtnDisplay: false
     }
   },
-  computed: {},
+  computed: {
+    product() {
+      return this.getData
+    },
+    allProduct() {
+      return this.getFilterProduct
+    },
+    statusValue() {
+      if (this.product.status) {
+        return 'PUBLISHED'
+      } else {
+        return 'UNPUBLISHED'
+      }
+    },
+    hasCheckText() {
+      return this.getHasSelectText
+    }
+  },
+  watch: {
+    allProduct: function() {
+      if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
+        this.trRowColor = true
+      }
+    },
+    hasCheckText: function(val) {
+      switch (val) {
+        case 'checked all':
+          this.hasCheck = true
+          break
+        case 'not checked all':
+          this.hasCheck = false
+          break
+        case 'select all':
+          this.hasCheck = true
+          break
+        case 'unselect all':
+          this.hasCheck = false
+          break
+        case 'published':
+          this.product.status === true
+            ? (this.hasCheck = true)
+            : (this.hasCheck = false)
+          break
+        case 'unpublished':
+          this.product.status === false
+            ? (this.hasCheck = true)
+            : (this.hasCheck = false)
+
+          break
+        default:
+          break
+      }
+    },
+    hasCheck: function() {
+      this.$emit('getHasCheckedData', this.hasCheck, this.product)
+    }
+  },
+  methods: {
+    statusBtnDisplayHandle() {
+      this.statusBtnDisplay = !this.statusBtnDisplay
+    },
+    deleteData() {
+      let userID = 'eeaiaWr8npPl02Xn9lQohYvfFgn2' + '/'
+      this.product.imgList.forEach(img => {
+        db.storage()
+          .ref('user/' + userID + 'product/' + this.product.id)
+          .child(img.name)
+          .delete()
+          .then(function() {
+            console.log('Files successfully deleted!')
+          })
+          .catch(function(error) {})
+      })
+      db.firestore()
+        .collection('user')
+        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .collection('product')
+        .doc(this.product.id)
+        .delete()
+        .then(function() {
+          console.log('Document successfully deleted!')
+        })
+        .catch(function(error) {
+          console.error('Error removing document: ', error)
+        })
+      this.$emit('deleteData', this.product)
+    },
+    changeBtnStatus(val) {
+      let vm = this
+      let newStatus = true
+      val === 'Published' ? (newStatus = true) : (newStatus = false)
+      db.firestore()
+        .collection('user')
+        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .collection('product')
+        .doc(vm.product.id)
+        .update({
+          status: newStatus
+        })
+        .then(function() {
+          vm.getData.status = newStatus
+        })
+        .catch(function(error) {
+          console.error('Error updating document: ', error)
+        })
+    }
+  },
   mounted() {
     this.$nextTick(function() {
       if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
