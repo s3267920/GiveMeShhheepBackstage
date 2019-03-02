@@ -4,36 +4,51 @@ import Home from './components/homeComponents/Home.vue';
 import Orders from './components/ordersComponents/Orders.vue';
 import Product from './components/productComponents/Product.vue';
 import LogIn from './components/LogIn.vue';
-import Register from './components/Register.vue';
+import SignUp from './components/SignUp.vue';
 
 Vue.use(Router);
 
-export default new Router({
-  mode: 'history',
+const router = new Router({
+  // mode: 'history',
   routes: [{
+    path: '/login',
+    name: 'login',
+    component: LogIn,
+    meta: {
+      title: '登入 LogIn',
+    },
+  },
+  {
+    path: '/signUp',
+    name: 'signUp',
+    component: SignUp,
+    meta: {
+      title: '註冊 SignUp',
+    },
+  },
+  {
     path: '/backstage',
     name: 'home',
     component: Home,
-  },
-  {
-    path: '/login',
-    name: 'login',
-    components: LogIn,
-  },
-  {
-    path: '/register',
-    name: 'register',
-    components: Register,
+    meta: {
+      title: '後台首頁 Home',
+    },
   },
   {
     path: '/backstage/orders',
     name: 'orders',
     component: Orders,
+    meta: {
+      title: '訂單管理 Orders',
+    },
   },
   {
     path: '/backstage/product',
     name: 'product',
     component: Product,
+    meta: {
+      title: '產品管理 Product',
+    },
   },
   {
     path: '/*',
@@ -41,3 +56,8 @@ export default new Router({
   },
   ],
 });
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next();
+});
+export default router;
