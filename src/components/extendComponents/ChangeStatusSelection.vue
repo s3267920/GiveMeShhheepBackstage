@@ -1,6 +1,6 @@
 <template>
   <span v-if="hasChecked.length" id="check_option_icon" @click="toggleIsShow">
-    <div :class="{tooltip_right:isShow,tooltip:!isShow}">Change Status</div>
+    <div :class="tooltipStyle">Change Status</div>
     <transition name="fade" mode="in-out">
       <ul v-if="isShow" id="status_change" class="status_change">
         <li v-for="data in allSelectionOption" :key="data">
@@ -26,6 +26,13 @@ export default {
     }
   },
   computed: {
+    tooltipStyle() {
+      if (this.isShow) {
+        return 'tooltip_right'
+      } else {
+        return 'tooltip'
+      }
+    },
     hasChecked() {
       if (!this.hasCheckedData.length) {
         this.isShow = false

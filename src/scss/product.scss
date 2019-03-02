@@ -133,14 +133,27 @@ a {
         line-height: 24px;
         margin-bottom: 10px;
 
+        .upload_icon {
+          margin-bottom: 8px;
+          width: 48px;
+          height: 48px;
+        }
+
+
         &:active {
           transform: translate() 4s;
           box-shadow: 0 0 5px color(color_teal, dark);
         }
 
-        img {
-          margin-bottom: 8px;
-          width: 48px;
+        //參考資料 https://stackoverflow.com/questions/42853699/is-there-a-css-drop-hover-pseudo-class
+        &[class="dragZone"] {
+          transform: translate() 4s;
+          box-shadow: 0 0 5px color(color_teal, dark);
+          color: color(color_teal, gray);
+
+          .upload_icon {
+            color: color(color_teal, gray)
+          }
         }
       }
 

@@ -25,6 +25,7 @@ export default {
     return {
       modalDisplay: false,
       isCheckedAll: false,
+      isDragZone: false,
       allSelectionOption: ['published', 'unpublished'],
       hasSelectText: '',
       hasCheckedDataArray: [],
@@ -79,7 +80,6 @@ export default {
         this.$nextTick(function() {
           this.getProductData()
           this.filterDataHandle(this.page, this.limitNum)
-          console.log(this.productData.length)
         })
       },
       deep: true
@@ -189,9 +189,13 @@ export default {
         reader.readAsDataURL(files)
       }
     },
+    dragImgHandle(e) {
+      this.isDragZone = false
+      var files = e.dataTransfer.files
+      Array.prototype.forEach.call(files, this.readURL)
+    },
     removeImg(newIndex) {
       this.imgList.splice(newIndex, 1)
-      this.image.splice(newIndex, 1)
     },
     removeSpecification(data) {
       let index = this.formData.specification.indexOf(data)
@@ -447,13 +451,7 @@ export default {
       }
       this.filterData = newData
       return newData
-    },
-    fileDragHandle(e) {
-      e.stopPropagation()
-      e.preventDefault()
-      e.target.className = e.type == 'dragover' ? 'hover' : ''
-    },
-    fileSelectHandle() {}
+    }
   },
   mounted() {
     this.isLoading = true

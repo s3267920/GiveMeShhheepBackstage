@@ -43,10 +43,12 @@
             <form v-on:submit.stop.prevent action="javascript:;" enctype="multipart/form-data" id="form" method="post">
               <div class="add_image">
                 <input @change.stop="addImg" type="file" name="src[]" id="addImage" accept="image/*" multiple>
-                <label for="addImage"> <img src="@/assets/img/cloud-upload-alt.svg">
+                <label for="addImage" @dragover.prevent.stop @drop.prevent.stop="dragImgHandle" :class="{dragZone:isDragZone}"
+                  @dragover.prevent.stop="isDragZone = true" @dragleave.prevent.stop="isDragZone=false">
+                  <font-awesome-icon class="upload_icon" :icon="['fas', 'cloud-upload-alt']" />
                   Drag an image or click here to upload…</label>
                 <div class="image_previews">
-                  <PreviewBox :get-image="items" :get-index="index" v-for="(items,index) in imgList" :key="items.name"
+                  <PreviewBox :get-image="items" :get-index="index" v-for="(items,index) in imgList" :key="items.name+index"
                     v-on:remove="removeImg"></PreviewBox>
                 </div>
               </div>

@@ -17,6 +17,7 @@ import {
   faCheck,
   faPlusCircle,
   faMinusCircle,
+  faCloudUploadAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FontAwesomeIcon,
@@ -36,6 +37,7 @@ import 'firebase/firebase-storage';
 
 library.add(faUserCircle, faTimesCircle, faUser, faBuilding, faEdit, faCheck, faPlusCircle,
   faMinusCircle);
+library.add(faCloudUploadAlt);
 sync(store, router);
 
 
