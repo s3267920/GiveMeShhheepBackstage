@@ -60,6 +60,14 @@
       }
     }
 
+    .error {
+      border: 1px solid color(other, error);
+
+      &:focus {
+        box-shadow: 0 0 5px color(other, error);
+      }
+    }
+
     .login_icon {
       position: absolute;
       left: 70px;
@@ -163,7 +171,6 @@
 
   .login_other {
     margin: 0 5%;
-    margin-top: 5px;
     display: flex;
     font-size: nth($font, 1);
     justify-content: flex-end;

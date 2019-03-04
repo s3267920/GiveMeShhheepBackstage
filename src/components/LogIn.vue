@@ -12,6 +12,7 @@
           type="email"
           name="user_email"
           id="user_email"
+          :class="{error:email.error.length}"
           placeholder="example@gmail.com"
           v-model="email.email"
           @focus="emailFocus=true"
@@ -26,6 +27,7 @@
           type="password"
           name="user_password"
           id="user_password"
+          :class="{error:password.error.length}"
           placeholder="password"
           v-model="password.password"
           @focus="passwordFocus=true"
@@ -64,11 +66,11 @@ export default {
     return {
       email: {
         email: '',
-        error: 'test，請輸入正確'
+        error: ''
       },
       password: {
         password: '',
-        error: 'aaa'
+        error: ''
       },
       emailFocus: false,
       passwordFocus: false,
@@ -78,10 +80,16 @@ export default {
   computed: {},
   methods: {
     checkForm() {
-      if (this.validEmail(this.email.email)) {
-        console.log('get')
+      !this.password.password.length
+        ? (this.password.error = '請輸入密碼')
+        : (this.password.error = '')
+
+      if (!this.email.email.length) {
+        this.email.error = '請輸入電子郵件'
       } else {
-        console.log('not')
+        !this.validEmail(this.email.email)
+          ? (this.email.error = '請輸入正確的電子郵件格式')
+          : (this.email.error = '')
       }
     },
     validEmail(email) {
