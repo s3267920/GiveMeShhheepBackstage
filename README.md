@@ -1,29 +1,36 @@
-# backstage
+#Give Me Shhheep 網站後台（前台構思中)
 
-## Project setup
+## 整體
+
 ```
-npm install
+使用:
+Vue
+Vue CLI3
+SCSS 純手刻
+firebase資料庫串接
+json-server ＆ heroku 製作靜態Api
 ```
 
-### Compiles and hot-reloads for development
+---
+
+靜態不可操作部分
+
+### Home 首頁
+
 ```
-npm run serve
+使用:
+ECharts製作折線圖
+
 ```
 
-### Compiles and minifies for production
+### orders
+
 ```
 npm run build
 ```
 
-### Run your tests
+### product
+
 ```
 npm run test
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
