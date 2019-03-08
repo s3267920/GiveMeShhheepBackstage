@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     axios
-      .get('http://localhost:3000/customers')
+      .get('https://give-me-shheep-data.herokuapp.com/customers')
       .then(res => {
         const data = res.data
         this.orderData = data

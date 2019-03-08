@@ -40,7 +40,6 @@
         :value="statusText"
         :class="btnColor"
         @click="statusBtnDisplayHandle"
-        @blur="statusBtnDisplay=false"
       >
         {{data.status.toUpperCase()}}
         <span class="triangle_bottom"></span>

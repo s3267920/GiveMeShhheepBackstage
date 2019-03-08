@@ -5,12 +5,14 @@
   </div>
 </template>
 <script>
-import Headers from './Headers'
+import Headers from './Headers';
+import router from './router.js';
+
 export default {
   name: 'app',
   components: { Headers },
   data() {
-    return {}
-  }
-}
+    return {};
+  },
+};
 </script>
