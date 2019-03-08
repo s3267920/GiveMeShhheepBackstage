@@ -32,7 +32,13 @@ const moment = require('moment')
 export default {
   data() {
     return {
-      orderData: ''
+      orderData: '',
+      isLoading: false
+    }
+  },
+  watch: {
+    orderData: function() {
+      this.$emit('isLoading', this.isLoading)
     }
   },
   methods: {
@@ -46,11 +52,13 @@ export default {
     }
   },
   mounted() {
+    this.isLoading = true
     axios
       .get('https://give-me-shheep-data.herokuapp.com/customers')
       .then(res => {
         const data = res.data
         this.orderData = data
+        this.isLoading = false
       })
       .catch(error => console.log(error))
   }
