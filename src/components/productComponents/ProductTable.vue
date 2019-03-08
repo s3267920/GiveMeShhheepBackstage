@@ -28,7 +28,8 @@
     </td>
     <td class="status">
       <button
-        @click="statusBtnDisplayHandle"
+        @click="statusBtnDisplay = !statusBtnDisplay"
+        @blur="statusBtnDisplay=false"
         class="status_Btn"
         value="UNPUBLISHED"
         :class="{published_status:statusValue==='PUBLISHED',unpublished_status:statusValue==='UNPUBLISHED'}"
@@ -54,7 +55,7 @@
 import db from '@/firebaseInit.js'
 export default {
   name: 'productTable',
-  props: ['getData', 'getFilterProduct', 'getHasSelectText'],
+  props: ['getData', 'getFilterProduct', 'getHasSelectText', 'getUserId'],
   data() {
     return {
       hasCheck: false,
@@ -78,6 +79,9 @@ export default {
     },
     hasCheckText() {
       return this.getHasSelectText
+    },
+    userID() {
+      return this.getUserId
     }
   },
   watch: {
@@ -120,14 +124,10 @@ export default {
     }
   },
   methods: {
-    statusBtnDisplayHandle() {
-      this.statusBtnDisplay = !this.statusBtnDisplay
-    },
     deleteData() {
-      let userID = 'eeaiaWr8npPl02Xn9lQohYvfFgn2' + '/'
       this.product.imgList.forEach(img => {
         db.storage()
-          .ref('user/' + userID + 'product/' + this.product.id)
+          .ref('user/' + this.userID + '/' + 'product/' + this.product.id)
           .child(img.name)
           .delete()
           .then(function() {
@@ -137,7 +137,7 @@ export default {
       })
       db.firestore()
         .collection('user')
-        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .doc(this.userID)
         .collection('product')
         .doc(this.product.id)
         .delete()
@@ -155,7 +155,7 @@ export default {
       val === 'Published' ? (newStatus = true) : (newStatus = false)
       db.firestore()
         .collection('user')
-        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .doc(this.userID)
         .collection('product')
         .doc(vm.product.id)
         .update({

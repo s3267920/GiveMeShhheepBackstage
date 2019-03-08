@@ -95,7 +95,7 @@
       </tr>
       <LoadingPage v-if="isLoading"></LoadingPage>
       <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
-        v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
+        :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
         :key="item.id"></ProductTable>
     </table>
     <Pagination :getData="productData" @changePage="filterDataHandle"></Pagination>

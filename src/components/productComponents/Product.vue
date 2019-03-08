@@ -51,13 +51,6 @@ export default {
     }
   },
   computed: {
-    imgName() {
-      let list = []
-      this.imgList.forEach(el => {
-        list.push(el.name)
-      })
-      return list
-    },
     getNewId() {
       return this.specificationCount
     },
@@ -70,6 +63,17 @@ export default {
         this.selectionOptionDisplay = false
         this.isCheckedAll = false
         return this.filterData
+      }
+    },
+    userID() {
+      return db.auth().currentUser.uid
+    },
+    productIndex() {
+      let vm = this
+      if (!vm.productData.length) {
+        return 0
+      } else {
+        return vm.productData[vm.productData.length - 1].productIndex + 1
       }
     }
   },
@@ -95,41 +99,45 @@ export default {
       //id裡面的集合product
       db.firestore()
         .collection('user')
-        .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+        .doc(this.userID)
         .collection('product')
         .orderBy('productIndex', 'asc')
         .get()
         .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            let data = {
-              id: doc.id,
-              productIndex: doc.data().productIndex,
-              imgList: doc.data().imgList,
-              productName: doc.data().productName,
-              discription: doc.data().discription,
-              price: {
-                original: doc.data().price.original,
-                discount: doc.data().price.discount
-              },
-              specification: doc.data().specification,
-              status: doc.data().status
-            }
-            newData.push(data)
-            if (this.productData.length < querySnapshot.docs.length) {
-              if (!this.productData.length) {
-                this.productData = newData
-              } else {
-                this.productData.forEach(el => {
-                  if (el === data) {
-                    return
-                  } else {
-                    this.productData = newData
-                  }
-                })
-              }
-            }
+          if (querySnapshot.docs.length === 0) {
             this.isLoading = false
-          })
+          } else {
+            querySnapshot.forEach(doc => {
+              let data = {
+                id: doc.id,
+                productIndex: doc.data().productIndex,
+                imgList: doc.data().imgList,
+                productName: doc.data().productName,
+                discription: doc.data().discription,
+                price: {
+                  original: doc.data().price.original,
+                  discount: doc.data().price.discount
+                },
+                specification: doc.data().specification,
+                status: doc.data().status
+              }
+              newData.push(data)
+              if (this.productData.length < querySnapshot.docs.length) {
+                if (!this.productData.length) {
+                  this.productData = newData
+                } else {
+                  this.productData.forEach(el => {
+                    if (el === data) {
+                      return
+                    } else {
+                      this.productData = newData
+                    }
+                  })
+                }
+              }
+              this.isLoading = false
+            })
+          }
         })
     },
     closeModal() {
@@ -255,7 +263,7 @@ export default {
       this.formData.price.original = ''
       this.formData.price.discount = ''
       this.formData.specification = []
-      this.img = []
+      this.formData.img = []
       this.imgList = []
       this.addNewSpecification()
     },
@@ -280,8 +288,7 @@ export default {
           imgList: [],
           productName: vm.formData.productName,
           discription: vm.formData.discription,
-          productIndex:
-            vm.productData[vm.productData.length - 1].productIndex + 1,
+          productIndex: vm.productIndex,
           price: {
             original: vm.formData.price.original,
             discount: vm.formData.price.discount
@@ -292,7 +299,7 @@ export default {
         let id
         db.firestore()
           .collection('user')
-          .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+          .doc(this.userID)
           .collection('product')
           .add(newProduct)
           .then(data => {
@@ -302,10 +309,9 @@ export default {
           })
           .then(id => {
             let storage = db.storage()
-            let userID = 'eeaiaWr8npPl02Xn9lQohYvfFgn2' + '/'
             vm.imgList.forEach(img => {
               storage
-                .ref('user/' + userID + 'product/' + id)
+                .ref('user/' + this.userID + '/' + 'product/' + id)
                 .child(img.name)
                 .putString(img.src, 'data_url')
                 .then(fileData => {
@@ -323,7 +329,7 @@ export default {
                       if (vm.formData.img.length === vm.imgList.length) {
                         db.firestore()
                           .collection('user')
-                          .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+                          .doc(this.userID)
                           .collection('product')
                           .doc(id)
                           .update({
@@ -331,13 +337,13 @@ export default {
                             imgList: vm.formData.img
                           })
                           .then(() => {
-                            ;(newProduct.id = id),
-                              (newProduct.imgList = vm.formData.img)
+                            newProduct.id = id
+                            newProduct.imgList = vm.formData.img
+                            this.productData.push(newProduct)
+                            vm.isLoading = false
+                            vm.modalDisplay = false
+                            vm.resetForm()
                           })
-                        this.productData.push(newProduct)
-                        vm.isLoading = false
-                        vm.modalDisplay = false
-                        vm.resetForm()
                       }
                     })
                 })
@@ -403,7 +409,7 @@ export default {
           let index = vm.productData.indexOf(data)
           db.firestore()
             .collection('user')
-            .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+            .doc(this.userID)
             .collection('product')
             .doc(data.id)
             .update({
@@ -421,7 +427,7 @@ export default {
           let index = vm.productData.indexOf(data)
           db.firestore()
             .collection('user')
-            .doc('eeaiaWr8npPl02Xn9lQohYvfFgn2')
+            .doc(this.userID)
             .collection('product')
             .doc(data.id)
             .update({
