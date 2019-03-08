@@ -40,6 +40,7 @@
         :value="statusText"
         :class="btnColor"
         @click="statusBtnDisplayHandle"
+        @blur="statusBtnDisplay=false"
       >
         {{data.status.toUpperCase()}}
         <span class="triangle_bottom"></span>
@@ -107,10 +108,10 @@ export default {
     }
   },
   watch: {
-    ischecked: function(status) {
+    ischecked(status) {
       this.$emit('getCheckedData', this.data, status)
     },
-    checkedSelection: function(val) {
+    checkedSelection(val) {
       switch (val) {
         case 'select all':
           this.ischecked = true
@@ -145,7 +146,7 @@ export default {
       }
     },
     data: {
-      handler: function() {
+      handler() {
         this.statusColor()
       },
       deep: true
