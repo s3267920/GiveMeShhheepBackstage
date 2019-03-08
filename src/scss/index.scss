@@ -200,8 +200,17 @@
           margin-bottom: 5px;
         }
 
+        .website_icon {
+          font-size: 50px;
+          width: 45px;
+          margin-right: 20px;
+          color: color(color_teal, dark);
+        }
+
+
         >img {
-          height: 45px;
+          width: 45px;
+          // height: 45px;
           margin-right: 20px;
         }
 

@@ -30,7 +30,11 @@ import {
   faEdit,
   faEnvelope as farEnvelope,
 } from '@fortawesome/free-regular-svg-icons';
-
+import {
+  faGoogle,
+  faFacebook,
+  faAmazon,
+} from '@fortawesome/free-brands-svg-icons';
 // firebase
 
 import firebase from 'firebase/app';
@@ -48,12 +52,14 @@ const solid = [faUser,
   faKey,
   faBirthdayCake,
 ];
+const brands = [faGoogle, faFacebook, faAmazon];
 const regular = [faUserCircle,
   faTimesCircle,
   faEdit, farEnvelope,
 ];
 library.add(solid);
 library.add(regular);
+library.add(brands);
 sync(store, router);
 
 
