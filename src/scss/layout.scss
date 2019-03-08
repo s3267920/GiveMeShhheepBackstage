@@ -88,6 +88,10 @@ header {
         }
       }
 
+      .customer_name {
+        text-transform: capitalize;
+      }
+
       .login {
         display: flex;
       }
