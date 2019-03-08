@@ -5,7 +5,6 @@ import store from './store'; // eslint-disable-line
 import {
   sync,
 } from 'vuex-router-sync';
-
 // vue-fontawesome
 
 import {
@@ -18,6 +17,9 @@ import {
   faPlusCircle,
   faMinusCircle,
   faCloudUploadAlt,
+  faKey,
+  faEnvelope as fasEnvelope,
+  faBirthdayCake,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FontAwesomeIcon,
@@ -26,6 +28,7 @@ import {
   faUserCircle,
   faTimesCircle,
   faEdit,
+  faEnvelope as farEnvelope,
 } from '@fortawesome/free-regular-svg-icons';
 
 // firebase
@@ -35,9 +38,22 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/firebase-storage';
 
-library.add(faUserCircle, faTimesCircle, faUser, faBuilding, faEdit, faCheck, faPlusCircle,
-  faMinusCircle);
-library.add(faCloudUploadAlt);
+const solid = [faUser,
+  faBuilding,
+  faCheck,
+  faPlusCircle,
+  faMinusCircle,
+  faCloudUploadAlt,
+  fasEnvelope,
+  faKey,
+  faBirthdayCake,
+];
+const regular = [faUserCircle,
+  faTimesCircle,
+  faEdit, farEnvelope,
+];
+library.add(solid);
+library.add(regular);
 sync(store, router);
 
 

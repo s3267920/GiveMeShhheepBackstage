@@ -5,6 +5,7 @@ import Orders from './components/ordersComponents/Orders.vue';
 import Product from './components/productComponents/Product.vue';
 import LogIn from './components/LogIn.vue';
 import SignUp from './components/SignUp.vue';
+import db from './firebaseInit';
 
 Vue.use(Router);
 
@@ -14,8 +15,12 @@ const router = new Router({
     path: '/login',
     name: 'login',
     component: LogIn,
+    params: {
+
+    },
     meta: {
       title: '登入 LogIn',
+
     },
   },
   {
@@ -32,6 +37,7 @@ const router = new Router({
     component: Home,
     meta: {
       title: '後台首頁 Home',
+      requiresAuth: true,
     },
   },
   {
@@ -40,6 +46,7 @@ const router = new Router({
     component: Orders,
     meta: {
       title: '訂單管理 Orders',
+      requiresAuth: true,
     },
   },
   {
@@ -48,6 +55,7 @@ const router = new Router({
     component: Product,
     meta: {
       title: '產品管理 Product',
+      requiresAuth: true,
     },
   },
   {
@@ -57,7 +65,24 @@ const router = new Router({
   ],
 });
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title;
-  next();
+  if (to.meta.requiresAuth) {
+    db.auth().onAuthStateChanged((user) => {
+      if (user) {
+        next();
+        document.title = to.meta.title;
+      } else {
+        next({
+          path: '/login',
+        });
+      }
+    });
+  } else {
+    db.auth().onAuthStateChanged((user) => {
+      if (user && to.fullPath === '/login') next(false);
+      else next();
+      if (user && to.fullPath === '/signUp') next(false);
+      else next();
+    });
+  }
 });
 export default router;

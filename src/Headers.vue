@@ -6,7 +6,7 @@
       </h1>
     </div>
     <nav>
-      <ul>
+      <ul v-if="login">
         <li>
           <router-link :class="{'checked':getThisPath=='home'}" to="/backstage">Home</router-link>
         </li>
@@ -28,12 +28,12 @@
             v-if="login"
           >ADMIN</router-link>
         </li>
-        <li class="LogOut" v-if="!login">
-          <router-link to="/backstage" key="signUp">Sign Up</router-link>
+        <li class="signOut" v-if="login" @click="signOut">
+          <a>Sign Out</a>
         </li>
-        <li>
-          <router-link v-if="!login" to="/backstage" key="login">Log in</router-link>
-          <router-link v-else to="/backstage" key="register">Register</router-link>
+        <li class="login">
+          <router-link v-if="!login&&getPath!=='login'" to="login" key="login">Log in</router-link>
+          <router-link v-if="!login&&getPath!=='signUp'" to="signUp" key="signUp">Sign Up</router-link>
         </li>
       </ul>
     </div>
@@ -41,26 +41,73 @@
 </template>
 
 <script>
+import db from './firebaseInit.js';
+import router from './router.js';
+
 export default {
   name: 'headers',
   data() {
     return {
       getPath: '',
-      customerName: 'ADMIN',
-      login: true,
-      personalDisplay: false
-    }
+      customerName: '',
+      login: false,
+      personalDisplay: false,
+    };
   },
   computed: {
     getThisPath() {
-      return (this.getPath = this.$route.name)
-    }
+      return (this.getPath = this.$route.name);
+    },
+  },
+  watch: {
+    $route() {
+      if (db.auth().currentUser !== null) {
+        this.login = true;
+      } else {
+        this.login = false;
+      }
+    },
   },
   methods: {
     personalDisplayStatus() {
-      this.personalDisplay = !this.personalDisplay
-    }
+      this.personalDisplay = !this.personalDisplay;
+    },
+    signOut() {
+      const vm = this;
+      db.auth()
+        .signOut()
+        .then(() => {
+          vm.login = false;
+          alert('登出成功');
+          router.push({
+            path: '/login',
+            name: 'login',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
-  mounted() {}
-}
+  mounted() {
+    db.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const id = db.auth().currentUser.uid;
+        this.login = true;
+        db.firestore()
+          .collection('user')
+          .doc(id)
+          .get()
+          .then((doc) => {
+            this.customerName = doc.data().userName;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        this.login = false;
+      }
+    });
+  },
+};
 </script>
