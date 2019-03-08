@@ -8,7 +8,7 @@
     <a href.prevent v-for="i in actualPage" :key="i" @click.prevent="changePage(i)">
       <li
         v-text="i"
-        :class="{currentPage:isCurrentPage===i,lastPage:i===totalPage,firstPage:i===startPage&&i<pageListLimit}"
+        :class="{currentPage:isCurrentPage===i,lastPage:i===totalPage&&actualPage.length!==1,firstPage:i===startPage&&i<pageListLimit&&actualPage.length!==1}"
       ></li>
     </a>
     <a href.prevent @click="goPage('ahead')" v-show="lastPage!==totalPage">
@@ -36,7 +36,7 @@ export default {
       return Math.ceil(this.getData.length / this.limitNum)
     },
     actualPage() {
-      let pageList = []
+      const pageList = []
       this.totalPage > this.pageListLimit
         ? (this.lastPage = this.lastPage)
         : (this.lastPage = this.totalPage)
@@ -52,8 +52,9 @@ export default {
       this.$emit('changePage', page, this.limitNum)
     },
     goPage(val) {
-      let total = this.totalPage,
-        limit = this.pageListLimit
+      const total = this.totalPage
+
+      const limit = this.pageListLimit
       if (val === 'ahead') {
         if (total % limit !== 0) {
           this.startPage + limit + (total % limit) >= total
@@ -67,21 +68,19 @@ export default {
             : ((this.startPage = this.startPage + limit),
               (this.lastPage = this.lastPage + limit))
         }
+      } else if (total % limit !== 0) {
+        this.lastPage - limit <= limit
+          ? ((this.startPage = 1), (this.lastPage = limit))
+          : this.lastPage === total
+          ? ((this.startPage = this.startPage - limit),
+            (this.lastPage = this.lastPage - (total % limit)))
+          : ((this.startPage = this.startPage - limit),
+            (this.lastPage = this.lastPage - limit))
       } else {
-        if (total % limit !== 0) {
-          this.lastPage - limit <= limit
-            ? ((this.startPage = 1), (this.lastPage = limit))
-            : this.lastPage === total
-            ? ((this.startPage = this.startPage - limit),
-              (this.lastPage = this.lastPage - (total % limit)))
-            : ((this.startPage = this.startPage - limit),
-              (this.lastPage = this.lastPage - limit))
-        } else {
-          this.lastPage - limit <= limit
-            ? ((this.startPage = 1), (this.lastPage = limit))
-            : ((this.startPage = this.startPage - limit),
-              (this.lastPage = this.lastPage - limit))
-        }
+        this.lastPage - limit <= limit
+          ? ((this.startPage = 1), (this.lastPage = limit))
+          : ((this.startPage = this.startPage - limit),
+            (this.lastPage = this.lastPage - limit))
       }
     }
   }

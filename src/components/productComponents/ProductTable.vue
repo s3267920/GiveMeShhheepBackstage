@@ -52,7 +52,8 @@
   </tr>
 </template>
 <script>
-import db from '@/firebaseInit.js'
+import db from '@/firebaseInit.js';
+
 export default {
   name: 'productTable',
   props: ['getData', 'getFilterProduct', 'getHasSelectText', 'getUserId'],
@@ -60,121 +61,120 @@ export default {
     return {
       hasCheck: false,
       trRowColor: false,
-      statusBtnDisplay: false
-    }
+      statusBtnDisplay: false,
+    };
   },
   computed: {
     product() {
-      return this.getData
+      return this.getData;
     },
     allProduct() {
-      return this.getFilterProduct
+      return this.getFilterProduct;
     },
     statusValue() {
       if (this.product.status) {
-        return 'PUBLISHED'
-      } else {
-        return 'UNPUBLISHED'
+        return 'PUBLISHED';
       }
+      return 'UNPUBLISHED';
     },
     hasCheckText() {
-      return this.getHasSelectText
+      return this.getHasSelectText;
     },
     userID() {
-      return this.getUserId
-    }
+      return this.getUserId;
+    },
   },
   watch: {
-    allProduct: function() {
+    allProduct() {
       if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true
+        this.trRowColor = true;
       }
     },
-    hasCheckText: function(val) {
+    hasCheckText(val) {
       switch (val) {
         case 'checked all':
-          this.hasCheck = true
-          break
+          this.hasCheck = true;
+          break;
         case 'not checked all':
-          this.hasCheck = false
-          break
+          this.hasCheck = false;
+          break;
         case 'select all':
-          this.hasCheck = true
-          break
+          this.hasCheck = true;
+          break;
         case 'unselect all':
-          this.hasCheck = false
-          break
+          this.hasCheck = false;
+          break;
         case 'published':
           this.product.status === true
             ? (this.hasCheck = true)
-            : (this.hasCheck = false)
-          break
+            : (this.hasCheck = false);
+          break;
         case 'unpublished':
           this.product.status === false
             ? (this.hasCheck = true)
-            : (this.hasCheck = false)
+            : (this.hasCheck = false);
 
-          break
+          break;
         default:
-          break
+          break;
       }
     },
-    hasCheck: function() {
-      this.$emit('getHasCheckedData', this.hasCheck, this.product)
-    }
+    hasCheck() {
+      this.$emit('getHasCheckedData', this.hasCheck, this.product);
+    },
   },
   methods: {
     deleteData() {
-      this.product.imgList.forEach(img => {
+      this.product.imgList.forEach((img) => {
         db.storage()
-          .ref('user/' + this.userID + '/' + 'product/' + this.product.id)
+          .ref(`user/${this.userID}/` + `product/${this.product.id}`)
           .child(img.name)
           .delete()
-          .then(function() {
-            console.log('Files successfully deleted!')
+          .then(() => {
+            console.log('Files successfully deleted!');
           })
-          .catch(function(error) {})
-      })
+          .catch((error) => {});
+      });
       db.firestore()
         .collection('user')
         .doc(this.userID)
         .collection('product')
         .doc(this.product.id)
         .delete()
-        .then(function() {
-          console.log('Document successfully deleted!')
+        .then(() => {
+          console.log('Document successfully deleted!');
         })
-        .catch(function(error) {
-          console.error('Error removing document: ', error)
-        })
-      this.$emit('deleteData', this.product)
+        .catch((error) => {
+          console.error('Error removing document: ', error);
+        });
+      this.$emit('deleteData', this.product);
     },
     changeBtnStatus(val) {
-      let vm = this
-      let newStatus = true
-      val === 'Published' ? (newStatus = true) : (newStatus = false)
+      const vm = this;
+      let newStatus = true;
+      val === 'Published' ? (newStatus = true) : (newStatus = false);
       db.firestore()
         .collection('user')
         .doc(this.userID)
         .collection('product')
         .doc(vm.product.id)
         .update({
-          status: newStatus
+          status: newStatus,
         })
-        .then(function() {
-          vm.getData.status = newStatus
+        .then(() => {
+          vm.getData.status = newStatus;
         })
-        .catch(function(error) {
-          console.error('Error updating document: ', error)
-        })
-    }
+        .catch((error) => {
+          console.error('Error updating document: ', error);
+        });
+    },
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true
+        this.trRowColor = true;
       }
-    })
-  }
-}
+    });
+  },
+};
 </script>

@@ -14,21 +14,21 @@ export default {
     return {
       img: '',
       image: '',
-      index: ''
-    }
+      index: '',
+    };
   },
   computed: {
     newImgList() {
-      return (this.img = this.getImage)
+      return (this.img = this.getImage);
     },
     newIndex() {
-      return (this.index = this.getIndex)
-    }
+      return (this.index = this.getIndex);
+    },
   },
   methods: {
     deleteImg() {
-      this.$emit('remove', this.newIndex)
-    }
-  }
-}
+      this.$emit('remove', this.newIndex);
+    },
+  },
+};
 </script>
