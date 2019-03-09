@@ -3,14 +3,14 @@
 </template>
 
 <script>
-const echarts = require('echarts/lib/echarts');
-require('echarts/lib/component/dataset');
-require('echarts/lib/chart/line');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/title');
-require('echarts/lib/component/markPoint');
-require('echarts/lib/component/markLine');
-require('echarts/lib/component/legend');
+const echarts = require('echarts/lib/echarts')
+require('echarts/lib/component/dataset')
+require('echarts/lib/chart/line')
+require('echarts/lib/component/tooltip')
+require('echarts/lib/component/title')
+require('echarts/lib/component/markPoint')
+require('echarts/lib/component/markLine')
+require('echarts/lib/component/legend')
 
 export default {
   name: 'mychart',
@@ -18,53 +18,53 @@ export default {
   data() {
     return {
       chart: '',
-      echartData: this.getData,
-    };
+      echartData: this.getData
+    }
   },
   computed: {
     income() {
-      const income = [];
-      const revenue = this.echartData.revenue;
-      const cost = this.echartData.cost;
+      const income = []
+      const revenue = this.echartData.revenue
+      const cost = this.echartData.cost
       for (let i = 0; i < revenue.length; i++) {
-        income.push(revenue[i] - cost[i]);
+        income.push(revenue[i] - cost[i])
       }
-      return income;
-    },
+      return income
+    }
   },
   mounted() {
-    const revenue = this.echartData.revenue;
-    const cost = this.echartData.cost;
-    const income = this.income;
+    const revenue = this.echartData.revenue
+    const cost = this.echartData.cost
+    const income = this.income
     // console.log()
-    const mychart = echarts.init(this.$refs.myChart);
+    const mychart = echarts.init(this.$refs.myChart)
     const options = {
       baseOption: {
         tooltip: {
           show: true,
-          trigger: 'item',
+          trigger: 'item'
         },
         legend: {
           data: [
             {
               name: 'TOTAL REVENUE',
-              icon: 'circle',
+              icon: 'circle'
             },
             {
               name: 'TOTAL COST',
-              icon: 'circle',
+              icon: 'circle'
             },
             {
               name: 'NET INCOME',
-              icon: 'circle',
-            },
+              icon: 'circle'
+            }
           ],
-          itemWidth: 10,
+          itemWidth: 10
         },
         textStyle: {
           color: '#8da291',
           fontWeight: 'bold',
-          fontSize: 16,
+          fontSize: 16
         },
         xAxis: [
           {
@@ -77,18 +77,18 @@ export default {
               '10 JUN',
               '11 JUN',
               '12 JUN',
-              '13 JUN',
+              '13 JUN'
             ],
             axisTick: {
-              show: false,
+              show: false
             },
             axisLabel: {
               color: '#8da291',
               fontWeight: 'bold',
               fontSize: 16,
-              interval: 0,
-            },
-          },
+              interval: 0
+            }
+          }
         ],
         yAxis: [
           {
@@ -100,9 +100,9 @@ export default {
               color: '#8da291',
               fontWeight: 'bold',
               fontSize: 16,
-              interval: 0,
-            },
-          },
+              interval: 0
+            }
+          }
         ],
         series: [
           {
@@ -112,23 +112,23 @@ export default {
             data: revenue,
             tooltip: {
               backgroundColor: '#7ed321',
-              formatter: '{a}<br />{b} : {c}',
+              formatter: '{a}<br />{b} : {c}'
             },
             itemStyle: {
-              opacity: 0,
+              opacity: 0
             },
             emphasis: {
               itemStyle: {
                 borderColor: '#7ed321',
                 borderWidth: 4,
-                opacity: 1,
+                opacity: 1
               },
               label: {
                 show: true,
                 formatter: '{c}',
-                color: '#7ed321',
-              },
-            },
+                color: '#7ed321'
+              }
+            }
           },
           {
             name: 'TOTAL COST',
@@ -137,23 +137,23 @@ export default {
             data: cost,
             tooltip: {
               backgroundColor: '#d0021b',
-              formatter: '{a}<br />{b} : {c}',
+              formatter: '{a}<br />{b} : {c}'
             },
             itemStyle: {
-              opacity: 0,
+              opacity: 0
             },
             emphasis: {
               itemStyle: {
                 borderColor: '#d0021b',
                 borderWidth: 4,
-                opacity: 1,
+                opacity: 1
               },
               label: {
                 show: true,
                 formatter: '{c}',
-                color: '#d0021b',
-              },
-            },
+                color: '#d0021b'
+              }
+            }
           },
           {
             name: 'NET INCOME',
@@ -162,58 +162,61 @@ export default {
             data: income,
             tooltip: {
               backgroundColor: '#4a90e2',
-              formatter: '{a}<br />{b} : {c}',
+              formatter: '{a}<br />{b} : {c}'
             },
             itemStyle: {
-              opacity: 0,
+              opacity: 0
             },
             markLine: {
               emphasis: {
                 lineStyle: {
                   width: 50,
-                  color: '#fff',
-                },
-              },
+                  color: '#fff'
+                }
+              }
             },
             lineStyle: {
               emphasis: {
                 width: 50,
-                color: '#fff',
-              },
+                color: '#fff'
+              }
             },
             emphasis: {
               itemStyle: {
                 borderColor: '#4a90e2',
                 borderWidth: 4,
-                opacity: 1,
+                opacity: 1
               },
               label: {
                 show: true,
                 formatter: '{c}',
-                color: '#4a90e2',
+                color: '#4a90e2'
               },
               lineStyle: {
-                width: 10,
-              },
-            },
-          },
-        ],
+                width: 10
+              }
+            }
+          }
+        ]
       },
       media: [
         {
           query: {
-            maxWidth: 1000,
+            maxWidth: 1000
           },
           option: {
             length: {
-              orient: 'horizontal',
-            },
-          },
-        },
-      ],
-    };
-    mychart.setOption(options);
+              orient: 'horizontal'
+            }
+          }
+        }
+      ]
+    }
+    mychart.setOption(options)
+    window.onresize = function() {
+      mychart.resize()
+    }
   },
-  methods: {},
-};
+  methods: {}
+}
 </script>
