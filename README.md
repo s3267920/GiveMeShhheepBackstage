@@ -2,7 +2,7 @@
 
 版型參考六角學院提供之版型另做優化 [設計圖](https://hexschool.github.io/THE_F2E_Design/week3-admin%20order/?fbclid=IwAR3BZhORXJR4Bzb86_JY0ouU_wp9U7d78UGMA6sEDkQblK5zTZxm-gI2fJY)
 
-Demo: https://s3267920.github.io/GiveMeShhheep/dist/index.html
+Demo: [https://s3267920.github.io/GiveMeShhheep/dist/index.html](https://s3267920.github.io/GiveMeShhheep/dist/index.html)
 
 ## 整體
 
