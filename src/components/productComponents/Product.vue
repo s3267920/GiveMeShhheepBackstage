@@ -4,13 +4,13 @@
 <template src="./product.html"></template>
 
 <script>
-import PreviewBox from './PreviewBox';
-import Specification from './Specification';
-import ProductTable from './ProductTable';
-import LoadingPage from '../extendComponents/LoadingPage';
-import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection';
-import Pagination from '../extendComponents/Pagination';
-import db from '@/firebaseInit.js';
+import PreviewBox from './PreviewBox'
+import Specification from './Specification'
+import ProductTable from './ProductTable'
+import LoadingPage from '../extendComponents/LoadingPage'
+import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
+import Pagination from '../extendComponents/Pagination'
+import db from '@/firebaseInit.js'
 
 export default {
   name: 'product',
@@ -20,7 +20,7 @@ export default {
     ChangeStatusSelection,
     ProductTable,
     LoadingPage,
-    Pagination,
+    Pagination
   },
   data() {
     return {
@@ -40,60 +40,60 @@ export default {
         discription: '',
         price: {
           original: '',
-          discount: '',
+          discount: ''
         },
         specification: [],
-        status: true,
+        status: true
       },
       isLoading: false,
       selectionOptionDisplay: false,
       page: null,
-      limitNum: null,
-    };
+      limitNum: null
+    }
   },
   computed: {
     getNewId() {
-      return this.specificationCount;
+      return this.specificationCount
     },
     productTableData() {
       if (!this.filterData.length) {
-        return this.filterDataHandle(1, 5);
+        return this.filterDataHandle(1, 5)
       }
-      this.hasCheckedData = [];
-      this.hasSelectText = '';
-      this.selectionOptionDisplay = false;
-      this.isCheckedAll = false;
-      return this.filterData;
+      this.hasCheckedData = []
+      this.hasSelectText = ''
+      this.selectionOptionDisplay = false
+      this.isCheckedAll = false
+      return this.filterData
     },
     userID() {
-      return db.auth().currentUser.uid;
+      return db.auth().currentUser.uid
     },
     productIndex() {
-      const vm = this;
+      const vm = this
       if (!vm.productData.length) {
-        return 0;
+        return 0
       }
-      return vm.productData[vm.productData.length - 1].productIndex + 1;
-    },
+      return vm.productData[vm.productData.length - 1].productIndex + 1
+    }
   },
   watch: {
     productData: {
       handler() {
-        this.isLoading = true;
-        this.$nextTick(function () {
-          this.getProductData();
-          this.filterDataHandle(this.page, this.limitNum);
-        });
+        this.isLoading = true
+        this.$nextTick(function() {
+          this.getProductData()
+          this.filterDataHandle(this.page, this.limitNum)
+        })
       },
-      deep: true,
+      deep: true
     },
     isCheckedAll() {
-      this.checkedSelectionOptionHandle(this.hasSelectText);
-    },
+      this.checkedSelectionOptionHandle(this.hasSelectText)
+    }
   },
   methods: {
     getProductData() {
-      const newData = [];
+      const newData = []
       // 在database裡面的user集合裡的id
       // id裡面的集合product
       db.firestore()
@@ -102,11 +102,11 @@ export default {
         .collection('product')
         .orderBy('productIndex', 'asc')
         .get()
-        .then((querySnapshot) => {
+        .then(querySnapshot => {
           if (querySnapshot.docs.length === 0) {
-            this.isLoading = false;
+            this.isLoading = false
           } else {
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach(doc => {
               const data = {
                 id: doc.id,
                 productIndex: doc.data().productIndex,
@@ -115,175 +115,171 @@ export default {
                 discription: doc.data().discription,
                 price: {
                   original: doc.data().price.original,
-                  discount: doc.data().price.discount,
+                  discount: doc.data().price.discount
                 },
                 specification: doc.data().specification,
-                status: doc.data().status,
-              };
-              newData.push(data);
+                status: doc.data().status
+              }
+              newData.push(data)
               if (this.productData.length < querySnapshot.docs.length) {
                 if (!this.productData.length) {
-                  this.productData = newData;
+                  this.productData = newData
                 } else {
-                  this.productData.forEach((el) => {
+                  this.productData.forEach(el => {
                     if (el === data) {
-
                     } else {
-                      this.productData = newData;
+                      this.productData = newData
                     }
-                  });
+                  })
                 }
               }
-              this.isLoading = false;
-            });
+              this.isLoading = false
+            })
           }
-        });
+        })
     },
     closeModal() {
-      this.modalDisplay = false;
-      this.resetForm();
+      this.modalDisplay = false
+      this.resetForm()
     },
     addImg(e) {
       // 參考https://runkids.github.io/vue/2017123101/
-      const vm = this;
-      const files = e.target.files;
-      Array.prototype.forEach.call(files, this.readURL);
+      const vm = this
+      const files = e.target.files
+      Array.prototype.forEach.call(files, this.readURL)
     },
     readURL(files) {
-      const vm = this;
+      const vm = this
       if (!window.FileReader) {
-        alert('您的設備不支援圖片預覽功能，如需此功能，請升級瀏覽器');
+        alert('您的設備不支援圖片預覽功能，如需此功能，請升級瀏覽器')
       } else {
-        const reader = new FileReader();
-        reader.onload = function (evt) {
-          const img = new Image();
-          const baseUrl = evt.target.result.replace(/\r\n|\n/g, '');
-          img.src = baseUrl;
-          const name = files.name;
+        const reader = new FileReader()
+        reader.onload = function(evt) {
+          const img = new Image()
+          const baseUrl = evt.target.result.replace(/\r\n|\n/g, '')
+          img.src = baseUrl
+          const name = files.name
           // 壓縮圖片
-          img.onload = function () {
+          img.onload = function() {
             // 參考資料https://www.cnblogs.com/moqiutao/p/8657926.html
             // https://www.zhangxinxu.com/wordpress/2017/07/html5-canvas-image-compress-upload/
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const imgWidth = img.width;
-            const imgHeight = img.height;
-            const maxWidth = 800;
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            const imgWidth = img.width
+            const imgHeight = img.height
+            const maxWidth = 800
 
+            const maxHeight = 800
 
-            const maxHeight = 800;
+            let targetWidth = imgWidth
 
-
-            let targetWidth = imgWidth;
-
-
-            let targetHeight = imgHeight;
+            let targetHeight = imgHeight
             if (imgWidth > maxWidth || imgHeight > maxHeight) {
               if (imgWidth / imgHeight > maxWidth / maxHeight) {
-                targetWidth = maxWidth;
-                targetHeight = Math.round(maxWidth * (imgHeight / imgWidth));
+                targetWidth = maxWidth
+                targetHeight = Math.round(maxWidth * (imgHeight / imgWidth))
               } else {
-                targetHeight = maxHeight;
-                targetWidth = Math.round(maxHeight * (imgWidth / imgHeight));
+                targetHeight = maxHeight
+                targetWidth = Math.round(maxHeight * (imgWidth / imgHeight))
               }
             }
-            canvas.width = targetWidth;
-            canvas.height = targetHeight;
-            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-            const newBaseUrl = canvas.toDataURL(files.type, 1.0);
-            const src = newBaseUrl.replace(/\r\n|\n/g, '');
+            canvas.width = targetWidth
+            canvas.height = targetHeight
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight)
+            const newBaseUrl = canvas.toDataURL(files.type, 1.0)
+            const src = newBaseUrl.replace(/\r\n|\n/g, '')
             const newImg = {
               src,
-              name,
-            };
-            vm.imgList.push(newImg);
-          };
-        };
-        reader.readAsDataURL(files);
+              name
+            }
+            vm.imgList.push(newImg)
+          }
+        }
+        reader.readAsDataURL(files)
       }
     },
     dragImgHandle(e) {
-      this.isDragZone = false;
-      const files = e.dataTransfer.files;
-      Array.prototype.forEach.call(files, this.readURL);
+      this.isDragZone = false
+      const files = e.dataTransfer.files
+      Array.prototype.forEach.call(files, this.readURL)
     },
     removeImg(newIndex) {
-      this.imgList.splice(newIndex, 1);
+      this.imgList.splice(newIndex, 1)
     },
     removeSpecification(data) {
-      const index = this.formData.specification.indexOf(data);
-      this.formData.specification.splice(index, 1);
-      this.$forceUpdate();
+      const index = this.formData.specification.indexOf(data)
+      this.formData.specification.splice(index, 1)
+      this.$forceUpdate()
     },
     determineSpecification(data) {
-      const newIndex = data.index;
-      const arr = this.formData.specification;
+      const newIndex = data.index
+      const arr = this.formData.specification
       if (!data.style.length && !data.inventory.length) {
-        alert('請輸入樣式跟庫存');
+        alert('請輸入樣式跟庫存')
       } else if (this.formData.specification.length <= 1) {
-        this.formData.specification.splice(newIndex, 1, data);
+        this.formData.specification.splice(newIndex, 1, data)
       } else {
         try {
-          arr.forEach((el) => {
+          arr.forEach(el => {
             if (arr.indexOf(el) !== newIndex) {
-              this.formData.specification.splice(newIndex, 1, data);
+              this.formData.specification.splice(newIndex, 1, data)
             } else {
               this.$set(
                 this.formData.specification,
                 this.formData.specification.findIndex(
-                  newData => newData.style === data.style,
+                  newData => newData.style === data.style
                 ),
-                data,
-              );
+                data
+              )
             }
-          });
+          })
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       }
     },
     addNewSpecification() {
       if (this.formData.specification.length > 0) {
-        this.specificationCount++;
+        this.specificationCount++
       }
       this.formData.specification.push({
         style: null,
         styleInfo: [
           {
             inventory: '',
-            size: '',
-          },
+            size: ''
+          }
         ],
         hasConfirm: null,
         id: this.getNewId,
-        index: this.getNewId,
-      });
+        index: this.getNewId
+      })
     },
     resetForm() {
-      this.formData.productName = '';
-      this.formData.discription = '';
-      this.formData.price.original = '';
-      this.formData.price.discount = '';
-      this.formData.specification = [];
-      this.formData.img = [];
-      this.imgList = [];
-      this.addNewSpecification();
+      this.formData.productName = ''
+      this.formData.discription = ''
+      this.formData.price.original = ''
+      this.formData.price.discount = ''
+      this.formData.specification = []
+      this.formData.img = []
+      this.imgList = []
+      this.addNewSpecification()
     },
     submitData(isPublished) {
-      const vm = this;
+      const vm = this
       isPublished === 'published'
         ? (vm.formData.status = true)
-        : (vm.formData.status = false);
+        : (vm.formData.status = false)
       if (
-        !vm.formData.img.length
-        && vm.formData.productName === ''
-        && vm.formData.discription === ''
-        && vm.formData.price.original === ''
-        && vm.formData.price.discount === ''
-        && vm.formData.specification[0].hasConfirm === null
-        && vm.formData.specification[0].style === null
+        !vm.formData.img.length &&
+        vm.formData.productName === '' &&
+        vm.formData.discription === '' &&
+        vm.formData.price.original === '' &&
+        vm.formData.price.discount === '' &&
+        vm.formData.specification[0].hasConfirm === null &&
+        vm.formData.specification[0].style === null
       ) {
-        alert('請填寫完畢再送出！！！');
+        alert('請填寫完畢再送出！！！')
       } else {
         const newProduct = {
           id: '',
@@ -293,40 +289,40 @@ export default {
           productIndex: vm.productIndex,
           price: {
             original: vm.formData.price.original,
-            discount: vm.formData.price.discount,
+            discount: vm.formData.price.discount
           },
           specification: vm.formData.specification,
-          status: vm.formData.status,
-        };
-        let id;
+          status: vm.formData.status
+        }
+        let id
         db.firestore()
           .collection('user')
           .doc(this.userID)
           .collection('product')
           .add(newProduct)
-          .then((data) => {
-            vm.isLoading = true;
-            id = data.id;
-            return id;
+          .then(data => {
+            vm.isLoading = true
+            id = data.id
+            return id
           })
-          .then((id) => {
-            const storage = db.storage();
-            vm.imgList.forEach((img) => {
+          .then(id => {
+            const storage = db.storage()
+            vm.imgList.forEach(img => {
               storage
                 .ref(`user/${this.userID}/` + `product/${id}`)
                 .child(img.name)
                 .putString(img.src, 'data_url')
-                .then((fileData) => {
+                .then(fileData => {
                   storage
                     .ref(fileData.metadata.fullPath)
                     .getDownloadURL()
-                    .then((url) => {
+                    .then(url => {
                       const newImgInfo = {
                         name: fileData.metadata.name,
-                        src: url,
-                      };
+                        src: url
+                      }
                       if (fileData.state === 'success') {
-                        vm.formData.img.push(newImgInfo);
+                        vm.formData.img.push(newImgInfo)
                       }
                       if (vm.formData.img.length === vm.imgList.length) {
                         db.firestore()
@@ -336,137 +332,136 @@ export default {
                           .doc(id)
                           .update({
                             id,
-                            imgList: vm.formData.img,
+                            imgList: vm.formData.img
                           })
                           .then(() => {
-                            newProduct.id = id;
-                            newProduct.imgList = vm.formData.img;
-                            this.productData.push(newProduct);
-                            vm.isLoading = false;
-                            vm.modalDisplay = false;
-                            vm.resetForm();
-                          });
+                            newProduct.id = id
+                            newProduct.imgList = vm.formData.img
+                            this.productData.push(newProduct)
+                            vm.isLoading = false
+                            vm.modalDisplay = false
+                            vm.resetForm()
+                          })
                       }
-                    });
+                    })
                 })
-                .catch((error) => {
-                  console.error('Error adding document: ', error);
-                });
-            });
+                .catch(error => {
+                  console.error('Error adding document: ', error)
+                })
+            })
           })
-          .catch((error) => {
-            console.error('Error adding document: ', error);
-          });
+          .catch(error => {
+            console.error('Error adding document: ', error)
+          })
       }
     },
     deleteProduct(data) {
-      console.log(data.id);
-      const dataIndex = this.productData.indexOf(data);
-      this.productData.splice(dataIndex, 1);
+      console.log(data.id)
+      const dataIndex = this.productData.indexOf(data)
+      this.productData.splice(dataIndex, 1)
     },
 
     getHasCheckedData(status, data) {
-      const arrIndex = this.hasCheckedDataArray.indexOf(data);
+      const arrIndex = this.hasCheckedDataArray.indexOf(data)
       status
         ? this.hasCheckedDataArray.push(data)
-        : this.hasCheckedDataArray.splice(arrIndex, 1);
+        : this.hasCheckedDataArray.splice(arrIndex, 1)
     },
     checkedSelectionOptionHandle(val) {
       switch (val) {
         case 'all':
           this.isCheckedAll === true
             ? (this.hasSelectText = 'not checked all')
-            : (this.hasSelectText = 'checked all');
-          break;
+            : (this.hasSelectText = 'checked all')
+          break
         case 'select all':
-          this.isCheckedAll = true;
-          this.hasSelectText = 'select all';
-          break;
+          this.isCheckedAll = true
+          this.hasSelectText = 'select all'
+          break
         case 'unselect all':
-          this.isCheckedAll = false;
-          this.hasSelectText = 'unselect all';
-          break;
+          this.isCheckedAll = false
+          this.hasSelectText = 'unselect all'
+          break
         case 'published':
-          this.isCheckedAll = false;
-          this.hasSelectText = 'published';
-          break;
+          this.isCheckedAll = false
+          this.hasSelectText = 'published'
+          break
         case 'unpublished':
-          this.isCheckedAll = false;
-          this.hasSelectText = 'unpublished';
-          break;
+          this.isCheckedAll = false
+          this.hasSelectText = 'unpublished'
+          break
         default:
-          break;
+          break
       }
     },
     changeHasCheckedDataStatus(val) {
-      const vm = this;
-      vm.isLoading = true;
+      const vm = this
+      vm.isLoading = true
       const reset = () => {
-        vm.hasSelectText = '';
-        vm.hasCheckedDataArray = [];
-        vm.isCheckedAll = false;
-      };
-      this.hasCheckedDataArray.forEach((data) => {
+        vm.hasSelectText = ''
+        vm.hasCheckedDataArray = []
+        vm.isCheckedAll = false
+      }
+      this.hasCheckedDataArray.forEach(data => {
         if (val === 'published') {
-          const index = vm.productData.indexOf(data);
+          const index = vm.productData.indexOf(data)
           db.firestore()
             .collection('user')
             .doc(this.userID)
             .collection('product')
             .doc(data.id)
             .update({
-              status: true,
+              status: true
             })
             .then(() => {
-              vm.productData[index].status = true;
-              vm.isLoading = false;
-              reset();
+              vm.productData[index].status = true
+              vm.isLoading = false
+              reset()
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            .catch(error => {
+              console.log(error)
+            })
         } else {
-          const index = vm.productData.indexOf(data);
+          const index = vm.productData.indexOf(data)
           db.firestore()
             .collection('user')
             .doc(this.userID)
             .collection('product')
             .doc(data.id)
             .update({
-              status: false,
+              status: false
             })
             .then(() => {
-              vm.productData[index].status = false;
-              vm.isLoading = false;
-              reset();
+              vm.productData[index].status = false
+              vm.isLoading = false
+              reset()
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            .catch(error => {
+              console.log(error)
+            })
         }
-      });
+      })
     },
     filterDataHandle(page, limitNum) {
-      this.page = page;
-      this.limitNum = limitNum;
-      const newData = [];
+      this.page = page
+      this.limitNum = limitNum
+      const newData = []
 
-
-      let totalData = 5;
+      let totalData = 5
       page * limitNum > this.productData.length
         ? (totalData = this.productData.length)
-        : (totalData = page * limitNum);
+        : (totalData = page * limitNum)
       for (let i = (page - 1) * limitNum; i < totalData; i++) {
-        newData.push(this.productData[i]);
+        newData.push(this.productData[i])
       }
-      this.filterData = newData;
-      return newData;
-    },
+      this.filterData = newData
+      return newData
+    }
   },
   mounted() {
-    this.isLoading = true;
-    this.getProductData();
-    this.addNewSpecification();
-  },
-};
+    this.isLoading = true
+    this.getProductData()
+    this.addNewSpecification()
+  }
+}
 </script>

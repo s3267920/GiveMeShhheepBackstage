@@ -4,7 +4,16 @@
 body {
   margin: 0 auto;
   max-width: 1024px;
+  min-width: 900px;
   font-family: 'Microsoft JhengHei', 'PingFang', Helvetica, sans-serif;
+
+  @include media($desktop) {
+    min-width: 1200px;
+  }
+
+  @include media($tablet-landscape) {
+    min-width: 900px;
+  }
 }
 
 a {
@@ -22,6 +31,10 @@ header {
     display: inline-flex;
     margin-right: 60px;
     margin-left: 4%;
+
+    @include media($tablet-protrait) {
+      margin-right: 4%;
+    }
 
     a {
       width: 250px;
@@ -41,8 +54,7 @@ header {
 
   >nav {
     display: inline-flex;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto;
 
     li {
       display: inline-flex;
@@ -52,6 +64,12 @@ header {
         padding: 25px 10px;
         color: color(color_gray, white);
         font-weight: 600;
+
+        @include media($desktop) {
+          margin-right: 20px;
+        }
+
+
 
         &:hover,
         &:focus,

@@ -82,22 +82,25 @@
         </div>
       </div>
     </div>
-    <table class="product_table">
-      <tr>
-        <th></th>
-        <th class="table_product">Product</th>
-        <th>Original</th>
-        <th class="table_discount">Discount</th>
-        <th class="information_style">Style</th>
-        <th class="information_size">Size</th>
-        <th class="information_inventory">Inventory</th>
-        <th>Status</th>
-      </tr>
-      <LoadingPage v-if="isLoading"></LoadingPage>
-      <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
-        :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
-        :key="item.id"></ProductTable>
-    </table>
+    <div class="content_product_table">
+      <table class="product_table">
+        <tr>
+          <th></th>
+          <th class="table_product">Product</th>
+          <th>Original</th>
+          <th class="table_discount">Discount</th>
+          <th class="information_style">Style</th>
+          <th class="information_size">Size</th>
+          <th class="information_inventory">Inventory</th>
+          <th>Status</th>
+        </tr>
+        <LoadingPage v-if="isLoading"></LoadingPage>
+        <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
+          :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
+          :key="item.id"></ProductTable>
+      </table>
+    </div>
+
     <Pagination :getData="productData" @changePage="filterDataHandle"></Pagination>
   </div>
   <footer></footer>

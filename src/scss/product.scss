@@ -47,7 +47,6 @@ a {
 
   .add_modal {
     position: fixed;
-    // display: none;
     display: flex;
     justify-content: center;
     z-index: 999;
@@ -409,9 +408,16 @@ a {
   }
 }
 
+.content_product_table {
+  position: relative;
+  margin: 0 2%;
+  overflow: auto;
+  overflow-y: hidden;
+}
+
 .product_table {
+  margin: 0 2%;
   user-select: none;
-  margin: 0 4%;
   color: color(color_teal, dark);
   table-layout: auto;
   word-break: keep-all;
@@ -433,13 +439,16 @@ a {
 
       &:first-child {
         vertical-align: top;
+        width: 2%;
         min-width: 20px;
         border-spacing: 0;
       }
 
       &:last-child {
-        min-width: 160px;
+        min-width: 155px;
       }
+
+
     }
 
     td {
@@ -520,6 +529,7 @@ a {
   }
 
 
+
   .information_size,
   .information_style,
   .information_inventory {
@@ -529,7 +539,6 @@ a {
   .information_inventory {
     padding-right: 30px;
   }
-
 
   .product {
     width: 170px;
