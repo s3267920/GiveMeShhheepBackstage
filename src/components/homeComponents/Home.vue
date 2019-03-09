@@ -44,8 +44,6 @@ export default {
     const vm = this
     this.$nextTick(() => {
       document.addEventListener('click', e => {
-        const changeOption = document.getElementsByClassName('change_option')
-        const selectMenu = document.getElementById('select_menu')
         if (e.target && e.target.className !== 'change_option') {
           vm.selectMenuDisplay = false
         }

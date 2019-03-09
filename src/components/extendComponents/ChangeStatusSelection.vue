@@ -22,31 +22,31 @@ export default {
   data() {
     return {
       isShow: false,
-      hasSelect: false,
-    };
+      hasSelect: false
+    }
   },
   computed: {
     tooltipStyle() {
       if (this.isShow) {
-        return 'tooltip_right';
+        return 'tooltip_right'
       }
-      return 'tooltip';
+      return 'tooltip'
     },
     hasChecked() {
       if (!this.hasCheckedData.length) {
-        this.isShow = false;
+        this.isShow = false
       }
-      return this.hasCheckedData;
+      return this.hasCheckedData
     },
     allSelectionOption() {
-      return this.getAllSelectionOption;
-    },
+      return this.getAllSelectionOption
+    }
   },
   methods: {
     changeStatus(val) {
-      this.isShow = false;
-      this.$emit('changeHasCheckedDataStatus', val);
-    },
-  },
-};
+      this.isShow = false
+      this.$emit('changeHasCheckedDataStatus', val)
+    }
+  }
+}
 </script>

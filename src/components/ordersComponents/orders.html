@@ -5,7 +5,7 @@
       <div class="check_option">
         <input type="checkbox" name="check" id="all" :class="{checked:checkedAll}" v-model="checkedAll">
         <label for="all" @click="checkedSelection(hasCheckedAll)"></label>
-        <span class="triangle_bottom" id="check_more_option" @click="selectDisplay">
+        <span class="triangle_bottom" id="check_more_option" @click="selectIsShow = !selectIsShow">
           <transition name="fade" mode="in-out">
             <ul id="select_menu" class="select_menu" v-show="selectIsShow">
               <li @click="checkedSelection('select all')"><a href.prevent class="select_all" :class="{has_check:hasSelect === 'select all'}">Select

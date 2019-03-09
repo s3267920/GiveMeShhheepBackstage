@@ -73,7 +73,6 @@ export default {
   ],
   data() {
     return {
-      data: this.getOrderData,
       getCheckItem: this.getCheck,
       allData: this.getAllData,
       ischecked: false,
@@ -83,6 +82,9 @@ export default {
     }
   },
   computed: {
+    data() {
+      return this.getOrderData
+    },
     btnColor() {
       switch (this.statusText) {
         case 'PAID':
@@ -162,15 +164,21 @@ export default {
       switch (val) {
         case 'paid':
           this.statusText = 'PAID'
+          this.data.status = 'PAID'
           break
         case 'unpaid':
           this.statusText = 'UNPAID'
+          this.data.status = 'UNPAID'
           break
         case 'shipping':
           this.statusText = 'SHIPPING'
+          this.data.status = 'SHIPPING'
+          break
+        case 'done':
+          this.statusText = 'DONE'
+          this.data.status = 'DONE'
           break
         default:
-          this.statusText = 'DONE'
           break
       }
       this.changeStatus()
@@ -193,8 +201,10 @@ export default {
         case 'shipping':
           this.statusText = 'SHIPPING'
           break
-        default:
+        case 'done':
           this.statusText = 'DONE'
+          break
+        default:
           break
       }
     }

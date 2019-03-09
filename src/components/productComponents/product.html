@@ -16,14 +16,16 @@
         <input type="checkbox" name="check" id="all" v-model="isCheckedAll" :class="{checked:isCheckedAll}" @click="checkedSelectionOptionHandle('all')">
         <label for="all"></label>
         <span class="triangle_bottom" id="check_more_option" @click="selectionOptionDisplay=!selectionOptionDisplay">
-          <ul v-if="selectionOptionDisplay" id="select_menu" class="select_menu">
-            <li><a href.prevent class="select_all" :class="{has_check:hasSelectText==='select all'}" @click="checkedSelectionOptionHandle('select all')">select
-                all</a></li>
-            <li><a href.prevent class="unselect_all" :class="{has_check:hasSelectText==='unselect all'}" @click="checkedSelectionOptionHandle('unselect all')">unselect
-                all</a></li>
-            <li><a href.prevent class="published" :class="{has_check:hasSelectText==='published'}" @click="checkedSelectionOptionHandle('published')">published</a></li>
-            <li><a href.prevent class="unpublished" :class="{has_check:hasSelectText==='unpublished'}" @click="checkedSelectionOptionHandle('unpublished')">unpublished</a></li>
-          </ul>
+          <transition name="fade" mode="in-out">
+            <ul v-if="selectionOptionDisplay" id="select_menu" class="select_menu">
+              <li><a href.prevent class="select_all" :class="{has_check:hasSelectText==='select all'}" @click="checkedSelectionOptionHandle('select all')">select
+                  all</a></li>
+              <li><a href.prevent class="unselect_all" :class="{has_check:hasSelectText==='unselect all'}" @click="checkedSelectionOptionHandle('unselect all')">unselect
+                  all</a></li>
+              <li><a href.prevent class="published" :class="{has_check:hasSelectText==='published'}" @click="checkedSelectionOptionHandle('published')">published</a></li>
+              <li><a href.prevent class="unpublished" :class="{has_check:hasSelectText==='unpublished'}" @click="checkedSelectionOptionHandle('unpublished')">unpublished</a></li>
+            </ul>
+          </transition>
         </span>
         <ChangeStatusSelection @changeHasCheckedDataStatus="changeHasCheckedDataStatus" :hasCheckedData="hasCheckedDataArray"
           :getAllSelectionOption="allSelectionOption"></ChangeStatusSelection>

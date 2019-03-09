@@ -75,9 +75,6 @@ export default {
     }
   },
   methods: {
-    selectDisplay() {
-      this.selectIsShow = !this.selectIsShow
-    },
     slideDownHandle() {
       this.editIsShow = !this.editIsShow
     },
@@ -171,6 +168,12 @@ export default {
             console.log(error)
           })
       }
+      const vm = this
+      document.addEventListener('click', e => {
+        if (e.target && e.target.id !== 'check_more_option') {
+          vm.selectIsShow = false
+        }
+      })
     })
   }
 }

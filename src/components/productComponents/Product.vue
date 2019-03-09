@@ -462,6 +462,14 @@ export default {
     this.isLoading = true
     this.getProductData()
     this.addNewSpecification()
+    this.$nextTick(() => {
+      const vm = this
+      document.addEventListener('click', e => {
+        if (e.target && e.target.id !== 'check_more_option') {
+          vm.selectionOptionDisplay = false
+        }
+      })
+    })
   }
 }
 </script>
