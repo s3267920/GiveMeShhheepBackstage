@@ -104,12 +104,13 @@ export default {
     },
     changeOrderListStatus(newRes, id) {
       axios
-        .patch(`http://localhost:3000/orders/${id}`, { status: newRes })
+        .patch(`https://give-me-shheep-data.herokuapp.com/orders/${id}`, {
+          status: newRes
+        })
         .then(res => {
           this.orderData[id - 1].status = newRes
           this.isLoading = false
         })
-      console.log('changeOrderListStatus')
     },
     getCheckedDataArray(data, status) {
       const vm = this
@@ -129,9 +130,12 @@ export default {
       this.hasCheckedData.forEach(el => {
         if (el.status !== val) {
           axios
-            .patch(`https://give-me-shheep-data.herokuapp.com/${el.id}`, {
-              status: val
-            })
+            .patch(
+              `https://give-me-shheep-data.herokuapp.com/orders/${el.id}`,
+              {
+                status: val
+              }
+            )
             .then(res => {
               this.orderData[el.id - 1].status = val
               this.isLoading = false
