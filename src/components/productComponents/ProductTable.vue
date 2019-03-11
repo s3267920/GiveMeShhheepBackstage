@@ -13,7 +13,7 @@
     <td class="discount">{{product.price.discount}}</td>
     <td class="information">
       <ul>
-        <li v-for="item in product.specification" :key="item.id">
+        <li v-for="item in product.specification" :key="item.index">
           <div class="style">
             <p>{{item.style}}</p>
           </div>
@@ -43,6 +43,9 @@
           <a href.prevent @click="changeBtnStatus('Unpublished')">
             <li>Unpublished</li>
           </a>
+          <a href.prevent @click="editData" class="edit">
+            <li>Edit</li>
+          </a>
           <a href.prevent @click="deleteData" class="delete">
             <li>Delete</li>
           </a>
@@ -52,7 +55,7 @@
   </tr>
 </template>
 <script>
-import db from '@/firebaseInit.js';
+import db from '@/firebaseInit.js'
 
 export default {
   name: 'productTable',
@@ -61,120 +64,128 @@ export default {
     return {
       hasCheck: false,
       trRowColor: false,
-      statusBtnDisplay: false,
-    };
+      statusBtnDisplay: false
+    }
   },
   computed: {
     product() {
-      return this.getData;
+      return this.getData
     },
     allProduct() {
-      return this.getFilterProduct;
+      return this.getFilterProduct
     },
     statusValue() {
       if (this.product.status) {
-        return 'PUBLISHED';
+        return 'PUBLISHED'
       }
-      return 'UNPUBLISHED';
+      return 'UNPUBLISHED'
     },
     hasCheckText() {
-      return this.getHasSelectText;
+      return this.getHasSelectText
     },
     userID() {
-      return this.getUserId;
-    },
+      return this.getUserId
+    }
   },
   watch: {
     allProduct() {
       if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true;
+        this.trRowColor = true
       }
     },
     hasCheckText(val) {
       switch (val) {
         case 'checked all':
-          this.hasCheck = true;
-          break;
+          this.hasCheck = true
+          break
         case 'not checked all':
-          this.hasCheck = false;
-          break;
+          this.hasCheck = false
+          break
         case 'select all':
-          this.hasCheck = true;
-          break;
+          this.hasCheck = true
+          break
         case 'unselect all':
-          this.hasCheck = false;
-          break;
+          this.hasCheck = false
+          break
         case 'published':
           this.product.status === true
             ? (this.hasCheck = true)
-            : (this.hasCheck = false);
-          break;
+            : (this.hasCheck = false)
+          break
         case 'unpublished':
           this.product.status === false
             ? (this.hasCheck = true)
-            : (this.hasCheck = false);
+            : (this.hasCheck = false)
 
-          break;
+          break
         default:
-          break;
+          break
       }
     },
     hasCheck() {
-      this.$emit('getHasCheckedData', this.hasCheck, this.product);
-    },
+      this.$emit('getHasCheckedData', this.hasCheck, this.product)
+    }
   },
   methods: {
     deleteData() {
-      this.product.imgList.forEach((img) => {
-        db.storage()
-          .ref(`user/${this.userID}/` + `product/${this.product.id}`)
-          .child(img.name)
+      let confirmMsg = confirm(`確認刪除${this.product.productName}嗎？`)
+      if (confirmMsg) {
+        this.product.imgList.forEach(img => {
+          db.storage()
+            .ref(`user/${this.userID}/` + `product/${this.product.id}`)
+            .child(img.name)
+            .delete()
+            .then(() => {
+              console.log('Files successfully deleted!')
+            })
+            .catch(error => {})
+        })
+        db.firestore()
+          .collection('user')
+          .doc(this.userID)
+          .collection('product')
+          .doc(this.product.id)
           .delete()
           .then(() => {
-            console.log('Files successfully deleted!');
+            console.log('Document successfully deleted!')
           })
-          .catch((error) => {});
-      });
-      db.firestore()
-        .collection('user')
-        .doc(this.userID)
-        .collection('product')
-        .doc(this.product.id)
-        .delete()
-        .then(() => {
-          console.log('Document successfully deleted!');
-        })
-        .catch((error) => {
-          console.error('Error removing document: ', error);
-        });
-      this.$emit('deleteData', this.product);
+          .catch(error => {
+            console.error('Error removing document: ', error)
+          })
+        this.$emit('deleteData', this.product)
+      } else {
+        return false
+      }
+    },
+    editData() {
+      this.$emit('editData', this.product)
     },
     changeBtnStatus(val) {
-      const vm = this;
-      let newStatus = true;
-      val === 'Published' ? (newStatus = true) : (newStatus = false);
+      const vm = this
+      let newStatus = true
+      val === 'Published' ? (newStatus = true) : (newStatus = false)
       db.firestore()
         .collection('user')
         .doc(this.userID)
         .collection('product')
         .doc(vm.product.id)
         .update({
-          status: newStatus,
+          status: newStatus
         })
         .then(() => {
-          vm.getData.status = newStatus;
+          vm.getData.status = newStatus
         })
-        .catch((error) => {
-          console.error('Error updating document: ', error);
-        });
-    },
+        .catch(error => {
+          console.error('Error updating document: ', error)
+        })
+    }
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true;
+        this.trRowColor = true
       }
-    });
-  },
-};
+    })
+  }
+}
 </script>

@@ -4,34 +4,31 @@
 <template src="./product.html"></template>
 
 <script>
-import PreviewBox from './PreviewBox'
-import Specification from './Specification'
 import ProductTable from './ProductTable'
 import LoadingPage from '../extendComponents/LoadingPage'
 import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
 import Pagination from '../extendComponents/Pagination'
+import Modal from './Modal'
 import db from '@/firebaseInit.js'
 
 export default {
   name: 'product',
   components: {
-    PreviewBox,
-    Specification,
     ChangeStatusSelection,
     ProductTable,
     LoadingPage,
-    Pagination
+    Pagination,
+    Modal
   },
   data() {
     return {
       modalDisplay: false,
+      modalTitleText: 'ADD NEW PRODUCT',
       isCheckedAll: false,
-      isDragZone: false,
       allSelectionOption: ['published', 'unpublished'],
       hasSelectText: '',
       hasCheckedDataArray: [],
       imgList: [],
-      specificationCount: 0,
       filterData: [],
       productData: [],
       formData: {
@@ -45,6 +42,7 @@ export default {
         specification: [],
         status: true
       },
+      editDataId: '',
       isLoading: false,
       selectionOptionDisplay: false,
       page: null,
@@ -138,229 +136,35 @@ export default {
           }
         })
     },
-    closeModal() {
-      this.modalDisplay = false
-      this.resetForm()
+    modalDisplayStatusHandle(status) {
+      return (this.modalDisplay = status)
     },
-    addImg(e) {
-      // 參考https://runkids.github.io/vue/2017123101/
-      const vm = this
-      const files = e.target.files
-      Array.prototype.forEach.call(files, this.readURL)
+    deleteProduct(data) {
+      let dataIndex = this.productData.indexOf(data)
+      this.productData.splice(dataIndex, 1)
     },
-    readURL(files) {
-      const vm = this
-      if (!window.FileReader) {
-        alert('您的設備不支援圖片預覽功能，如需此功能，請升級瀏覽器')
-      } else {
-        const reader = new FileReader()
-        reader.onload = function(evt) {
-          const img = new Image()
-          const baseUrl = evt.target.result.replace(/\r\n|\n/g, '')
-          img.src = baseUrl
-          const name = files.name
-          // 壓縮圖片
-          img.onload = function() {
-            // 參考資料https://www.cnblogs.com/moqiutao/p/8657926.html
-            // https://www.zhangxinxu.com/wordpress/2017/07/html5-canvas-image-compress-upload/
-            const canvas = document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
-            const imgWidth = img.width
-            const imgHeight = img.height
-            const maxWidth = 800
-
-            const maxHeight = 800
-
-            let targetWidth = imgWidth
-
-            let targetHeight = imgHeight
-            if (imgWidth > maxWidth || imgHeight > maxHeight) {
-              if (imgWidth / imgHeight > maxWidth / maxHeight) {
-                targetWidth = maxWidth
-                targetHeight = Math.round(maxWidth * (imgHeight / imgWidth))
-              } else {
-                targetHeight = maxHeight
-                targetWidth = Math.round(maxHeight * (imgWidth / imgHeight))
-              }
-            }
-            canvas.width = targetWidth
-            canvas.height = targetHeight
-            ctx.drawImage(img, 0, 0, targetWidth, targetHeight)
-            const newBaseUrl = canvas.toDataURL(files.type, 1.0)
-            const src = newBaseUrl.replace(/\r\n|\n/g, '')
-            const newImg = {
-              src,
-              name
-            }
-            vm.imgList.push(newImg)
-          }
-        }
-        reader.readAsDataURL(files)
-      }
-    },
-    dragImgHandle(e) {
-      this.isDragZone = false
-      const files = e.dataTransfer.files
-      Array.prototype.forEach.call(files, this.readURL)
-    },
-    removeImg(newIndex) {
-      this.imgList.splice(newIndex, 1)
-    },
-    removeSpecification(data) {
-      const index = this.formData.specification.indexOf(data)
-      this.formData.specification.splice(index, 1)
-      this.$forceUpdate()
-    },
-    determineSpecification(data) {
-      const newIndex = data.index
-      const arr = this.formData.specification
-      if (!data.style.length && !data.inventory.length) {
-        alert('請輸入樣式跟庫存')
-      } else if (this.formData.specification.length <= 1) {
-        this.formData.specification.splice(newIndex, 1, data)
-      } else {
-        try {
-          arr.forEach(el => {
-            if (arr.indexOf(el) !== newIndex) {
-              this.formData.specification.splice(newIndex, 1, data)
-            } else {
-              this.$set(
-                this.formData.specification,
-                this.formData.specification.findIndex(
-                  newData => newData.style === data.style
-                ),
-                data
-              )
-            }
-          })
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    },
-    addNewSpecification() {
-      if (this.formData.specification.length > 0) {
-        this.specificationCount++
-      }
-      this.formData.specification.push({
-        style: null,
-        styleInfo: [
-          {
-            inventory: '',
-            size: ''
-          }
-        ],
-        hasConfirm: null,
-        id: this.getNewId,
-        index: this.getNewId
-      })
-    },
-    resetForm() {
+    cancelEditProduct() {
       this.formData.productName = ''
       this.formData.discription = ''
       this.formData.price.original = ''
       this.formData.price.discount = ''
       this.formData.specification = []
       this.formData.img = []
-      this.imgList = []
-      this.addNewSpecification()
+      this.formData.status = true
     },
-    submitData(isPublished) {
-      const vm = this
-      isPublished === 'published'
-        ? (vm.formData.status = true)
-        : (vm.formData.status = false)
-      if (
-        !vm.formData.img.length &&
-        vm.formData.productName === '' &&
-        vm.formData.discription === '' &&
-        vm.formData.price.original === '' &&
-        vm.formData.price.discount === '' &&
-        vm.formData.specification[0].hasConfirm === null &&
-        vm.formData.specification[0].style === null
-      ) {
-        alert('請填寫完畢再送出！！！')
-      } else {
-        const newProduct = {
-          id: '',
-          imgList: [],
-          productName: vm.formData.productName,
-          discription: vm.formData.discription,
-          productIndex: vm.productIndex,
-          price: {
-            original: vm.formData.price.original,
-            discount: vm.formData.price.discount
-          },
-          specification: vm.formData.specification,
-          status: vm.formData.status
-        }
-        let id
-        db.firestore()
-          .collection('user')
-          .doc(this.userID)
-          .collection('product')
-          .add(newProduct)
-          .then(data => {
-            vm.isLoading = true
-            id = data.id
-            return id
-          })
-          .then(id => {
-            const storage = db.storage()
-            vm.imgList.forEach(img => {
-              storage
-                .ref(`user/${this.userID}/` + `product/${id}`)
-                .child(img.name)
-                .putString(img.src, 'data_url')
-                .then(fileData => {
-                  storage
-                    .ref(fileData.metadata.fullPath)
-                    .getDownloadURL()
-                    .then(url => {
-                      const newImgInfo = {
-                        name: fileData.metadata.name,
-                        src: url
-                      }
-                      if (fileData.state === 'success') {
-                        vm.formData.img.push(newImgInfo)
-                      }
-                      if (vm.formData.img.length === vm.imgList.length) {
-                        db.firestore()
-                          .collection('user')
-                          .doc(this.userID)
-                          .collection('product')
-                          .doc(id)
-                          .update({
-                            id,
-                            imgList: vm.formData.img
-                          })
-                          .then(() => {
-                            newProduct.id = id
-                            newProduct.imgList = vm.formData.img
-                            this.productData.push(newProduct)
-                            vm.isLoading = false
-                            vm.modalDisplay = false
-                            vm.resetForm()
-                          })
-                      }
-                    })
-                })
-                .catch(error => {
-                  console.error('Error adding document: ', error)
-                })
-            })
-          })
-          .catch(error => {
-            console.error('Error adding document: ', error)
-          })
-      }
+    editProduct(data) {
+      let form = this.formData
+      form.img = data.imgList
+      form.productName = data.productName
+      form.discription = data.discription
+      form.price.original = data.price.original
+      form.price.discount = data.price.discount
+      form.specification = data.specification
+      form.status = data.status
+      this.editDataId = data.id
+      this.modalTitleText = 'EDIT PRODUCT'
+      this.modalDisplay = true
     },
-    deleteProduct(data) {
-      console.log(data.id)
-      const dataIndex = this.productData.indexOf(data)
-      this.productData.splice(dataIndex, 1)
-    },
-
     getHasCheckedData(status, data) {
       const arrIndex = this.hasCheckedDataArray.indexOf(data)
       status
@@ -461,7 +265,6 @@ export default {
   mounted() {
     this.isLoading = true
     this.getProductData()
-    this.addNewSpecification()
     this.$nextTick(() => {
       const vm = this
       document.addEventListener('click', e => {

@@ -96,7 +96,7 @@
 <script>
 export default {
   name: 'specifition',
-  props: ['getIndex', 'getNewId'],
+  props: ['getIndex', 'getNewId', 'getEditData'],
   data() {
     return {
       specificationInfo: {
@@ -104,46 +104,58 @@ export default {
         styleInfo: [
           {
             inventory: '',
-            size: '',
-          },
+            size: ''
+          }
         ],
-        hasConfirm: false,
-      },
-    };
+        hasConfirm: false
+      }
+    }
   },
   computed: {
     newIndex() {
-      return this.getIndex;
+      return this.getIndex
     },
     getId() {
-      return this.getNewId;
+      return this.getNewId
     },
+    editData() {
+      return (this.specificationInfo = this.getEditData)
+    }
+  },
+  watch: {
+    editData: {
+      handler() {
+        this.specificationInfo = this.getEditData
+      },
+      deep: true
+    }
   },
   methods: {
     deleteSpecificationIcon() {
-      const data = this.specificationInfo;
-      this.$emit('delete', data);
+      const data = this.specificationInfo
+      this.$emit('delete', data)
     },
     editSpecificationIcon() {
-      this.specificationInfo.hasConfirm = false;
+      this.specificationInfo.hasConfirm = false
     },
     determineSpecificationIcon() {
-      this.$emit('confirm', this.specificationInfo);
-      if (this.specificationInfo.style.length) this.specificationInfo.hasConfirm = true;
+      this.$emit('confirm', this.specificationInfo)
+      if (this.specificationInfo.style.length)
+        this.specificationInfo.hasConfirm = true
     },
     addNewIcon() {
       if (this.specificationInfo.hasConfirm === true) {
-        return;
+        return
       }
-      this.specificationInfo.styleInfo.push({ inventory: '', size: '' });
+      this.specificationInfo.styleInfo.push({ inventory: '', size: '' })
     },
     removeIcon(index) {
-      this.specificationInfo.styleInfo.splice(index, 1);
-    },
+      this.specificationInfo.styleInfo.splice(index, 1)
+    }
   },
   mounted() {
-    this.$set(this.specificationInfo, 'id', this.getId);
-    this.$set(this.specificationInfo, 'index', this.newIndex);
-  },
-};
+    this.$set(this.specificationInfo, 'id', this.getId)
+    this.$set(this.specificationInfo, 'index', this.newIndex)
+  }
+}
 </script>

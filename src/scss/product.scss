@@ -410,7 +410,9 @@ a {
 
 .content_product_table {
   position: relative;
+  height: auto;
   margin: 0 2%;
+  padding-bottom: 70px;
   overflow: auto;
   overflow-y: hidden;
 }
@@ -421,7 +423,7 @@ a {
   color: color(color_teal, dark);
   table-layout: auto;
   word-break: keep-all;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
 
   tr {
     white-space: nowrap;
@@ -469,7 +471,11 @@ a {
         margin-left: 7px;
         border-spacing: 0 7px;
       }
+
+
     }
+
+
   }
 
   .table_checkbox {
@@ -644,7 +650,6 @@ a {
       width: 90%;
       display: flex;
       cursor: pointer;
-      // display: none;
       flex-direction: column;
       align-items: center;
       position: absolute;

@@ -30,58 +30,11 @@
         <ChangeStatusSelection @changeHasCheckedDataStatus="changeHasCheckedDataStatus" :hasCheckedData="hasCheckedDataArray"
           :getAllSelectionOption="allSelectionOption"></ChangeStatusSelection>
       </div>
-      <button class="add_product_btn" @click="modalDisplay = true">ADD NEW PRODUCT<span>＋</span></button>
+      <button class="add_product_btn" @click="modalDisplay = true;modalTitleText='ADD NEW PRODUCT'">ADD NEW PRODUCT<span>＋</span></button>
       <div class="add_modal" v-show="modalDisplay">
-
-        <div class="modal">
-          <div class="modal_head">
-            <h3>ADD NEW PRODUCT</h3>
-
-            <label for="close_reset" class="close_btn">
-            </label>
-          </div>
-          <div class="modal_content">
-            <LoadingPage style="position:absolute;left:0%;z-index:99" v-if="isLoading"></LoadingPage>
-            <form v-on:submit.stop.prevent action="javascript:;" enctype="multipart/form-data" id="form" method="post">
-              <div class="add_image">
-                <input @change.stop="addImg" type="file" name="src[]" id="addImage" accept="image/*" multiple>
-                <label for="addImage" @dragover.prevent.stop @drop.prevent.stop="dragImgHandle" :class="{dragZone:isDragZone}"
-                  @dragover.prevent.stop="isDragZone = true" @dragleave.prevent.stop="isDragZone=false">
-                  <font-awesome-icon class="upload_icon" :icon="['fas', 'cloud-upload-alt']" />
-                  Drag an image or click here to upload…</label>
-                <div class="image_previews">
-                  <PreviewBox :get-image="items" :get-index="index" v-for="(items,index) in imgList" :key="items.name+index"
-                    v-on:remove="removeImg"></PreviewBox>
-                </div>
-              </div>
-              <div class="add_information">
-                <label for="product_name">Product Discription </label>
-                <input type="text" name="productName" id="product_name" placeholder="Product Name" required="required"
-                  v-model.trim="formData.productName">
-                <textarea name="" id="" cols="30" rows="10" placeholder="Discription" v-model.trim="formData.discription"></textarea>
-                <label for="">Price</label>
-                <div class="info_price">
-                  <label for="original"><span>Original</span><input type="number" min="0" name="original" v-model.trim="formData.price.original"
-                      required="required"></label>
-                  <label for="discount"><span>Discount</span><input type="number" name="discount" v-model.trim="formData.price.discount"
-                      min="0" required="required"></label>
-                </div>
-                <label for="">Specification</label>
-                <ul class="specification_info" v-if="formData.specification">
-                  <Specification v-for="(items,index) in formData.specification" @delete="removeSpecification" @confirm="determineSpecification"
-                    :get-index="index" :get-new-id="getNewId" :key="items.id"></Specification>
-                </ul>
-                <button type="button" class="add_new_btn" @click="addNewSpecification">ADD
-                  NEW SPECIFICATION <img src="@/assets/img/ic_add.svg"></button>
-                <input type="reset" id="close_reset" value="" @click="closeModal">
-                <div class="submit_btn">
-                  <a href="javascript:;" @click.stop="submitData('unpublished')" id="save_draft">UNPUBLISHED</a>
-                  <button type="button" @click.stop="submitData('published')">PUBLISH</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+        <Modal @modalDisplayStatus="modalDisplayStatusHandle" :get-all-data="productData" @cancelEdit="cancelEditProduct"
+          :get-edit-data-id="editDataId" :get-edit-data="formData" :title="modalTitleText">
+        </Modal>
       </div>
     </div>
     <div class="content_product_table">
@@ -98,8 +51,8 @@
         </tr>
         <LoadingPage v-if="isLoading"></LoadingPage>
         <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
-          :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @getHasCheckedData="getHasCheckedData"
-          :key="item.id"></ProductTable>
+          :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @editData="editProduct"
+          @getHasCheckedData="getHasCheckedData" :key="item.id"></ProductTable>
       </table>
     </div>
 
