@@ -37,6 +37,7 @@
         </Modal>
       </div>
     </div>
+
     <div class="content_product_table">
       <table class="product_table">
         <tr>
@@ -56,9 +57,9 @@
       </table>
     </div>
 
-    <Pagination :getData="productData" @changePage="filterDataHandle"></Pagination>
+    <Pagination v-if="!isLoading" :getData="productData" @changePage="filterDataHandle"></Pagination>
   </div>
-  <footer></footer>
+  <footer v-if="!isLoading"></footer>
 </body>
 
 </html>
