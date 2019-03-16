@@ -35,7 +35,7 @@
             <PreviewBox
               :get-image="items"
               :get-index="index"
-              v-for="(items,index) in imgList"
+              v-for="(items,index) in imgListHandle"
               :key="items.name+index"
               v-on:remove="removeImg"
             ></PreviewBox>
@@ -118,6 +118,7 @@ import db from '../../firebaseInit.js'
 import Specification from './Specification'
 import PreviewBox from './PreviewBox'
 import LoadingPage from '../extendComponents/LoadingPage'
+import { Promise, reject, resolve, async } from 'q'
 export default {
   name: 'modal',
   components: {
@@ -125,7 +126,7 @@ export default {
     LoadingPage,
     PreviewBox
   },
-  props: ['getEditData', 'getAllData', 'title', 'getEditDataId'],
+  props: ['getEditData', 'getAllData', 'title'],
   data() {
     return {
       isLoading: false,
@@ -134,6 +135,7 @@ export default {
       imgList: [],
       specificationCount: 0,
       formData: {
+        id: '',
         img: [],
         productName: '',
         discription: '',
@@ -142,9 +144,11 @@ export default {
           discount: ''
         },
         specification: [],
-        status: true
+        status: true,
+        productIndex: ''
       },
-      editData: ''
+      editData: '',
+      editImgList: []
     }
   },
   computed: {
@@ -154,7 +158,7 @@ export default {
     modalTitle() {
       return this.title
     },
-    newData() {
+    takeEditData() {
       if (!this.getEditData.productName.length) {
         return (this.editData = this.getEditData)
       } else {
@@ -164,7 +168,7 @@ export default {
     productData() {
       return this.getAllData
     },
-    productIndex() {
+    newProductIndex() {
       const vm = this
       if (!vm.productData.length) {
         return 0
@@ -174,26 +178,15 @@ export default {
     userID() {
       return db.auth().currentUser.uid
     },
-    editDataId() {
-      return this.getEditDataId
+    imgListHandle() {
+      if (this.title === 'EDIT PRODUCT') {
+        return this.editImgList
+      } else {
+        return this.imgList
+      }
     }
   },
   watch: {
-    newData: {
-      handler() {
-        if (this.title === 'EDIT PRODUCT') {
-          this.imgList = this.editData.img
-          this.formData.productName = this.editData.productName
-          this.formData.discription = this.editData.discription
-          this.formData.price.original = this.editData.price.original
-          this.formData.price.discount = this.editData.price.discount
-          this.formData.specification = this.editData.specification
-          this.formData.status = this.editData.status
-          this.specificationCount = this.editData.specification.length
-        }
-      },
-      deep: true
-    },
     formData: {
       handler: function() {
         if (!this.formData.specification.length) {
@@ -201,12 +194,59 @@ export default {
         }
       },
       deep: true
+    },
+    takeEditData() {
+      this.editDataHandle()
     }
   },
   methods: {
+    editDataHandle() {
+      try {
+        if (this.title === 'EDIT PRODUCT') {
+          let dataIndex = this.getEditDataIndex()
+          this.formData = {
+            id: this.editData.id,
+            img: [],
+            productName: this.editData.productName,
+            discription: this.editData.discription,
+            price: {
+              original: this.editData.price.original,
+              discount: this.editData.price.discount
+            },
+            specification: this.editData.specification,
+            status: this.editData.status,
+            productIndex: this.editData.productIndex
+          }
+          // this.imgList = this.productData[dataIndex].imgList
+          this.specificationCount = this.editData.specification.length
+          if (!this.editImgList.length) {
+            this.editData.img.forEach(data => {
+              this.imgList.push(data)
+              this.editImgList.push(data)
+            })
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    getEditDataIndex() {
+      let dataIndex
+      this.productData.forEach((data, index, arr) => {
+        if (data.id === this.editData.id) {
+          dataIndex = arr.indexOf(data)
+        }
+      })
+      return dataIndex
+    },
     closeModal() {
       this.modalIsShow = false
-      this.$emit('cancelEdit')
+      if (this.title === 'EDIT PRODUCT') {
+        let dataIndex = this.getEditDataIndex()
+        this.productData[dataIndex].imgList = this.imgList
+        this.editImgList = []
+        this.$emit('cancelEdit')
+      }
       this.resetForm()
       this.$emit('modalDisplayStatus', this.modalIsShow)
     },
@@ -260,7 +300,9 @@ export default {
               src,
               name
             }
-            vm.imgList.push(newImg)
+            vm.title === 'EDIT PRODUCT'
+              ? vm.editImgList.push(newImg)
+              : vm.imgList.push(newImg)
           }
         }
         reader.readAsDataURL(files)
@@ -272,7 +314,9 @@ export default {
       Array.prototype.forEach.call(files, this.readURL)
     },
     removeImg(newIndex) {
-      this.imgList.splice(newIndex, 1)
+      this.title === 'EDIT PRODUCT'
+        ? this.editImgList.splice(newIndex, 1)
+        : this.imgList.splice(newIndex, 1)
     },
     removeSpecification(data) {
       const index = this.formData.specification.indexOf(data)
@@ -326,24 +370,31 @@ export default {
       })
     },
     resetForm() {
-      this.formData.productName = ''
-      this.formData.discription = ''
-      this.formData.price.original = ''
-      this.formData.price.discount = ''
-      this.formData.specification = []
-      this.formData.img = []
+      this.formData = {
+        id: '',
+        img: [],
+        productName: '',
+        discription: '',
+        price: {
+          original: '',
+          discount: ''
+        },
+        specification: [],
+        status: true,
+        productIndex: ''
+      }
       this.specificationCount = 0
       this.imgList = []
       this.addNewSpecification()
     },
     addNewProductHandle() {
       const vm = this
-      const newProduct = {
+      let newProduct = {
         id: '',
         imgList: [],
         productName: vm.formData.productName,
         discription: vm.formData.discription,
-        productIndex: vm.productIndex,
+        productIndex: vm.newProductIndex,
         price: {
           original: vm.formData.price.original,
           discount: vm.formData.price.discount
@@ -412,7 +463,253 @@ export default {
           console.error('Error adding document: ', error)
         })
     },
-    editProductHandle() {},
+    editProductHandle() {
+      const vm = this
+      let haseditedProduct = {
+        id: vm.formData.id,
+        imgList: [],
+        productName: vm.formData.productName,
+        discription: vm.formData.discription,
+        productIndex: vm.formData.productIndex,
+        price: {
+          original: vm.formData.price.original,
+          discount: vm.formData.price.discount
+        },
+        specification: vm.formData.specification,
+        status: vm.formData.status
+      }
+      let dataIndex = this.getEditDataIndex()
+      //retainImgList 還保留的檔案
+      //deleteImgList 要刪除的檔案
+      let retainImgList = [],
+        deleteImgList = [],
+        newImgList = []
+      vm.editImgList.forEach(newImgData => {
+        let originalImgList = vm.imgList.filter(oldImgData => {
+          if (oldImgData === newImgData) retainImgList.push(oldImgData)
+        })
+      })
+      if (retainImgList.length) {
+        if (vm.imgList.length !== retainImgList.length) {
+          console.log('!==')
+          retainImgList.forEach(img => {
+            deleteImgList = vm.imgList.filter(deleteData => {
+              return deleteData !== img
+            })
+            newImgList = vm.editImgList.filter(newImg => {
+              return newImg !== img
+            })
+          })
+        } else {
+          newImgList = vm.editImgList.slice(retainImgList.length)
+        }
+      }
+      //delete storage
+      //如果imgList 跟 editImgList內的照片都不同的話就刪除imgList
+      //如果部分一樣的話，先檢查imgList內是否有一樣的就略過，其他刪除
+      //如果有一樣的話就直接略過delete到下一個步驟
+      //deleteImgList 有值代表部分為原檔案 => 刪除部分
+      //retainImgList 為空代表已無原檔案 => 刪除全部
+      //deleteImgList 為空且retainImgList 有值代表沒更動 => 直接進入下一步
+      return new Promise((resolve, reject) => {
+        if (deleteImgList.length) {
+          deleteImgList.forEach(del => {
+            db.storage()
+              .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+              .child(del.name)
+              .delete()
+              .then(() => {
+                console.log(`${del.name} successfully deleted!`)
+                return new Promise(resolve => {
+                  resolve('some data has deleted')
+                })
+              })
+              .catch(error => {
+                reject(error)
+                console.log(error)
+              })
+          })
+        } else if (!retainImgList.length) {
+          return new Promise((resolve, reject) => {
+            vm.imgList.forEach(del => {
+              db.storage()
+                .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                .child(del.name)
+                .delete()
+                .then(() => {
+                  console.log(`${del.name} successfully deleted!`)
+                  resolve('delete all')
+                })
+                .catch(error => {
+                  reject(error)
+                  console.log(error)
+                })
+            })
+            resolve('finish delete')
+          }).then(() => {
+            resolve('delete all')
+          })
+        } else {
+          retainImgList.forEach(img => {
+            vm.formData.img.push(img)
+          })
+          resolve('ignore')
+        }
+      })
+        .then(status => {
+          return new Promise((resolve, reject) => {
+            console.log(status)
+            const storage = db.storage()
+            switch (status) {
+              case 'some data has deleted':
+                newImgList.forEach(img => {
+                  storage
+                    .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                    .child(img.name)
+                    .putString(img.src, 'data_url')
+                    .then(fileData => {
+                      storage
+                        .ref(fileData.metadata.fullPath)
+                        .getDownloadURL()
+                        .then(url => {
+                          let newImgInfo = {
+                            name: fileData.metadata.name,
+                            src: url
+                          }
+                          console.log(newImgInfo)
+                          if (fileData.state === 'success') {
+                            vm.formData.img.push(newImgInfo)
+                          }
+                          if (
+                            vm.formData.img.length === vm.editImgList.length
+                          ) {
+                            console.log('update some image')
+
+                            resolve('update some image')
+                          }
+                        })
+                    })
+                    .catch(error => {
+                      console.error('Error adding document: ', error)
+                    })
+                })
+                break
+              case 'delete all':
+                vm.editImgList.forEach(img => {
+                  storage
+                    .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                    .child(img.name)
+                    .putString(img.src, 'data_url')
+                    .then(fileData => {
+                      storage
+                        .ref(fileData.metadata.fullPath)
+                        .getDownloadURL()
+                        .then(url => {
+                          const newImgInfo = {
+                            name: fileData.metadata.name,
+                            src: url
+                          }
+                          if (fileData.state === 'success') {
+                            vm.formData.img.push(newImgInfo)
+                          }
+                          if (
+                            vm.formData.img.length === vm.editImgList.length
+                          ) {
+                            resolve('update all image')
+
+                            console.log('update all image')
+                          }
+                        })
+                    })
+                    .catch(error => {
+                      console.error('Error adding document: ', error)
+                    })
+                })
+                break
+              case 'ignore':
+                if (newImgList.length) {
+                  newImgList.forEach(img => {
+                    storage
+                      .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                      .child(img.name)
+                      .putString(img.src, 'data_url')
+                      .then(fileData => {
+                        storage
+                          .ref(fileData.metadata.fullPath)
+                          .getDownloadURL()
+                          .then(url => {
+                            let newImgInfo = {
+                              name: fileData.metadata.name,
+                              src: url
+                            }
+                            if (fileData.state === 'success') {
+                              vm.formData.img.push(newImgInfo)
+                            }
+                            if (
+                              vm.formData.img.length === vm.editImgList.length
+                            ) {
+                              console.log('update new image')
+                              resolve('update new image')
+                            }
+                          })
+                      })
+                      .catch(error => {
+                        console.error('Error adding document: ', error)
+                        reject(error)
+                      })
+                  })
+                } else {
+                  vm.formData.img = vm.imgList
+                  return new Promise(resolve => {
+                    resolve('no imgage updated')
+                    console.log('no image updated')
+                  })
+                }
+                break
+            }
+          })
+        })
+        .then(() => {
+          return new Promise((resolve, reject) => {
+            db.firestore()
+              .collection('user')
+              .doc(vm.userID)
+              .collection('product')
+              .doc(vm.formData.id)
+              .update({
+                id: vm.formData.id,
+                imgList: vm.formData.img,
+                productName: vm.formData.productName,
+                discription: vm.formData.discription,
+                productIndex: vm.formData.productIndex,
+                price: {
+                  original: vm.formData.price.original,
+                  discount: vm.formData.price.discount
+                },
+                specification: vm.formData.specification,
+                status: vm.formData.status
+              })
+              .then(() => {
+                console.log(vm.formData.img)
+                haseditedProduct.imgList = vm.formData.img
+                vm.productData.splice(dataIndex, 1, haseditedProduct)
+                vm.isLoading = false
+                vm.modalIsShow = false
+                vm.editImgList = []
+                vm.resetForm()
+                vm.$emit('modalDisplayStatus', vm.modalIsShow)
+                resolve('edit')
+                console.log('edit over')
+              })
+              .catch(error => {
+                console.log(error)
+              })
+          })
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     submitData(isPublished) {
       const vm = this
       isPublished === 'published'
@@ -428,8 +725,15 @@ export default {
         this.formData.specification[0].style === null
       ) {
         alert('請填寫完畢再送出！！！')
+        return
       } else {
-        if (this.title === 'ADD NEW PRODUCT') this.addNewProductHandle()
+        if (this.title === 'ADD NEW PRODUCT') {
+          this.isLoading = true
+          this.addNewProductHandle()
+        } else {
+          this.isLoading = true
+          this.editProductHandle()
+        }
       }
     }
   },

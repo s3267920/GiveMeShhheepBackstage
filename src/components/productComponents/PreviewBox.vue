@@ -12,23 +12,21 @@ export default {
   props: ['getImage', 'getIndex'],
   data() {
     return {
-      img: '',
-      image: '',
-      index: '',
-    };
+      image: ''
+    }
   },
   computed: {
     newImgList() {
-      return (this.img = this.getImage);
+      return this.getImage
     },
     newIndex() {
-      return (this.index = this.getIndex);
-    },
+      return this.getIndex
+    }
   },
   methods: {
     deleteImg() {
-      this.$emit('remove', this.newIndex);
-    },
-  },
-};
+      this.$emit('remove', this.newIndex)
+    }
+  }
+}
 </script>

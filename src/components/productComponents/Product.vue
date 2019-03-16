@@ -40,9 +40,22 @@ export default {
           discount: ''
         },
         specification: [],
-        status: true
+        status: true,
+        productIndex: ''
       },
-      editDataId: '',
+      editData: {
+        id: '',
+        img: [],
+        productName: '',
+        discription: '',
+        price: {
+          original: '',
+          discount: ''
+        },
+        specification: [],
+        status: true,
+        productIndex: ''
+      },
       isLoading: false,
       selectionOptionDisplay: false,
       page: null,
@@ -50,9 +63,6 @@ export default {
     }
   },
   computed: {
-    getNewId() {
-      return this.specificationCount
-    },
     productTableData() {
       if (!this.filterData.length) {
         return this.filterDataHandle(1, 5)
@@ -78,10 +88,8 @@ export default {
     productData: {
       handler() {
         this.isLoading = true
-        this.$nextTick(function() {
-          this.getProductData()
-          this.filterDataHandle(this.page, this.limitNum)
-        })
+        this.getProductData()
+        this.filterDataHandle(this.page, this.limitNum)
       },
       deep: true
     },
@@ -116,7 +124,8 @@ export default {
                   discount: doc.data().price.discount
                 },
                 specification: doc.data().specification,
-                status: doc.data().status
+                status: doc.data().status,
+                productIndex: doc.data().productIndex
               }
               newData.push(data)
               if (this.productData.length < querySnapshot.docs.length) {
@@ -144,24 +153,34 @@ export default {
       this.productData.splice(dataIndex, 1)
     },
     cancelEditProduct() {
-      this.formData.productName = ''
-      this.formData.discription = ''
-      this.formData.price.original = ''
-      this.formData.price.discount = ''
-      this.formData.specification = []
-      this.formData.img = []
-      this.formData.status = true
+      this.editData = {
+        id: '',
+        img: [],
+        productName: '',
+        discription: '',
+        price: {
+          original: '',
+          discount: ''
+        },
+        specification: [],
+        status: true,
+        productIndex: ''
+      }
     },
     editProduct(data) {
-      let form = this.formData
-      form.img = data.imgList
-      form.productName = data.productName
-      form.discription = data.discription
-      form.price.original = data.price.original
-      form.price.discount = data.price.discount
-      form.specification = data.specification
-      form.status = data.status
-      this.editDataId = data.id
+      this.editData = {
+        id: data.id,
+        img: data.imgList,
+        productName: data.productName,
+        discription: data.discription,
+        price: {
+          original: data.price.original,
+          discount: data.price.discount
+        },
+        specification: data.specification,
+        status: data.status,
+        productIndex: data.productIndex
+      }
       this.modalTitleText = 'EDIT PRODUCT'
       this.modalDisplay = true
     },

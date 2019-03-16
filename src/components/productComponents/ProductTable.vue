@@ -6,7 +6,7 @@
     </td>
 
     <td class="product">
-      <img :src="''||product.imgList[0].src">
+      <img :src="srcHandle">
       <span>{{product.productName}}</span>
     </td>
     <td class="original">{{product.price.original}}</td>
@@ -85,6 +85,13 @@ export default {
     },
     userID() {
       return this.getUserId
+    },
+    srcHandle() {
+      if (!this.product.imgList.length) {
+        return ''
+      } else {
+        return this.product.imgList[0].src
+      }
     }
   },
   watch: {
@@ -124,6 +131,16 @@ export default {
     },
     hasCheck() {
       this.$emit('getHasCheckedData', this.hasCheck, this.product)
+    },
+    getData: {
+      handler() {
+        if (!this.getData.imgList.length) {
+          return ''
+        } else {
+          return this.getData.imgList[0].src
+        }
+      }
+      // deep: true
     }
   },
   methods: {

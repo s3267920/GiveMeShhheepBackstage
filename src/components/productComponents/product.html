@@ -1,65 +1,118 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1 ,maximum-scale=1" />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Product</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1 ,maximum-scale=1">
-
-</head>
-
-<body>
-  <div class="product_content">
-    <div class="content_head">
-      <div class="check_option">
-        <input type="checkbox" name="check" id="all" v-model="isCheckedAll" :class="{checked:isCheckedAll}" @click="checkedSelectionOptionHandle('all')">
-        <label for="all"></label>
-        <span class="triangle_bottom" id="check_more_option" @click="selectionOptionDisplay=!selectionOptionDisplay">
-          <transition name="fade" mode="in-out">
-            <ul v-if="selectionOptionDisplay" id="select_menu" class="select_menu">
-              <li><a href.prevent class="select_all" :class="{has_check:hasSelectText==='select all'}" @click="checkedSelectionOptionHandle('select all')">select
-                  all</a></li>
-              <li><a href.prevent class="unselect_all" :class="{has_check:hasSelectText==='unselect all'}" @click="checkedSelectionOptionHandle('unselect all')">unselect
-                  all</a></li>
-              <li><a href.prevent class="published" :class="{has_check:hasSelectText==='published'}" @click="checkedSelectionOptionHandle('published')">published</a></li>
-              <li><a href.prevent class="unpublished" :class="{has_check:hasSelectText==='unpublished'}" @click="checkedSelectionOptionHandle('unpublished')">unpublished</a></li>
-            </ul>
-          </transition>
-        </span>
-        <ChangeStatusSelection @changeHasCheckedDataStatus="changeHasCheckedDataStatus" :hasCheckedData="hasCheckedDataArray"
-          :getAllSelectionOption="allSelectionOption"></ChangeStatusSelection>
+  <body>
+    <div class="product_content">
+      <div class="content_head">
+        <div class="check_option">
+          <input
+            type="checkbox"
+            name="check"
+            id="all"
+            v-model="isCheckedAll"
+            :class="{checked:isCheckedAll}"
+            @click="checkedSelectionOptionHandle('all')"
+          />
+          <label for="all"></label>
+          <span class="triangle_bottom" id="check_more_option" @click="selectionOptionDisplay=!selectionOptionDisplay">
+            <transition name="fade" mode="in-out">
+              <ul v-if="selectionOptionDisplay" id="select_menu" class="select_menu">
+                <li>
+                  <a
+                    href.prevent
+                    class="select_all"
+                    :class="{has_check:hasSelectText==='select all'}"
+                    @click="checkedSelectionOptionHandle('select all')"
+                    >select all</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href.prevent
+                    class="unselect_all"
+                    :class="{has_check:hasSelectText==='unselect all'}"
+                    @click="checkedSelectionOptionHandle('unselect all')"
+                    >unselect all</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href.prevent
+                    class="published"
+                    :class="{has_check:hasSelectText==='published'}"
+                    @click="checkedSelectionOptionHandle('published')"
+                    >published</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href.prevent
+                    class="unpublished"
+                    :class="{has_check:hasSelectText==='unpublished'}"
+                    @click="checkedSelectionOptionHandle('unpublished')"
+                    >unpublished</a
+                  >
+                </li>
+              </ul>
+            </transition>
+          </span>
+          <ChangeStatusSelection
+            @changeHasCheckedDataStatus="changeHasCheckedDataStatus"
+            :hasCheckedData="hasCheckedDataArray"
+            :getAllSelectionOption="allSelectionOption"
+          ></ChangeStatusSelection>
+        </div>
+        <button class="add_product_btn" @click="modalDisplay = true;modalTitleText='ADD NEW PRODUCT'">
+          ADD NEW PRODUCT<span>＋</span>
+        </button>
+        <div class="add_modal" v-show="modalDisplay">
+          <Modal
+            @modalDisplayStatus="modalDisplayStatusHandle"
+            @cancelEdit="cancelEditProduct"
+            :get-all-data="productData"
+            :get-edit-data="editData"
+            :title="modalTitleText"
+          >
+          </Modal>
+        </div>
       </div>
-      <button class="add_product_btn" @click="modalDisplay = true;modalTitleText='ADD NEW PRODUCT'">ADD NEW PRODUCT<span>＋</span></button>
-      <div class="add_modal" v-show="modalDisplay">
-        <Modal @modalDisplayStatus="modalDisplayStatusHandle" :get-all-data="productData" @cancelEdit="cancelEditProduct"
-          :get-edit-data-id="editDataId" :get-edit-data="formData" :title="modalTitleText">
-        </Modal>
+
+      <div class="content_product_table">
+        <table class="product_table">
+          <tr>
+            <th></th>
+            <th class="table_product">Product</th>
+            <th>Original</th>
+            <th class="table_discount">Discount</th>
+            <th class="information_style">Style</th>
+            <th class="information_size">Size</th>
+            <th class="information_inventory">Inventory</th>
+            <th>Status</th>
+          </tr>
+          <LoadingPage v-if="isLoading"></LoadingPage>
+          <ProductTable
+            v-else
+            v-for="(item,index) in productTableData"
+            :get-filter-product="productTableData"
+            :get-data="item"
+            :key="item.id"
+            :getHasSelectText="hasSelectText"
+            :getUserId="userID"
+            @deleteData="deleteProduct"
+            @editData="editProduct"
+            @getHasCheckedData="getHasCheckedData"
+          ></ProductTable>
+        </table>
       </div>
+
+      <Pagination v-if="!isLoading" :getData="productData" @changePage="filterDataHandle"></Pagination>
     </div>
-
-    <div class="content_product_table">
-      <table class="product_table">
-        <tr>
-          <th></th>
-          <th class="table_product">Product</th>
-          <th>Original</th>
-          <th class="table_discount">Discount</th>
-          <th class="information_style">Style</th>
-          <th class="information_size">Size</th>
-          <th class="information_inventory">Inventory</th>
-          <th>Status</th>
-        </tr>
-        <LoadingPage v-if="isLoading"></LoadingPage>
-        <ProductTable v-else :get-filter-product="productTableData" :get-data="item" :getHasSelectText="hasSelectText"
-          :getUserId="userID" v-for="(item,index) in productTableData" @deleteData="deleteProduct" @editData="editProduct"
-          @getHasCheckedData="getHasCheckedData" :key="item.id"></ProductTable>
-      </table>
-    </div>
-
-    <Pagination v-if="!isLoading" :getData="productData" @changePage="filterDataHandle"></Pagination>
-  </div>
-  <footer v-if="!isLoading"></footer>
-</body>
-
+    <footer v-if="!isLoading"></footer>
+  </body>
 </html>
