@@ -6,6 +6,7 @@
     </div>
     <div class="modal_content">
       <LoadingPage style="position:absolute;left:0%;z-index:99" v-if="isLoading"></LoadingPage>
+      <div class="progress_bar" v-if="isLoading" v-text="progress+' %'"></div>
       <form
         v-on:submit.stop.prevent
         action="javascript:;"
@@ -130,6 +131,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      progress: 0,
       modalIsShow: false,
       isDragZone: false,
       imgList: [],
@@ -187,13 +189,12 @@ export default {
     }
   },
   watch: {
-    formData: {
+    'formData.specification': {
       handler: function() {
         if (!this.formData.specification.length) {
           this.addNewSpecification()
         }
-      },
-      deep: true
+      }
     },
     takeEditData() {
       this.editDataHandle()
@@ -414,6 +415,7 @@ export default {
           return id
         })
         .then(id => {
+          vm.progress = 50
           const storage = db.storage()
           vm.imgList.forEach(img => {
             storage
@@ -421,6 +423,7 @@ export default {
               .child(img.name)
               .putString(img.src, 'data_url')
               .then(fileData => {
+                vm.progress = 75
                 storage
                   .ref(fileData.metadata.fullPath)
                   .getDownloadURL()
@@ -446,6 +449,7 @@ export default {
                           newProduct.id = id
                           newProduct.imgList = vm.formData.img
                           vm.productData.push(newProduct)
+                          vm.progress = 100
                           vm.isLoading = false
                           vm.modalIsShow = false
                           vm.resetForm()
@@ -491,7 +495,6 @@ export default {
       })
       if (retainImgList.length) {
         if (vm.imgList.length !== retainImgList.length) {
-          console.log('!==')
           retainImgList.forEach(img => {
             deleteImgList = vm.imgList.filter(deleteData => {
               return deleteData !== img
@@ -513,21 +516,25 @@ export default {
       //deleteImgList 為空且retainImgList 有值代表沒更動 => 直接進入下一步
       return new Promise((resolve, reject) => {
         if (deleteImgList.length) {
-          deleteImgList.forEach(del => {
-            db.storage()
-              .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
-              .child(del.name)
-              .delete()
-              .then(() => {
-                console.log(`${del.name} successfully deleted!`)
-                return new Promise(resolve => {
-                  resolve('some data has deleted')
+          return new Promise((resolve, reject) => {
+            deleteImgList.forEach(del => {
+              db.storage()
+                .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                .child(del.name)
+                .delete()
+                .then(() => {
+                  resolve('finished deleted')
                 })
-              })
-              .catch(error => {
-                reject(error)
-                console.log(error)
-              })
+                .catch(error => {
+                  reject(error)
+                  console.log(error)
+                })
+            })
+          }).then(() => {
+            retainImgList.forEach(img => {
+              vm.formData.img.push(img)
+            })
+            resolve('some img have deleted')
           })
         } else if (!retainImgList.length) {
           return new Promise((resolve, reject) => {
@@ -537,15 +544,13 @@ export default {
                 .child(del.name)
                 .delete()
                 .then(() => {
-                  console.log(`${del.name} successfully deleted!`)
-                  resolve('delete all')
+                  resolve('delete')
                 })
                 .catch(error => {
                   reject(error)
                   console.log(error)
                 })
             })
-            resolve('finish delete')
           }).then(() => {
             resolve('delete all')
           })
@@ -557,11 +562,40 @@ export default {
         }
       })
         .then(status => {
-          return new Promise((resolve, reject) => {
-            console.log(status)
-            const storage = db.storage()
-            switch (status) {
-              case 'some data has deleted':
+          vm.progress = 50
+          const storage = db.storage()
+          if (status === 'some img have deleted' || status === 'delete all') {
+            return new Promise((resolve, reject) => {
+              newImgList.forEach(img => {
+                storage
+                  .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
+                  .child(img.name)
+                  .putString(img.src, 'data_url')
+                  .then(fileData => {
+                    storage
+                      .ref(fileData.metadata.fullPath)
+                      .getDownloadURL()
+                      .then(url => {
+                        const newImgInfo = {
+                          name: fileData.metadata.name,
+                          src: url
+                        }
+                        if (fileData.state === 'success') {
+                          vm.formData.img.push(newImgInfo)
+                        }
+                        if (vm.formData.img.length === vm.editImgList.length) {
+                          resolve('update image')
+                        }
+                      })
+                  })
+                  .catch(error => {
+                    console.error('Error adding document: ', error)
+                  })
+              })
+            })
+          } else if (status === 'ignore') {
+            return new Promise((resolve, reject) => {
+              if (newImgList.length) {
                 newImgList.forEach(img => {
                   storage
                     .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
@@ -576,100 +610,30 @@ export default {
                             name: fileData.metadata.name,
                             src: url
                           }
-                          console.log(newImgInfo)
                           if (fileData.state === 'success') {
                             vm.formData.img.push(newImgInfo)
                           }
                           if (
                             vm.formData.img.length === vm.editImgList.length
                           ) {
-                            console.log('update some image')
-
-                            resolve('update some image')
+                            resolve('update new image')
                           }
                         })
                     })
                     .catch(error => {
                       console.error('Error adding document: ', error)
+                      reject(error)
                     })
                 })
-                break
-              case 'delete all':
-                vm.editImgList.forEach(img => {
-                  storage
-                    .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
-                    .child(img.name)
-                    .putString(img.src, 'data_url')
-                    .then(fileData => {
-                      storage
-                        .ref(fileData.metadata.fullPath)
-                        .getDownloadURL()
-                        .then(url => {
-                          const newImgInfo = {
-                            name: fileData.metadata.name,
-                            src: url
-                          }
-                          if (fileData.state === 'success') {
-                            vm.formData.img.push(newImgInfo)
-                          }
-                          if (
-                            vm.formData.img.length === vm.editImgList.length
-                          ) {
-                            resolve('update all image')
-
-                            console.log('update all image')
-                          }
-                        })
-                    })
-                    .catch(error => {
-                      console.error('Error adding document: ', error)
-                    })
-                })
-                break
-              case 'ignore':
-                if (newImgList.length) {
-                  newImgList.forEach(img => {
-                    storage
-                      .ref(`user/${vm.userID}/` + `product/${vm.formData.id}`)
-                      .child(img.name)
-                      .putString(img.src, 'data_url')
-                      .then(fileData => {
-                        storage
-                          .ref(fileData.metadata.fullPath)
-                          .getDownloadURL()
-                          .then(url => {
-                            let newImgInfo = {
-                              name: fileData.metadata.name,
-                              src: url
-                            }
-                            if (fileData.state === 'success') {
-                              vm.formData.img.push(newImgInfo)
-                            }
-                            if (
-                              vm.formData.img.length === vm.editImgList.length
-                            ) {
-                              console.log('update new image')
-                              resolve('update new image')
-                            }
-                          })
-                      })
-                      .catch(error => {
-                        console.error('Error adding document: ', error)
-                        reject(error)
-                      })
-                  })
-                } else {
-                  vm.formData.img = vm.imgList
-                  return new Promise(resolve => {
-                    resolve('no imgage updated')
-                    console.log('no image updated')
-                  })
-                }
-                break
-            }
-          })
+              } else {
+                vm.formData.img = vm.imgList
+                resolve('no imgage updated')
+              }
+            })
+          }
         })
-        .then(() => {
+        .then(success => {
+          vm.progress = 75
           return new Promise((resolve, reject) => {
             db.firestore()
               .collection('user')
@@ -690,7 +654,6 @@ export default {
                 status: vm.formData.status
               })
               .then(() => {
-                console.log(vm.formData.img)
                 haseditedProduct.imgList = vm.formData.img
                 vm.productData.splice(dataIndex, 1, haseditedProduct)
                 vm.isLoading = false
@@ -699,7 +662,7 @@ export default {
                 vm.resetForm()
                 vm.$emit('modalDisplayStatus', vm.modalIsShow)
                 resolve('edit')
-                console.log('edit over')
+                vm.progress = 100
               })
               .catch(error => {
                 console.log(error)

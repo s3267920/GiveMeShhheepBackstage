@@ -408,6 +408,15 @@ a {
   }
 }
 
+.progress_bar {
+  position: absolute;
+  top: 25%;
+  left: 47.5%;
+  color: color(other, white);
+  font-size: nth($font, 4);
+  z-index: 100;
+}
+
 .content_product_table {
   position: relative;
   height: auto;
