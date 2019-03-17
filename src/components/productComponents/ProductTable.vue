@@ -179,7 +179,9 @@ export default {
     changeBtnStatus(val) {
       const vm = this
       let newStatus = true
-      val === 'Published' ? (newStatus = true) : (newStatus = false)
+      val === 'Published'
+        ? ((newStatus = true), (vm.statusValue = 'published'))
+        : ((newStatus = false), (vm.statusValue = 'unpublished'))
       db.firestore()
         .collection('user')
         .doc(this.userID)
