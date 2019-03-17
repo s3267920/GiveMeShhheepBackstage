@@ -87,7 +87,9 @@ export default {
   watch: {
     productData: {
       handler() {
-        this.isLoading = true
+        if (!this.productData.length) {
+          this.isLoading = true
+        }
         this.getProductData()
         this.filterDataHandle(this.page, this.limitNum)
       },

@@ -150,7 +150,8 @@ export default {
         productIndex: ''
       },
       editData: '',
-      editImgList: []
+      editImgList: [],
+      originalSpecification: []
     }
   },
   computed: {
@@ -218,7 +219,7 @@ export default {
             status: this.editData.status,
             productIndex: this.editData.productIndex
           }
-          // this.imgList = this.productData[dataIndex].imgList
+          this.originalSpecification = this.editData.specification.slice(0)
           this.specificationCount = this.editData.specification.length
           if (!this.editImgList.length) {
             this.editData.img.forEach(data => {
@@ -245,6 +246,7 @@ export default {
       if (this.title === 'EDIT PRODUCT') {
         let dataIndex = this.getEditDataIndex()
         this.productData[dataIndex].imgList = this.imgList
+        this.productData[dataIndex].specification = this.originalSpecification
         this.editImgList = []
         this.$emit('cancelEdit')
       }

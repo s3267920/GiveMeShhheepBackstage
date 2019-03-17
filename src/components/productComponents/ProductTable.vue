@@ -132,7 +132,7 @@ export default {
     hasCheck() {
       this.$emit('getHasCheckedData', this.hasCheck, this.product)
     },
-    getData: {
+    'getData.imgList': {
       handler() {
         if (!this.getData.imgList.length) {
           return ''
@@ -140,7 +140,6 @@ export default {
           return this.getData.imgList[0].src
         }
       }
-      // deep: true
     }
   },
   methods: {
