@@ -90,10 +90,12 @@ export default {
         if (!this.productData.length) {
           this.isLoading = true
         }
+        // this.isLoading = true
         this.getProductData()
         this.filterDataHandle(this.page, this.limitNum)
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
     isCheckedAll() {
       this.checkedSelectionOptionHandle(this.hasSelectText)

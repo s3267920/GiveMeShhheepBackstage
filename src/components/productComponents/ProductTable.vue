@@ -75,10 +75,8 @@ export default {
       return this.getFilterProduct
     },
     statusValue() {
-      if (this.product.status) {
-        return 'PUBLISHED'
-      }
-      return 'UNPUBLISHED'
+      if (this.product.status) return 'PUBLISHED'
+      else return 'UNPUBLISHED'
     },
     hasCheckText() {
       return this.getHasSelectText
@@ -95,9 +93,11 @@ export default {
     }
   },
   watch: {
-    allProduct() {
-      if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true
+    allProduct: {
+      handler(val, oldVal) {
+        if (val.length !== oldVal.length) {
+          this.rowColor()
+        }
       }
     },
     hasCheckText(val) {
@@ -143,34 +143,54 @@ export default {
     }
   },
   methods: {
+    rowColor() {
+      if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
+        this.trRowColor = true
+      } else {
+        this.trRowColor = false
+      }
+    },
     deleteData() {
       let confirmMsg = confirm(`確認刪除${this.product.productName}嗎？`)
       if (confirmMsg) {
-        this.product.imgList.forEach(img => {
-          db.storage()
-            .ref(`user/${this.userID}/` + `product/${this.product.id}`)
-            .child(img.name)
-            .delete()
-            .then(() => {
-              console.log('Files successfully deleted!')
+        return new Promise((resolve, reject) => {
+          return new Promise((resolve, reject) => {
+            this.product.imgList.forEach(img => {
+              db.storage()
+                .ref(`user/${this.userID}/` + `product/${this.product.id}`)
+                .child(img.name)
+                .delete()
+                .then(() => {
+                  console.log('Files successfully deleted!')
+                  resolve('Files successfully deleted!')
+                })
+                .catch(error => {})
             })
-            .catch(error => {})
+          }).then(() => {
+            resolve('img deleted')
+          })
         })
-        db.firestore()
-          .collection('user')
-          .doc(this.userID)
-          .collection('product')
-          .doc(this.product.id)
-          .delete()
           .then(() => {
-            console.log('Document successfully deleted!')
+            return new Promise((resolve, reject) => {
+              db.firestore()
+                .collection('user')
+                .doc(this.userID)
+                .collection('product')
+                .doc(this.product.id)
+                .delete()
+                .then(() => {
+                  console.log('Document successfully deleted!')
+                  resolve(this.product)
+                })
+            }).then(() => {
+              this.$emit('deleteData', this.product)
+            })
           })
           .catch(error => {
-            console.error('Error removing document: ', error)
+            console.log(error)
           })
-        this.$emit('deleteData', this.product)
       } else {
-        return false
+        return
       }
     },
     editData() {
@@ -179,9 +199,7 @@ export default {
     changeBtnStatus(val) {
       const vm = this
       let newStatus = true
-      val === 'Published'
-        ? ((newStatus = true), (vm.statusValue = 'published'))
-        : ((newStatus = false), (vm.statusValue = 'unpublished'))
+      val === 'Published' ? (newStatus = true) : (newStatus = false)
       db.firestore()
         .collection('user')
         .doc(this.userID)
@@ -199,11 +217,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(function() {
-      if ((this.allProduct.indexOf(this.product) + 1) % 2 === 0) {
-        this.trRowColor = true
-      }
-    })
+    this.rowColor()
   }
 }
 </script>
