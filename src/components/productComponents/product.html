@@ -68,7 +68,7 @@
 
     <Pagination v-if="!isLoading" :getData="productData" @changePage="filterDataHandle"></Pagination>
   </div>
-  <footer v-if="!isLoading"></footer>
+  <Footers v-if="!isLoading"></Footers>
 </body>
 
 </html>

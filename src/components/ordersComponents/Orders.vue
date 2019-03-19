@@ -8,14 +8,15 @@ import orderList from './orderList'
 import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
 import loadingPage from '../extendComponents/LoadingPage'
 import pagination from '../extendComponents/Pagination'
-
+import Footers from '../extendComponents/Footers'
 export default {
   name: 'orders',
   components: {
     orderList,
     loadingPage,
     ChangeStatusSelection,
-    pagination
+    pagination,
+    Footers
   },
 
   data() {

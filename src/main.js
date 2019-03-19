@@ -34,6 +34,8 @@ import {
   faGoogle,
   faFacebook,
   faAmazon,
+  faGithub,
+  faGithubAlt,
 } from '@fortawesome/free-brands-svg-icons';
 // firebase
 
@@ -52,7 +54,7 @@ const solid = [faUser,
   faKey,
   faBirthdayCake,
 ];
-const brands = [faGoogle, faFacebook, faAmazon];
+const brands = [faGoogle, faFacebook, faAmazon, faGithub, faGithubAlt];
 const regular = [faUserCircle,
   faTimesCircle,
   faEdit, farEnvelope,

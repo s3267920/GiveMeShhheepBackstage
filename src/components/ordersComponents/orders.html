@@ -98,5 +98,5 @@
     </div>
     <pagination :get-data="orderData" @changePage="filterDataHandle"></pagination>
   </div>
-  <footer></footer>
+  <Footers v-if="!isLoading"></Footers>
 </body>

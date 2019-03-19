@@ -5,9 +5,10 @@
 import Echart from './Echart.vue'
 import LastOrders from './LastOrders'
 import LoadingPage from '../extendComponents/LoadingPage'
+import Footers from '../extendComponents/Footers'
 export default {
   name: 'home',
-  components: { Echart, LastOrders, LoadingPage },
+  components: { Echart, LastOrders, LoadingPage, Footers },
   data() {
     return {
       eChartData: {

@@ -9,6 +9,7 @@ import LoadingPage from '../extendComponents/LoadingPage'
 import ChangeStatusSelection from '../extendComponents/ChangeStatusSelection'
 import Pagination from '../extendComponents/Pagination'
 import Modal from './Modal'
+import Footers from '../extendComponents/Footers'
 import db from '@/firebaseInit.js'
 
 export default {
@@ -18,7 +19,8 @@ export default {
     ProductTable,
     LoadingPage,
     Pagination,
-    Modal
+    Modal,
+    Footers
   },
   data() {
     return {

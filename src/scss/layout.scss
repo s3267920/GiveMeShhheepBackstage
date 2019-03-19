@@ -133,4 +133,16 @@ header {
 footer {
   height: 70px;
   background-color: color(color_teal, dark);
+  display: flex;
+
+  a {
+    display: flex;
+    margin: auto;
+  }
+
+  .github_icon {
+    font-size: nth($font, 5);
+    color: color(other, white);
+
+  }
 }

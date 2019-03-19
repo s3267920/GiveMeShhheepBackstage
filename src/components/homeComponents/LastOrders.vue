@@ -44,7 +44,6 @@ export default {
       !this.orderData.length
         ? (this.isLoading = true)
         : (this.isLoading = false)
-
       this.$emit('isLoading', this.isLoading)
     }
   },
