@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import db from './firebaseInit.js';
-import router from './router.js';
+import db from './firebaseInit.js'
+import router from './router.js'
 
 export default {
   name: 'headers',
@@ -51,63 +51,63 @@ export default {
       getPath: '',
       customerName: '',
       login: false,
-      personalDisplay: false,
-    };
+      personalDisplay: false
+    }
   },
   computed: {
     getThisPath() {
-      return (this.getPath = this.$route.name);
-    },
+      return (this.getPath = this.$route.name)
+    }
   },
   watch: {
     $route() {
       if (db.auth().currentUser !== null) {
-        this.login = true;
+        this.login = true
       } else {
-        this.login = false;
+        this.login = false
       }
-    },
+    }
   },
   methods: {
     personalDisplayStatus() {
-      this.personalDisplay = !this.personalDisplay;
+      this.personalDisplay = !this.personalDisplay
     },
     signOut() {
-      const vm = this;
+      const vm = this
       db.auth()
         .signOut()
         .then(() => {
-          vm.login = false;
-          alert('登出成功');
+          vm.login = false
+          alert('登出成功')
           router.push({
             path: '/login',
-            name: 'login',
-          });
+            name: 'login'
+          })
         })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+        .catch(error => {
+          console.log(error)
+        })
+    }
   },
   mounted() {
-    db.auth().onAuthStateChanged((user) => {
+    db.auth().onAuthStateChanged(user => {
       if (user) {
-        const id = db.auth().currentUser.uid;
-        this.login = true;
+        const id = user.uid
+        this.login = true
         db.firestore()
           .collection('user')
           .doc(id)
           .get()
-          .then((doc) => {
-            this.customerName = doc.data().userName;
+          .then(doc => {
+            this.customerName = doc.data().userName
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch(error => {
+            console.warn(error)
+          })
       } else {
-        this.login = false;
+        this.login = false
       }
-    });
-  },
-};
+    })
+  }
+}
 </script>
