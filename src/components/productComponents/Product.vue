@@ -50,6 +50,8 @@ export default {
       editData: {
         id: '',
         img: [],
+        tag: '',
+        series: '',
         productName: '',
         discription: '',
         price: {

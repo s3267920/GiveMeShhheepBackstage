@@ -228,6 +228,8 @@ export default {
           this.formData = {
             id: this.editData.id,
             img: [],
+            tag: this.editData.tag,
+            series: this.editData.series,
             productName: this.editData.productName,
             discription: this.editData.discription,
             price: {
