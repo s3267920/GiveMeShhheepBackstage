@@ -35,6 +35,8 @@ export default {
       productData: [],
       formData: {
         img: [],
+        tag: '',
+        series: '',
         productName: '',
         discription: '',
         price: {
@@ -123,8 +125,10 @@ export default {
                 id: doc.id,
                 productIndex: doc.data().productIndex,
                 imgList: doc.data().imgList,
+                series: doc.data().series,
                 productName: doc.data().productName,
                 discription: doc.data().discription,
+                tag: doc.data().tag,
                 price: {
                   original: doc.data().price.original,
                   discount: doc.data().price.discount
@@ -162,6 +166,8 @@ export default {
       this.editData = {
         id: '',
         img: [],
+        tag: '',
+        series: '',
         productName: '',
         discription: '',
         price: {
@@ -177,6 +183,8 @@ export default {
       this.editData = {
         id: data.id,
         img: data.imgList,
+        tag: data.tag,
+        series: data.series,
         productName: data.productName,
         discription: data.discription,
         price: {

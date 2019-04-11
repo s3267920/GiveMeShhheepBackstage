@@ -9,6 +9,7 @@
       <img :src="srcHandle">
       <span>{{product.productName}}</span>
     </td>
+    <td class="tag">{{product.tag}}</td>
     <td class="original">{{product.price.original}}</td>
     <td class="discount">{{product.price.discount}}</td>
     <td class="information">

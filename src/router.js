@@ -11,57 +11,55 @@ Vue.use(Router);
 
 const router = new Router({
   // mode: 'history',
-  routes: [{
-    path: '/login',
-    name: 'login',
-    component: LogIn,
-    params: {
-
+  routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: LogIn,
+      params: {},
+      meta: {
+        title: '登入 LogIn',
+      },
     },
-    meta: {
-      title: '登入 LogIn',
-
+    {
+      path: '/signUp',
+      name: 'signUp',
+      component: SignUp,
+      meta: {
+        title: '註冊 SignUp',
+      },
     },
-  },
-  {
-    path: '/signUp',
-    name: 'signUp',
-    component: SignUp,
-    meta: {
-      title: '註冊 SignUp',
+    {
+      path: '/backstage',
+      name: 'home',
+      component: Home,
+      meta: {
+        title: '後台首頁 Home',
+        requiresAuth: true,
+      },
     },
-  },
-  {
-    path: '/backstage',
-    name: 'home',
-    component: Home,
-    meta: {
-      title: '後台首頁 Home',
-      requiresAuth: true,
+    {
+      path: '/backstage/orders',
+      name: 'orders',
+      component: Orders,
+      meta: {
+        title: '訂單管理 Orders',
+        requiresAuth: true,
+      },
     },
-  },
-  {
-    path: '/backstage/orders',
-    name: 'orders',
-    component: Orders,
-    meta: {
-      title: '訂單管理 Orders',
-      requiresAuth: true,
+    {
+      path: '/backstage/product',
+      name: 'product',
+      component: Product,
+      meta: {
+        title: '產品管理 Product',
+        requiresAuth: true,
+      },
     },
-  },
-  {
-    path: '/backstage/product',
-    name: 'product',
-    component: Product,
-    meta: {
-      title: '產品管理 Product',
-      requiresAuth: true,
+    {
+      path: '/*',
+      redirect: '/backstage',
     },
-  },
-  {
-    path: '/*',
-    redirect: '/backstage',
-  },
   ],
 });
 router.beforeEach((to, from, next) => {

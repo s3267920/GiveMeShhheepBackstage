@@ -56,10 +56,26 @@
             name
             id
             cols="30"
-            rows="10"
+            rows="8"
             placeholder="Discription"
             v-model.trim="formData.discription"
           ></textarea>
+          <div class="info_tag_and_series">
+            <label for="product_tag">
+              <span>Tag</span>
+              <select type="text" id="product_tag" v-model="formData.tag">
+                <option value disabled>請選擇</option>
+                <option value="本日精選">本日精選</option>
+                <option value="人氣推薦">人氣推薦</option>
+                <option value="新品上市">新品上市</option>
+                <option value="其他">其他</option>
+              </select>
+            </label>
+            <label for="product_series">
+              <span>Series</span>
+              <input type="text" id="product_series" v-model.trim="formData.series">
+            </label>
+          </div>
           <label for>Price</label>
           <div class="info_price">
             <label for="original">
@@ -83,6 +99,7 @@
               >
             </label>
           </div>
+
           <label for>Specification</label>
           <ul class="specification_info" v-if="formData.specification">
             <Specification
@@ -138,6 +155,8 @@ export default {
       specificationCount: 0,
       formData: {
         id: '',
+        tag: '',
+        series: '',
         img: [],
         productName: '',
         discription: '',
@@ -376,6 +395,8 @@ export default {
       this.formData = {
         id: '',
         img: [],
+        tag: '',
+        series: '',
         productName: '',
         discription: '',
         price: {
@@ -395,6 +416,8 @@ export default {
       let newProduct = {
         id: '',
         imgList: [],
+        tag: vm.formData.tag,
+        series: vm.formData.series,
         productName: vm.formData.productName,
         discription: vm.formData.discription,
         productIndex: vm.newProductIndex,
@@ -474,6 +497,8 @@ export default {
       let haseditedProduct = {
         id: vm.formData.id,
         imgList: [],
+        tag: vm.formData.tag,
+        series: vm.formData.series,
         productName: vm.formData.productName,
         discription: vm.formData.discription,
         productIndex: vm.formData.productIndex,
@@ -645,6 +670,8 @@ export default {
               .update({
                 id: vm.formData.id,
                 imgList: vm.formData.img,
+                tag: vm.formData.tag,
+                series: vm.formData.series,
                 productName: vm.formData.productName,
                 discription: vm.formData.discription,
                 productIndex: vm.formData.productIndex,
@@ -686,6 +713,7 @@ export default {
         !this.formData.discription.length ||
         this.formData.price.original === '' ||
         this.formData.price.discount === '' ||
+        this.formData.tag === '' ||
         this.formData.specification[0].hasConfirm === null ||
         this.formData.specification[0].style === null
       ) {
