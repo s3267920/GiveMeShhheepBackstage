@@ -1,8 +1,10 @@
-# Give Me Shhheep 網站後台（前台構思中)
+# Give Me Shhheep 網站後台
 
 版型參考六角學院提供之版型另做優化 [設計圖](https://hexschool.github.io/THE_F2E_Design/week3-admin%20order/?fbclid=IwAR3BZhORXJR4Bzb86_JY0ouU_wp9U7d78UGMA6sEDkQblK5zTZxm-gI2fJY)
 
 Demo: [https://s3267920.github.io/GiveMeShhheepBackstage/dist/index.html](https://s3267920.github.io/GiveMeShhheepBackstage/dist/index.html)
+
+[前台部分](https://github.com/s3267920/GiveMeShhheep)
 
 ## 整體
 
@@ -56,5 +58,7 @@ Demo: [https://s3267920.github.io/GiveMeShhheepBackstage/dist/index.html](https:
 - **由於 firestorage 有容量限制，請勿增添過多資料進去**
 - **如果看不到圖片，有可能是容量達到限制，請隔日五點後再試**
 - **使用後請記得登出**
+- **為了不影響前台，所以後台註冊用戶為獨立帳戶**
+- **使用者只保留兩週，過後刪除**
 
 ---
