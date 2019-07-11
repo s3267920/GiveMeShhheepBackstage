@@ -12,7 +12,7 @@
         name="style"
         :id="`style${newIndex}`"
         class="style"
-      >
+      />
     </label>
     <span class="specification_icon">
       <font-awesome-icon
@@ -58,7 +58,7 @@
           name="size"
           :id="`size${newIndex}`"
           class="size"
-        >
+        />
       </label>
       <label :for="`inventory${newIndex}`">
         <span>Inventory</span>
@@ -73,7 +73,7 @@
           name="inventory"
           :id="`inventory${newIndex}`"
           class="inventory"
-        >
+        />
       </label>
       <font-awesome-icon
         class="specification_delete"
