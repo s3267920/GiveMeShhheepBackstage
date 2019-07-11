@@ -1,0 +1,564 @@
+.content_login,
+.content_signUp {
+  width: 100%;
+  height: 100%;
+  background-color: #fbfbfb;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.content_login .login,
+.content_login .sign_up,
+.content_signUp .login,
+.content_signUp .sign_up {
+  margin-top: 12.5%;
+  margin-bottom: 20%;
+  width: 450px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #eef5f6;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.content_login .login label,
+.content_login .sign_up label,
+.content_signUp .login label,
+.content_signUp .sign_up label {
+  font-size: 20px;
+  color: #004a52;
+  margin-right: 10px;
+  width: 120px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  text-transform: capitalize;
+}
+
+.content_login .login input,
+.content_login .sign_up input,
+.content_signUp .login input,
+.content_signUp .sign_up input {
+  -webkit-transition: width 0.1s linear;
+  transition: width 0.1s linear;
+  color: #004a52;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  line-height: 45px;
+  width: 90%;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #004a52;
+  font-size: 20px;
+}
+
+.content_login .login input::-webkit-input-placeholder,
+.content_login .sign_up input::-webkit-input-placeholder,
+.content_signUp .login input::-webkit-input-placeholder,
+.content_signUp .sign_up input::-webkit-input-placeholder {
+  padding-left: 20px;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input:-ms-input-placeholder,
+.content_login .sign_up input:-ms-input-placeholder,
+.content_signUp .login input:-ms-input-placeholder,
+.content_signUp .sign_up input:-ms-input-placeholder {
+  padding-left: 20px;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input::-ms-input-placeholder,
+.content_login .sign_up input::-ms-input-placeholder,
+.content_signUp .login input::-ms-input-placeholder,
+.content_signUp .sign_up input::-ms-input-placeholder {
+  padding-left: 20px;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input::placeholder,
+.content_login .sign_up input::placeholder,
+.content_signUp .login input::placeholder,
+.content_signUp .sign_up input::placeholder {
+  padding-left: 20px;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input:focus,
+.content_login .sign_up input:focus,
+.content_signUp .login input:focus,
+.content_signUp .sign_up input:focus {
+  height: 50px;
+  -webkit-box-shadow: 0 0 5px #004a52;
+          box-shadow: 0 0 5px #004a52;
+}
+
+.content_login .login input:focus::-webkit-input-placeholder,
+.content_login .sign_up input:focus::-webkit-input-placeholder,
+.content_signUp .login input:focus::-webkit-input-placeholder,
+.content_signUp .sign_up input:focus::-webkit-input-placeholder {
+  padding-left: 0;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input:focus:-ms-input-placeholder,
+.content_login .sign_up input:focus:-ms-input-placeholder,
+.content_signUp .login input:focus:-ms-input-placeholder,
+.content_signUp .sign_up input:focus:-ms-input-placeholder {
+  padding-left: 0;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input:focus::-ms-input-placeholder,
+.content_login .sign_up input:focus::-ms-input-placeholder,
+.content_signUp .login input:focus::-ms-input-placeholder,
+.content_signUp .sign_up input:focus::-ms-input-placeholder {
+  padding-left: 0;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login input:focus::placeholder,
+.content_login .sign_up input:focus::placeholder,
+.content_signUp .login input:focus::placeholder,
+.content_signUp .sign_up input:focus::placeholder {
+  padding-left: 0;
+  font-size: 16px;
+  color: #8abbc1;
+}
+
+.content_login .login .error,
+.content_login .sign_up .error,
+.content_signUp .login .error,
+.content_signUp .sign_up .error {
+  border: 1px solid #ff0000;
+}
+
+.content_login .login .error:focus,
+.content_login .sign_up .error:focus,
+.content_signUp .login .error:focus,
+.content_signUp .sign_up .error:focus {
+  -webkit-box-shadow: 0 0 5px #ff0000;
+          box-shadow: 0 0 5px #ff0000;
+}
+
+.content_login .login .login_icon,
+.content_login .sign_up .login_icon,
+.content_signUp .login .login_icon,
+.content_signUp .sign_up .login_icon {
+  position: absolute;
+  left: 110px;
+  top: 10px;
+  color: #8abbc1;
+  -webkit-transition: opacity 2s;
+  transition: opacity 2s;
+}
+
+.content_login .sign_up label,
+.content_signUp .sign_up label {
+  width: 30px;
+}
+
+.content_login .sign_up input,
+.content_signUp .sign_up input {
+  -webkit-transition: none;
+  transition: none;
+  height: 45px;
+  padding: 0 5px;
+}
+
+.content_login .sign_up input::-webkit-input-placeholder,
+.content_signUp .sign_up input::-webkit-input-placeholder {
+  padding-left: 10px;
+}
+
+.content_login .sign_up input:-ms-input-placeholder,
+.content_signUp .sign_up input:-ms-input-placeholder {
+  padding-left: 10px;
+}
+
+.content_login .sign_up input::-ms-input-placeholder,
+.content_signUp .sign_up input::-ms-input-placeholder {
+  padding-left: 10px;
+}
+
+.content_login .sign_up input::placeholder,
+.content_signUp .sign_up input::placeholder {
+  padding-left: 10px;
+}
+
+.content_login .sign_up input:focus::-webkit-input-placeholder,
+.content_signUp .sign_up input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.content_login .sign_up input:focus:-ms-input-placeholder,
+.content_signUp .sign_up input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+
+.content_login .sign_up input:focus::-ms-input-placeholder,
+.content_signUp .sign_up input:focus::-ms-input-placeholder {
+  color: transparent;
+}
+
+.content_login .sign_up input:focus::placeholder,
+.content_signUp .sign_up input:focus::placeholder {
+  color: transparent;
+}
+
+.content_login .sign_up select,
+.content_signUp .sign_up select {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 45px;
+  width: 100%;
+  margin: 0 5px;
+  color: #004a52;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #004a52;
+  font-size: 20px;
+  text-indent: 10px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-repeat: no-repeat;
+  background-position: 90% center;
+  background-size: 15px;
+  background-color: #fff;
+}
+
+.content_login .sign_up select:focus,
+.content_signUp .sign_up select:focus {
+  -webkit-box-shadow: 0 0 5px #004a52;
+          box-shadow: 0 0 5px #004a52;
+}
+
+.content_login .sign_up select.triangle_down,
+.content_signUp .sign_up select.triangle_down {
+  background-image: url(../assets/img/angle-down-darkTeal.svg);
+}
+
+.content_login .sign_up .birthday_select,
+.content_signUp .sign_up .birthday_select {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.content_login .sign_up .sign_up_icon,
+.content_signUp .sign_up .sign_up_icon {
+  font-size: 1.25em;
+}
+
+.content_login .isFocus,
+.content_signUp .isFocus {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  position: relative;
+}
+
+.content_login .isFocus label,
+.content_signUp .isFocus label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  position: absolute;
+  width: 80px;
+  top: -11px;
+  left: 10px;
+  z-index: 10;
+}
+
+.content_login .isFocus label span,
+.content_signUp .isFocus label span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 81px;
+  height: 13px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #eef5f6;
+}
+
+.content_login .isFocus label[for="user_password"],
+.content_signUp .isFocus label[for="user_password"] {
+  width: 120px;
+}
+
+.content_login .isFocus label[for="user_password"] span,
+.content_signUp .isFocus label[for="user_password"] span {
+  width: 120px;
+}
+
+.content_login .isFocus .login_icon,
+.content_signUp .isFocus .login_icon {
+  position: absolute;
+  font-size: 1.5em;
+  top: -14px;
+  left: 14px;
+  color: #004a52;
+  z-index: 11;
+}
+
+.content_login .login_header,
+.content_login .sign_up_header,
+.content_signUp .login_header,
+.content_signUp .sign_up_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  line-height: 25px;
+  height: 70px;
+  background-color: #008a9a;
+  margin-bottom: 30px;
+  border-radius: 5px 5px 0 0;
+}
+
+.content_login .login_header h2,
+.content_login .sign_up_header h2,
+.content_signUp .login_header h2,
+.content_signUp .sign_up_header h2 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.content_login .input_group,
+.content_signUp .input_group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 20px 5%;
+  margin-bottom: 30px;
+}
+
+.content_login .error_msg,
+.content_signUp .error_msg {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  bottom: -30px;
+  left: 0;
+  font-size: 14px;
+  color: #ff0000;
+}
+
+.content_login .error_msg.sign_up_error,
+.content_signUp .error_msg.sign_up_error {
+  bottom: -20px;
+  left: 40px;
+}
+
+.content_login .login_other,
+.content_login .sign_up_other,
+.content_signUp .login_other,
+.content_signUp .sign_up_other {
+  margin: 0 5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  color: #004a52;
+}
+
+.content_login .login_other a,
+.content_login .sign_up_other a,
+.content_signUp .login_other a,
+.content_signUp .sign_up_other a {
+  color: #8abbc1;
+}
+
+.content_login .login_other a:hover,
+.content_login .sign_up_other a:hover,
+.content_signUp .login_other a:hover,
+.content_signUp .sign_up_other a:hover {
+  color: #27A2AF;
+}
+
+.content_login .login_other .change_to_sign_up,
+.content_login .sign_up_other .change_to_sign_up,
+.content_signUp .login_other .change_to_sign_up,
+.content_signUp .sign_up_other .change_to_sign_up {
+  margin-left: 15px;
+}
+
+.content_login .sign_up_other > a,
+.content_signUp .sign_up_other > a {
+  margin-left: 10px;
+}
+
+.content_login .submit_btn,
+.content_signUp .submit_btn {
+  cursor: pointer;
+  width: 90%;
+  height: 50px;
+  margin: 30px auto;
+  margin-bottom: 40px;
+  font-size: 20px;
+  border: 1px solid #004a52;
+  border-radius: 5px;
+  background-color: #fff;
+  outline: none;
+}
+
+.content_login .submit_btn:active, .content_login .submit_btn:focus,
+.content_signUp .submit_btn:active,
+.content_signUp .submit_btn:focus {
+  background-color: #004a52;
+  color: #fff;
+  -webkit-box-shadow: 0 0 5px #004a52;
+          box-shadow: 0 0 5px #004a52;
+}
+
+.content_login .submit_btn:active,
+.content_signUp .submit_btn:active {
+  -webkit-box-shadow: 0 0 5px #ffe867;
+          box-shadow: 0 0 5px #ffe867;
+}
+
+.content_login .checking,
+.content_signUp .checking {
+  position: relative;
+}
+
+.content_login .checking::before,
+.content_signUp .checking::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 15px;
+  height: 20px;
+  background-color: #004a52;
+  -webkit-animation-name: checkLoading;
+          animation-name: checkLoading;
+  -webkit-animation-duration: 2s;
+          animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-timing-function: step-start;
+          animation-timing-function: step-start;
+}
+
+@-webkit-keyframes checkLoading {
+  5% {
+    width: 15px;
+  }
+  33% {
+    width: 10px;
+  }
+  66% {
+    width: 5px;
+  }
+  99% {
+    width: 0px;
+  }
+}
+
+@keyframes checkLoading {
+  5% {
+    width: 15px;
+  }
+  33% {
+    width: 10px;
+  }
+  66% {
+    width: 5px;
+  }
+  99% {
+    width: 0px;
+  }
+}
+
+@-webkit-keyframes iconMove {
+  0% {
+    position: absolute;
+    left: 70px;
+    top: 10px;
+  }
+  99% {
+    position: absolute;
+    font-size: 1.5em;
+    top: -12px;
+    left: 14px;
+  }
+}
+
+@keyframes iconMove {
+  0% {
+    position: absolute;
+    left: 70px;
+    top: 10px;
+  }
+  99% {
+    position: absolute;
+    font-size: 1.5em;
+    top: -12px;
+    left: 14px;
+  }
+}
+/*# sourceMappingURL=loginAndSignUp.css.map */
