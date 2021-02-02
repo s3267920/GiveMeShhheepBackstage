@@ -17,11 +17,11 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "echarts": "^4.2.1",
-    "firebase": "^5.11.1",
-    "firebase-admin": "^7.4.0",
-    "json-server": "^0.14.2",
+    "firebase": "8.2.5",
+    "firebase-admin": "^9.4.2",
+    "json-server": "^0.16.3",
     "moment": "^2.24.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/cli-service": "^4.5.11",
     "@vue/eslint-config-airbnb": "^4.0.1",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
@@ -77,5 +77,17 @@
       "vue-cli-service lint",
       "git add"
     ]
-  }
+  },
+  "description": "版型參考六角學院提供之版型另做優化 [設計圖](https://hexschool.github.io/THE_F2E_Design/week3-admin%20order/?fbclid=IwAR3BZhORXJR4Bzb86_JY0ouU_wp9U7d78UGMA6sEDkQblK5zTZxm-gI2fJY)",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s3267920/GiveMeShhheepBackstage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s3267920/GiveMeShhheepBackstage/issues"
+  },
+  "homepage": "https://github.com/s3267920/GiveMeShhheepBackstage#readme"
 }
